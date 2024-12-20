@@ -27,7 +27,7 @@ export default function Store() {
     slidesToShow: 1, // 一次顯示一個 NFT
     slidesToScroll: 1,
     autoplay: true, // 自動播放
-    autoplaySpeed: 3000, // 每 3 秒切換
+    autoplaySpeed: 30000, // 每 3 秒切換
     centerMode: true, // 居中模式
     centerPadding: "0px", // 避免內邊距造成偏移
   };
