@@ -73,19 +73,18 @@ export function Inventory({ nft }: Props) {
         <Card
           key={nft.metadata.id}
           p={5}
-          shadow="lg"
+          shadow="md"
           borderWidth="1px"
           borderRadius="lg"
           transition="transform 0.2s, box-shadow 0.2s"
-          _hover={{ transform: "scale(1.05)", boxShadow: "xl" }}
+          _hover={{ transform: "scale(1.05)", boxShadow: "lg" }}
         >
-          <Stack alignItems="center">
+          <Stack alignItems="center" spacing={3}>
             {/* NFT 圖片 */}
             <MediaRenderer
               src={nft.metadata.image}
               height="100px"
               width="100px"
-              style={{ borderRadius: "10px" }}
             />
             <Text fontWeight="bold">{nft.metadata.name}</Text>
 
@@ -109,7 +108,6 @@ export function Inventory({ nft }: Props) {
                 }
                 isDisabled={(quantities[nft.metadata.id] || 1) <= 1} // 禁用負數數量
                 borderRadius="full"
-                px={4}
               >
                 -
               </Button>
@@ -138,7 +136,6 @@ export function Inventory({ nft }: Props) {
                   )
                 }
                 borderRadius="full"
-                px={4}
               >
                 +
               </Button>
@@ -152,16 +149,14 @@ export function Inventory({ nft }: Props) {
               }
               style={{
                 marginTop: "10px",
-                borderRadius: "20px",
                 padding: "10px 20px",
+                borderRadius: "8px",
                 backgroundColor: "#3182ce",
                 color: "#fff",
                 fontWeight: "bold",
-                transition: "background-color 0.3s, transform 0.2s",
               }}
               _hover={{
                 backgroundColor: "#2b6cb0",
-                transform: "scale(1.1)",
               }}
             >
               {`Equip (${quantities[nft.metadata.id] || 1})`}
