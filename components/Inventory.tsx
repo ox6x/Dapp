@@ -71,9 +71,10 @@ export function Inventory({ nft }: Props) {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow: 1, // 每次显示一列一个 NFT
     slidesToScroll: 1,
     adaptiveHeight: true,
+    arrows: false, // 隐藏左右箭头
   };
 
   return (
