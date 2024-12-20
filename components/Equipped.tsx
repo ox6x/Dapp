@@ -55,7 +55,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
             my={4}
             alignItems="center"
         >
-            {/* NFT 图片 */}
+            {/* 左侧 NFT 图片 */}
             <Box flexShrink={0} mr={4}>
                 <MediaRenderer
                     src={nft?.metadata.image}
@@ -65,7 +65,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                 />
             </Box>
 
-            {/* NFT 信息 */}
+            {/* 右侧 NFT 信息和功能 */}
             <VStack align="start" spacing={4} flex={1}>
                 {/* NFT 名称 */}
                 <Text fontSize="xl" fontWeight="bold">
