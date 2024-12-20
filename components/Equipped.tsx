@@ -1,111 +1,51 @@
-import React, { useState } from "react";
-import Slider from "react-slick";
-import {
-    MediaRenderer,
-    Web3Button,
-    useAddress,
-    useContract,
-    useContractRead,
-    useNFT
-} from "@thirdweb-dev/react";
+import { MediaRenderer, Web3Button, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { Box, Card, Stack, Flex, Text } from "@chakra-ui/react";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
+import { useState } from "react";
 
 interface EquippedProps {
     tokenId: number;
-    nftArray: { id: number; image: string; name: string }[];
-}
+};
 
 export const Equipped = (props: EquippedProps) => {
     const address = useAddress();
+
     const { contract: toolContract } = useContract(TOOLS_ADDRESS);
     const { data: nft } = useNFT(toolContract, props.tokenId);
 
     const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+
     const { data: claimableRewards } = useContractRead(
         stakingContract,
         "getStakeInfoForToken",
         [props.tokenId, address]
     );
 
+    // 添加数量选择的状态
     const [quantity, setQuantity] = useState<number>(1);
 
     const handleQuantityChange = (newQuantity: number) => {
-        setQuantity(Math.max(1, newQuantity));
-    };
-
-    // Slider settings
-    const sliderSettings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 1,
-                },
-            },
-        ],
+        setQuantity(Math.max(1, newQuantity)); // 确保数量至少为1
     };
 
     return (
         <Box>
-            {/* 外部容器添加樣式 */}
-            <Box maxWidth="80%" margin="0 auto">
-                <Slider {...sliderSettings}>
-                    {props.nftArray.map((nftItem) => (
-                        <Box
-                            key={nftItem.id}
-                            maxWidth="300px"
-                            maxHeight="300px"
-                            overflow="hidden"
-                            borderRadius="10px"
-                            padding="10px"
-                            bgColor="white"
-                        >
-                            <MediaRenderer
-                                src={nftItem.image}
-                                height="100%"
-                                width="100%"
-                                style={{ objectFit: "contain" }}
-                            />
-                            <Text fontWeight="bold" textAlign="center" mt={2}>
-                                {nftItem.name}
-                            </Text>
-                        </Box>
-                    ))}
-                </Slider>
-            </Box>
-
             {nft && (
-                <Card p={5} mt={5}>
+                <Card p={5}>
                     <Flex>
-                        <Box
-                            maxWidth="300px"
-                            maxHeight="300px"
-                            overflow="hidden"
-                            borderRadius="10px"
-                        >
+                        <Box>
                             <MediaRenderer
                                 src={nft.metadata.image}
-                                height="100%"
-                                width="100%"
-                                style={{ objectFit: "contain" }}
+                                height="80%"
+                                width="80%"
                             />
                         </Box>
-                        <Stack spacing={3} ml={5}>
-                            <Text fontSize="2xl" fontWeight="bold">
-                                {nft.metadata.name}
-                            </Text>
-                            <Text>
-                                Equipped: {ethers.utils.formatUnits(claimableRewards[0], 0)}
-                            </Text>
+                        <Stack spacing={1}>
+                            <Text fontSize={"2xl"} fontWeight={"bold"}>{nft.metadata.name}</Text>
+                            <Text>Equipped: {ethers.utils.formatUnits(claimableRewards[0], 0)}</Text>
+
+                            {/* 数量选择器 */}
                             <Flex align="center" gap={2}>
                                 <button
                                     onClick={() => handleQuantityChange(quantity - 1)}
@@ -149,6 +89,7 @@ export const Equipped = (props: EquippedProps) => {
                                     +
                                 </button>
                             </Flex>
+
                             <Web3Button
                                 contractAddress={STAKING_ADDRESS}
                                 action={(contract) => contract.call("withdraw", [props.tokenId, quantity])}
