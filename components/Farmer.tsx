@@ -1,12 +1,11 @@
-import React from "react";
 import { MediaRenderer, Web3Button, useContract, useContractMetadata } from "@thirdweb-dev/react";
 import { FARMER_ADDRESS } from "../const/addresses";
 import { Box, Container, Flex, Heading } from "@chakra-ui/react";
 
-export const Farmer: React.FC = () => {
+export default function Farmer() {
     const { contract } = useContract(FARMER_ADDRESS);
     const { data: metadata } = useContractMetadata(contract);
-
+    
     return (
         <Container maxW={"1200px"}>
             <Flex direction={"column"} alignItems={"center"} justifyContent={"center"} h={"50vh"}>
@@ -28,4 +27,4 @@ export const Farmer: React.FC = () => {
             </Flex>
         </Container>
     );
-};
+}
