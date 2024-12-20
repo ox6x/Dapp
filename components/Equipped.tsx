@@ -8,7 +8,7 @@ import {
 } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { Box, Text, VStack, HStack, Button, Input, Divider, Stack } from "@chakra-ui/react";
+import { Box, Text, VStack, HStack, Button, Input, Divider, Flex } from "@chakra-ui/react";
 import { useState, useMemo } from "react";
 
 interface EquippedProps {
@@ -45,71 +45,69 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
     );
 
     return (
-        <Box
+        <Flex
             p={4}
-            maxW="sm"
-            mx="auto"
             bg="gray.50"
-            border="1px"
+            border="1px solid"
             borderColor="gray.200"
             borderRadius="md"
             shadow="md"
             my={4}
+            alignItems="center"
         >
-            {nft && (
-                <VStack spacing={4}>
-                    {/* NFT 图片 */}
-                    <Box>
-                        <MediaRenderer
-                            src={nft.metadata.image}
-                            height="150px"
-                            width="150px"
-                            style={{ borderRadius: "10px" }}
-                        />
-                    </Box>
+            {/* NFT 图片 */}
+            <Box flexShrink={0} mr={4}>
+                <MediaRenderer
+                    src={nft?.metadata.image}
+                    height="120px"
+                    width="120px"
+                    style={{ borderRadius: "10px" }}
+                />
+            </Box>
 
-                    {/* NFT 名称 */}
-                    <Text fontSize="xl" fontWeight="bold" textAlign="center">
-                        {nft.metadata.name}
-                    </Text>
+            {/* NFT 信息 */}
+            <VStack align="start" spacing={4} flex={1}>
+                {/* NFT 名称 */}
+                <Text fontSize="xl" fontWeight="bold">
+                    {nft?.metadata.name}
+                </Text>
 
-                    {/* Equipped 信息 */}
-                    <Box>
-                        <Text fontSize="md" textAlign="center">
-                            Equipped: {equipped}
-                        </Text>
-                    </Box>
+                {/* Equipped 信息 */}
+                <Text fontSize="md">
+                    <strong>Equipped:</strong> {equipped}
+                </Text>
 
-                    {/* 数量选择器 */}
-                    <HStack spacing={2}>
-                        <Button
-                            size="sm"
-                            colorScheme="red"
-                            onClick={() => handleQuantityChange(quantity - 1)}
-                        >
-                            -
-                        </Button>
-                        <Input
-                            size="sm"
-                            type="number"
-                            value={quantity}
-                            onChange={(e) => {
-                                const value = parseInt(e.target.value);
-                                handleQuantityChange(isNaN(value) ? 1 : value);
-                            }}
-                            width="60px"
-                            textAlign="center"
-                        />
-                        <Button
-                            size="sm"
-                            colorScheme="green"
-                            onClick={() => handleQuantityChange(quantity + 1)}
-                        >
-                            +
-                        </Button>
-                    </HStack>
+                {/* 数量选择器 */}
+                <HStack spacing={2}>
+                    <Button
+                        size="sm"
+                        colorScheme="red"
+                        onClick={() => handleQuantityChange(quantity - 1)}
+                    >
+                        -
+                    </Button>
+                    <Input
+                        size="sm"
+                        type="number"
+                        value={quantity}
+                        onChange={(e) => {
+                            const value = parseInt(e.target.value);
+                            handleQuantityChange(isNaN(value) ? 1 : value);
+                        }}
+                        width="60px"
+                        textAlign="center"
+                    />
+                    <Button
+                        size="sm"
+                        colorScheme="green"
+                        onClick={() => handleQuantityChange(quantity + 1)}
+                    >
+                        +
+                    </Button>
+                </HStack>
 
-                    {/* Unequip 按钮 */}
+                {/* 操作按钮 */}
+                <Flex gap={2} flexWrap="wrap">
                     <Web3Button
                         contractAddress={STAKING_ADDRESS}
                         action={async (contract) => {
@@ -123,29 +121,20 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                         Unequip {quantity}
                     </Web3Button>
 
-                    <Divider />
-
-                    {/* Claimable rewards */}
-                    <VStack spacing={2}>
-                        <Text fontSize="lg" fontWeight="medium">
-                            Claimable:
-                        </Text>
-                        <Text fontSize="md">{rewards}</Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS}
-                            action={async (contract) => {
-                                try {
-                                    await contract.call("claimRewards", [tokenId]);
-                                } catch (error) {
-                                    console.error("Claim rewards failed:", error);
-                                }
-                            }}
-                        >
-                            Claim
-                        </Web3Button>
-                    </VStack>
-                </VStack>
-            )}
-        </Box>
+                    <Web3Button
+                        contractAddress={STAKING_ADDRESS}
+                        action={async (contract) => {
+                            try {
+                                await contract.call("claimRewards", [tokenId]);
+                            } catch (error) {
+                                console.error("Claim rewards failed:", error);
+                            }
+                        }}
+                    >
+                        Claim
+                    </Web3Button>
+                </Flex>
+            </VStack>
+        </Flex>
     );
 };
