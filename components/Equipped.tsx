@@ -8,24 +8,14 @@ import {
 } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import {
-    Box,
-    Text,
-    VStack,
-    HStack,
-    Button,
-    Input,
-    Divider,
-    Stack,
-    SimpleGrid,
-} from "@chakra-ui/react";
+import { Box, Text, VStack, HStack, Button, Input, Divider, Stack } from "@chakra-ui/react";
 import { useState, useMemo } from "react";
 
 interface EquippedProps {
     tokenId: number;
 }
 
-const Equipped = ({ tokenId }: EquippedProps) => {
+export const Equipped = ({ tokenId }: EquippedProps) => {
     const address = useAddress();
     const { contract: toolContract } = useContract(TOOLS_ADDRESS);
     const { data: nft } = useNFT(toolContract, tokenId);
@@ -157,21 +147,5 @@ const Equipped = ({ tokenId }: EquippedProps) => {
                 </VStack>
             )}
         </Box>
-    );
-};
-
-export const EquippedGrid = ({ tokenIds }: { tokenIds: number[] }) => {
-    return (
-        <SimpleGrid
-            columns={{ base: 1, sm: 2, md: 3 }}
-            spacing={4}
-            px={4}
-            py={6}
-            minChildWidth="280px"
-        >
-            {tokenIds.map((tokenId) => (
-                <Equipped key={tokenId} tokenId={tokenId} />
-            ))}
-        </SimpleGrid>
     );
 };
