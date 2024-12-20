@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Text, Card } from "@chakra-ui/react";
+import {
+  Text,
+  Card,
+  Box,
+  Button,
+  Flex,
+  Input,
+  Stack,
+  Spinner,
+} from "@chakra-ui/react";
 import { MediaRenderer, useContract, useActiveClaimCondition } from "@thirdweb-dev/react";
 import { NFT } from "@thirdweb-dev/sdk";
 import { TOOLS_ADDRESS } from "../const/addresses";
@@ -43,82 +52,71 @@ export default function NFTComponent({ nft }: Props) {
   };
 
   return (
-    <Card key={nft.metadata.id} overflow={"hidden"}>
-      {/* 图片显示 */}
-      <MediaRenderer src={nft.metadata.image} height="100%" width="100%" />
-      {/* NFT名称 */}
-      <Text fontSize={"2xl"} fontWeight={"bold"} my={5} textAlign={"center"}>
-        {nft.metadata.name}
-      </Text>
-      {/* 价格显示 */}
-      {!isLoading && data ? (
-        <Text textAlign={"center"} my={5}>
-          Cost per NFT: {ethers.utils.formatEther(data?.price)}{" "}
-          {data?.currencyMetadata.symbol}
+    <Card key={nft.metadata.id} overflow={"hidden"} p={5} shadow="md" borderWidth="1px">
+      <Stack spacing={4} align="center">
+        {/* 图片显示 */}
+        <Box>
+          <MediaRenderer src={nft.metadata.image} height="200px" width="200px" />
+        </Box>
+        {/* NFT名称 */}
+        <Text fontSize={"xl"} fontWeight={"bold"} textAlign={"center"}>
+          {nft.metadata.name}
         </Text>
-      ) : (
-        <Text>Loading...</Text>
-      )}
-      {/* 数量选择器 */}
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", margin: "10px 0" }}>
-        <button
-          onClick={() => setQuantity(Math.max(1, quantity - 1))}
-          style={{
-            padding: "5px 10px",
-            backgroundColor: "#f56565",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
+        {/* 价格显示 */}
+        {isLoading ? (
+          <Spinner size="lg" />
+        ) : (
+          <Text fontSize="md" color="gray.600" textAlign={"center"}>
+            Cost per NFT: {ethers.utils.formatEther(data?.price)}{" "}
+            {data?.currencyMetadata.symbol}
+          </Text>
+        )}
+        {/* 数量选择器 */}
+        <Flex align="center" gap={3}>
+          <Button
+            size="sm"
+            colorScheme="red"
+            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            isDisabled={quantity <= 1}
+          >
+            -
+          </Button>
+          <Input
+            size="sm"
+            type="number"
+            value={quantity}
+            onChange={(e) => {
+              const value = parseInt(e.target.value);
+              setQuantity(isNaN(value) ? 1 : Math.max(1, value));
+            }}
+            textAlign="center"
+            width="60px"
+          />
+          <Button
+            size="sm"
+            colorScheme="green"
+            onClick={() => setQuantity(quantity + 1)}
+          >
+            +
+          </Button>
+        </Flex>
+        {/* Claim 按钮 */}
+        <TransactionButton
+          transaction={() =>
+            claimTo({
+              contract,
+              to: "your-wallet-address", // 替换为实际钱包地址
+              quantity: BigInt(quantity),
+            })
+          }
+          onTransactionConfirmed={async () => {
+            setQuantity(1); // 重置数量
+            alert("NFT claimed!");
           }}
         >
-          -
-        </button>
-        <input
-          type="number"
-          value={quantity}
-          onChange={(e) => {
-            const value = parseInt(e.target.value);
-            setQuantity(isNaN(value) ? 1 : Math.max(1, value));
-          }}
-          style={{
-            width: "60px",
-            textAlign: "center",
-            border: "1px solid #ccc",
-            borderRadius: "5px",
-            padding: "5px",
-          }}
-        />
-        <button
-          onClick={() => setQuantity(quantity + 1)}
-          style={{
-            padding: "5px 10px",
-            backgroundColor: "#48bb78",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          +
-        </button>
-      </div>
-      {/* Claim 按钮 */}
-      <TransactionButton
-        transaction={() =>
-          claimTo({
-            contract,
-            to: "your-wallet-address", // 替换为实际钱包地址
-            quantity: BigInt(quantity),
-          })
-        }
-        onTransactionConfirmed={async () => {
-          setQuantity(1); // 重置数量
-          alert("NFT claimed!");
-        }}
-      >
-        {`Claim NFT (${getNFTPrice(quantity)} ETH)`}
-      </TransactionButton>
+          {`Claim NFT (${getNFTPrice(quantity)} ETH)`}
+        </TransactionButton>
+      </Stack>
     </Card>
   );
 }
@@ -150,19 +148,14 @@ const TransactionButton = ({
   };
 
   return (
-    <button
+    <Button
       onClick={handleClick}
-      disabled={loading}
-      style={{
-        padding: "10px 20px",
-        backgroundColor: "#3182ce",
-        color: "#fff",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-      }}
+      isLoading={loading}
+      colorScheme="blue"
+      loadingText="Processing"
+      width="full"
     >
-      {loading ? "Processing..." : children}
-    </button>
+      {children}
+    </Button>
   );
 };
