@@ -54,12 +54,12 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
     );
 
     return (
-        <Box maxWidth="400px" mx="auto" mt={4}>
+        <Flex maxWidth="400px" mx="auto" mt={4} direction="column" align="center">
             {nft && (
-                <Card p={5} shadow="md" borderWidth="1px" borderRadius="lg">
-                    <Flex direction="column" align="center" gap={3}>
+                <Card p={5} shadow="md" borderWidth="1px" borderRadius="lg" width="100%">
+                    <Stack spacing={4} align="center">
                         {/* NFT 圖片 */}
-                        <Box cursor="pointer">
+                        <Box>
                             <MediaRenderer
                                 src={nft.metadata.image}
                                 height="150px"
@@ -74,7 +74,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                         </Text>
 
                         {/* Equipped 資訊 */}
-                        <Stack spacing={3} mt={3} width="100%">
+                        <Stack spacing={3} width="100%">
                             <Text fontSize="md" textAlign="center">
                                 Equipped: {equipped}
                             </Text>
@@ -138,16 +138,15 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                                             await contract.call("claimRewards", [tokenId]);
                                         } catch (error) {
                                             console.error("Claim rewards failed:", error);
-                                        }
-                                    }}
-                                >
-                                    Claim $CARROT
-                                </Web3Button>
-                            </Box>
+                                        }}
+                                    >
+                                        Claim $CARROT
+                                    </Web3Button>
+                                </Box>
+                            </Stack>
                         </Stack>
-                    </Flex>
-                </Card>
-            )}
-        </Box>
-    );
-};
+                    </Card>
+                )}
+            </Flex>
+        );
+    };
