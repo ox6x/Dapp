@@ -29,28 +29,38 @@ export default function Store() {
   };
 
   return (
-    <Container maxW={"1200px"} mt={5}>
+    <Container maxW={"1200px"} mt={5} centerContent>
       {/* Header Section */}
-      <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+      <Flex
+        direction={"row"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        width="100%"
+        maxW="800px"
+      >
         <Link href="/">
           <Button>Back</Button>
         </Link>
       </Flex>
 
       {/* Store Heading */}
-      <Heading mt={5}>Store</Heading>
-      <Text>Purchase tools with $CARROTS to increase your earnings.</Text>
+      <Heading mt={5} textAlign="center">
+        Store
+      </Heading>
+      <Text textAlign="center" mt={2}>
+        Purchase tools with $CARROTS to increase your earnings.
+      </Text>
 
       {/* NFT Carousel */}
       {!nfts ? (
-        <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
-          <Spinner />
+        <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"} mt={10}>
+          <Spinner size="lg" />
         </Flex>
       ) : (
-        <Box mt={10}>
+        <Box mt={10} width="100%" maxW="800px">
           <Slider {...sliderSettings}>
             {nfts?.map((nftItem) => (
-              <Box key={nftItem.metadata.id} p={5}>
+              <Box key={nftItem.metadata.id} p={5} textAlign="center">
                 <NFT nft={nftItem} />
               </Box>
             ))}
