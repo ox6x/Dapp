@@ -70,13 +70,22 @@ export function Inventory({ nft }: Props) {
   return (
     <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
       {nft?.map((nft) => (
-        <Card key={nft.metadata.id} p={5} shadow="md" borderWidth="1px">
+        <Card
+          key={nft.metadata.id}
+          p={5}
+          shadow="lg"
+          borderWidth="1px"
+          borderRadius="lg"
+          transition="transform 0.2s, box-shadow 0.2s"
+          _hover={{ transform: "scale(1.05)", boxShadow: "xl" }}
+        >
           <Stack alignItems="center">
             {/* NFT 圖片 */}
             <MediaRenderer
               src={nft.metadata.image}
               height="100px"
               width="100px"
+              style={{ borderRadius: "10px" }}
             />
             <Text fontWeight="bold">{nft.metadata.name}</Text>
 
@@ -99,6 +108,8 @@ export function Inventory({ nft }: Props) {
                   )
                 }
                 isDisabled={(quantities[nft.metadata.id] || 1) <= 1} // 禁用負數數量
+                borderRadius="full"
+                px={4}
               >
                 -
               </Button>
@@ -115,6 +126,7 @@ export function Inventory({ nft }: Props) {
                 }}
                 textAlign="center"
                 w="60px"
+                borderRadius="md"
               />
               <Button
                 size="sm"
@@ -125,6 +137,8 @@ export function Inventory({ nft }: Props) {
                     (quantities[nft.metadata.id] || 1) + 1
                   )
                 }
+                borderRadius="full"
+                px={4}
               >
                 +
               </Button>
@@ -136,7 +150,19 @@ export function Inventory({ nft }: Props) {
               action={() =>
                 stakeNFT(nft.metadata.id, quantities[nft.metadata.id] || 1)
               }
-              style={{ marginTop: "10px" }}
+              style={{
+                marginTop: "10px",
+                borderRadius: "20px",
+                padding: "10px 20px",
+                backgroundColor: "#3182ce",
+                color: "#fff",
+                fontWeight: "bold",
+                transition: "background-color 0.3s, transform 0.2s",
+              }}
+              _hover={{
+                backgroundColor: "#2b6cb0",
+                transform: "scale(1.1)",
+              }}
             >
               {`Equip (${quantities[nft.metadata.id] || 1})`}
             </Web3Button>
