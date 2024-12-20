@@ -1,4 +1,3 @@
-// components/Login.tsx
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { Flex, Heading, Container } from "@chakra-ui/react";
 
@@ -20,5 +19,8 @@ const Login = () => {
     </Container>
   );
 };
+
+// 不使用佈局
+Login.getLayout = (page: React.ReactNode) => <>{page}</>;
 
 export default Login;
