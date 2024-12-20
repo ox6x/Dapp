@@ -6,7 +6,7 @@ import { useState } from "react";
 
 interface EquippedProps {
     tokenId: number;
-};
+}
 
 export const Equipped = (props: EquippedProps) => {
     const address = useAddress();
@@ -15,37 +15,47 @@ export const Equipped = (props: EquippedProps) => {
     const { data: nft } = useNFT(toolContract, props.tokenId);
 
     const { contract: stakingContract } = useContract(STAKING_ADDRESS);
-
     const { data: claimableRewards } = useContractRead(
         stakingContract,
         "getStakeInfoForToken",
         [props.tokenId, address]
     );
 
-    // 添加数量选择的状态
+    // 數量選擇的狀態
     const [quantity, setQuantity] = useState<number>(1);
 
     const handleQuantityChange = (newQuantity: number) => {
-        setQuantity(Math.max(1, newQuantity)); // 确保数量至少为1
+        setQuantity(Math.max(1, newQuantity)); // 確保數量至少為 1
     };
 
     return (
         <Box>
-            {nft && (
+            {nft && claimableRewards && (
                 <Card p={5}>
                     <Flex>
-                        <Box>
+                        <Box
+                            maxWidth="200px"
+                            maxHeight="200px"
+                            overflow="hidden"
+                            borderRadius="10px"
+                            marginRight="20px"
+                        >
                             <MediaRenderer
                                 src={nft.metadata.image}
-                                height="80%"
-                                width="80%"
+                                height="100%"
+                                width="100%"
+                                style={{ objectFit: "contain" }}
                             />
                         </Box>
-                        <Stack spacing={1}>
-                            <Text fontSize={"2xl"} fontWeight={"bold"}>{nft.metadata.name}</Text>
-                            <Text>Equipped: {ethers.utils.formatUnits(claimableRewards[0], 0)}</Text>
+                        <Stack spacing={3}>
+                            <Text fontSize="2xl" fontWeight="bold">
+                                {nft.metadata.name}
+                            </Text>
+                            <Text>
+                                Equipped: {ethers.utils.formatUnits(claimableRewards[0] || 0, 0)}
+                            </Text>
 
-                            {/* 数量选择器 */}
+                            {/* 數量選擇器 */}
                             <Flex align="center" gap={2}>
                                 <button
                                     onClick={() => handleQuantityChange(quantity - 1)}
@@ -100,7 +110,7 @@ export const Equipped = (props: EquippedProps) => {
                     </Flex>
                     <Box mt={5}>
                         <Text>Claimable $CARROT:</Text>
-                        <Text>{ethers.utils.formatUnits(claimableRewards[1], 18)}</Text>
+                        <Text>{ethers.utils.formatUnits(claimableRewards[1] || 0, 18)}</Text>
                         <Web3Button
                             contractAddress={STAKING_ADDRESS}
                             action={(contract) => contract.call("claimRewards", [props.tokenId])}
