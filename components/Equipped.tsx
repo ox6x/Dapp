@@ -17,8 +17,6 @@ import {
     Button,
     Divider,
     Input,
-    Collapse,
-    useDisclosure,
 } from "@chakra-ui/react";
 import { useState, useMemo } from "react";
 
@@ -37,7 +35,6 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
         [tokenId, address]
     );
 
-    const { isOpen, onToggle } = useDisclosure(); // 控制展開/收起
     const [quantity, setQuantity] = useState<number>(1);
 
     const handleQuantityChange = (newQuantity: number) => {
@@ -62,11 +59,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                 <Card p={5} shadow="md" borderWidth="1px" borderRadius="lg">
                     <Flex direction="column" align="center" gap={3}>
                         {/* NFT 圖片 */}
-                        <Box
-                            onClick={onToggle}
-                            cursor="pointer"
-                            _hover={{ transform: "scale(1.05)", transition: "0.3s" }}
-                        >
+                        <Box cursor="pointer">
                             <MediaRenderer
                                 src={nft.metadata.image}
                                 height="150px"
@@ -80,88 +73,78 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                             {nft.metadata.name}
                         </Text>
 
-                        {/* 展開區域 */}
-                        <Collapse in={isOpen} animateOpacity>
-                            <Stack spacing={3} mt={3} width="100%">
-                                {/* Equipped 資訊 */}
-                                <Text fontSize="md" textAlign="center">
-                                    Equipped: {equipped}
+                        {/* Equipped 資訊 */}
+                        <Stack spacing={3} mt={3} width="100%">
+                            <Text fontSize="md" textAlign="center">
+                                Equipped: {equipped}
+                            </Text>
+
+                            {/* 數量選擇器 */}
+                            <Flex align="center" gap={2} justify="center">
+                                <Button
+                                    size="sm"
+                                    colorScheme="red"
+                                    onClick={() => handleQuantityChange(quantity - 1)}
+                                >
+                                    -
+                                </Button>
+                                <Input
+                                    size="sm"
+                                    type="number"
+                                    value={quantity}
+                                    onChange={(e) => {
+                                        const value = parseInt(e.target.value);
+                                        handleQuantityChange(isNaN(value) ? 1 : value);
+                                    }}
+                                    width="60px"
+                                    textAlign="center"
+                                />
+                                <Button
+                                    size="sm"
+                                    colorScheme="green"
+                                    onClick={() => handleQuantityChange(quantity + 1)}
+                                >
+                                    +
+                                </Button>
+                            </Flex>
+
+                            {/* Unequip 按鈕 */}
+                            <Web3Button
+                                contractAddress={STAKING_ADDRESS}
+                                action={async (contract) => {
+                                    try {
+                                        await contract.call("withdraw", [tokenId, quantity]);
+                                    } catch (error) {
+                                        console.error("Withdraw failed:", error);
+                                    }
+                                }}
+                            >
+                                Unequip {quantity}
+                            </Web3Button>
+
+                            {/* 分隔線 */}
+                            <Divider my={4} />
+
+                            {/* Claimable rewards */}
+                            <Box textAlign="center">
+                                <Text fontSize="lg" fontWeight="medium">
+                                    Claimable $CARROT:
                                 </Text>
-
-                                {/* 數量選擇器 */}
-                                <Flex align="center" gap={2} justify="center">
-                                    <Button
-                                        size="sm"
-                                        colorScheme="red"
-                                        onClick={(e) => {
-                                            e.stopPropagation(); // 防止點擊觸發展開/收起
-                                            handleQuantityChange(quantity - 1);
-                                        }}
-                                    >
-                                        -
-                                    </Button>
-                                    <Input
-                                        size="sm"
-                                        type="number"
-                                        value={quantity}
-                                        onClick={(e) => e.stopPropagation()} // 防止點擊觸發展開/收起
-                                        onChange={(e) => {
-                                            const value = parseInt(e.target.value);
-                                            handleQuantityChange(isNaN(value) ? 1 : value);
-                                        }}
-                                        width="60px"
-                                        textAlign="center"
-                                    />
-                                    <Button
-                                        size="sm"
-                                        colorScheme="green"
-                                        onClick={(e) => {
-                                            e.stopPropagation(); // 防止點擊觸發展開/收起
-                                            handleQuantityChange(quantity + 1);
-                                        }}
-                                    >
-                                        +
-                                    </Button>
-                                </Flex>
-
-                                {/* Unequip 按鈕 */}
+                                <Text fontSize="md">{rewards}</Text>
                                 <Web3Button
                                     contractAddress={STAKING_ADDRESS}
                                     action={async (contract) => {
                                         try {
-                                            await contract.call("withdraw", [tokenId, quantity]);
+                                            await contract.call("claimRewards", [tokenId]);
                                         } catch (error) {
-                                            console.error("Withdraw failed:", error);
+                                            console.error("Claim rewards failed:", error);
                                         }
                                     }}
                                 >
-                                    Unequip {quantity}
+                                    Claim $CARROT
                                 </Web3Button>
-
-                                {/* 分隔線 */}
-                                <Divider my={4} />
-
-                                {/* Claimable rewards */}
-                                <Box textAlign="center">
-                                    <Text fontSize="lg" fontWeight="medium">
-                                        Claimable $CARROT:
-                                    </Text>
-                                    <Text fontSize="md">{rewards}</Text>
-                                    <Web3Button
-                                        contractAddress={STAKING_ADDRESS}
-                                        action={async (contract) => {
-                                            try {
-                                                await contract.call("claimRewards", [tokenId]);
-                                            } catch (error) {
-                                                console.error("Claim rewards failed:", error);
-                                            }
-                                        }}
-                                    >
-                                        Claim $CARROT
-                                    </Web3Button>
-                                </Box>
-                            </Stack>
-                        </Collapse>
+                            </Box>
+                        </Stack>
                     </Flex>
                 </Card>
             )}
