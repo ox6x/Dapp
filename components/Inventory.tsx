@@ -11,7 +11,6 @@ import {
   Text,
   Box,
   Button,
-  Stack,
   Flex,
   Input,
   VStack,
@@ -74,12 +73,12 @@ export function Inventory({ nft }: Props) {
     slidesToShow: 1, // 每次显示一列一个 NFT
     slidesToScroll: 1,
     adaptiveHeight: true,
-    arrows: false, // 隐藏左右箭头
+    arrows: true, // 显示左右箭头
   };
 
   return (
     <Box
-      bg="gray.100" // 外部容器背景色
+      bg="gray.100"
       borderRadius="md"
       p={6}
       maxW="600px"
@@ -92,7 +91,11 @@ export function Inventory({ nft }: Props) {
 
       <Slider {...settings}>
         {nft.map((nftItem) => (
-          <Box key={nftItem.metadata.id} p={4}>
+          <Box
+            key={nftItem.metadata.id}
+            p={4}
+            width="100%" // 确保每个滑块占满容器宽度
+          >
             <VStack spacing={4} align="center">
               {/* NFT 图片 */}
               <MediaRenderer
