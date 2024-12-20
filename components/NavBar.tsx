@@ -7,8 +7,6 @@ export default function NavBar() {
             <Flex direction={"row"} justifyContent={"space-between"}>
                 <Heading>Crypto Farm</Heading>
                 <Flex alignItems={"center"}>
-                    <Link href={"/"} mx={2}>Play</Link>
-                    <Link href={"/shop"} mx={2}>Shop</Link>
                 </Flex>
                 <ConnectWallet/>
             </Flex>
