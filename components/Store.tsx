@@ -11,7 +11,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import Slider from "react-slick";
-import NFT from "../components/NFT";
+import NFT from "./NFT";
 
 export default function Store() {
   const { contract } = useContract(TOOLS_ADDRESS);
