@@ -3,6 +3,9 @@ import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
 import { useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 interface EquippedProps {
     tokenId: number;
