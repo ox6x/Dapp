@@ -7,7 +7,7 @@ import {
   useOwnedNFTs,
 } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import { useRouter } from "next/router"; // 用于路由跳转
+import { useRouter } from "next/router";
 import {
   FARMER_ADDRESS,
   REWARDS_ADDRESS,
@@ -21,8 +21,6 @@ import { BigNumber, ethers } from "ethers";
 import {
   Text,
   Box,
-  Card,
-  Container,
   Flex,
   Heading,
   SimpleGrid,
@@ -32,7 +30,7 @@ import {
 
 const Home: NextPage = () => {
   const address = useAddress();
-  const router = useRouter(); // Next.js 路由对象
+  const router = useRouter();
 
   const { contract: farmerContract } = useContract(FARMER_ADDRESS);
   const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
@@ -55,85 +53,77 @@ const Home: NextPage = () => {
   // 如果用户未连接钱包，显示欢迎页
   if (!address) {
     return (
-      <Container maxW={"1200px"}>
-        <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Heading my={"40px"}>Welcome to Crypto Farm</Heading>
-          <ConnectWallet />
-        </Flex>
-      </Container>
+      <Flex direction="column" h="100vh" justifyContent="center" alignItems="center">
+        <Heading mb={6}>Welcome to Crypto Farm</Heading>
+        <ConnectWallet />
+      </Flex>
     );
   }
 
   // 如果数据正在加载，显示 Spinner
   if (loadingOwnedFarmers) {
     return (
-      <Container maxW={"1200px"}>
-        <Flex h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Spinner />
-        </Flex>
-      </Container>
+      <Flex h="100vh" justifyContent="center" alignItems="center">
+        <Spinner />
+      </Flex>
     );
   }
 
   // 如果用户没有 Farmers，显示领取 Farmer 的页面
   if (ownedFarmers?.length === 0) {
-    return (
-      <Container maxW={"1200px"}>
-        <ClaimFarmer />
-      </Container>
-    );
+    return <ClaimFarmer />;
   }
 
   return (
-    <Container maxW={"1200px"}>
+    <Box px={4} py={6}>
       <SimpleGrid columns={2} spacing={10}>
-        {/* 农夫信息卡片 */}
-        <Card p={5}>
-          <Heading>Farmer:</Heading>
-          <SimpleGrid columns={2} spacing={10}>
+        {/* 农夫信息 */}
+        <Box>
+          <Heading mb={4}>Farmer:</Heading>
+          <SimpleGrid columns={2} spacing={6}>
             <Box>
               {ownedFarmers?.map((nft) => (
-                <div key={nft.metadata.id}>
-                  <MediaRenderer
-                    src={nft.metadata.image}
-                    height="100%"
-                    width="100%"
-                  />
-                </div>
+                <MediaRenderer
+                  key={nft.metadata.id}
+                  src={nft.metadata.image}
+                  height="100%"
+                  width="100%"
+                />
               ))}
             </Box>
             <Box>
-              <Text fontSize={"small"} fontWeight={"bold"}>$CARROT Balance:</Text>
-              {rewardBalance && <p>{ethers.utils.formatUnits(rewardBalance, 18)}</p>}
+              <Text fontSize="sm" fontWeight="bold">$CARROT Balance:</Text>
+              {rewardBalance && <Text>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>}
             </Box>
           </SimpleGrid>
-        </Card>
+        </Box>
 
-        {/* Inventory 卡片，点击跳转到 Store */}
-        <Card p={5}>
+        {/* Inventory，点击跳转到 Store */}
+        <Box>
           <Heading
-            cursor="pointer" // 鼠标指针样式
-            onClick={() => router.push("/store")} // 点击跳转到 Store 页面
+            mb={4}
+            cursor="pointer"
+            onClick={() => router.push("/store")}
           >
             Inventory:
           </Heading>
           <Skeleton isLoaded={!loadingOwnedTools}>
             <Inventory nft={ownedTools} />
           </Skeleton>
-        </Card>
+        </Box>
       </SimpleGrid>
 
-      {/* 装备的工具卡片 */}
-      <Card p={5} my={10}>
-        <Heading mb={"30px"}>Equipped Tools:</Heading>
-        <SimpleGrid columns={3} spacing={10}>
+      {/* 装备的工具 */}
+      <Box mt={10}>
+        <Heading mb={6}>Equipped Tools:</Heading>
+        <SimpleGrid columns={3} spacing={6}>
           {equippedTools &&
             equippedTools[0].map((nft: BigNumber) => (
               <Equipped key={nft.toNumber()} tokenId={nft.toNumber()} />
             ))}
         </SimpleGrid>
-      </Card>
-    </Container>
+      </Box>
+    </Box>
   );
 };
 
