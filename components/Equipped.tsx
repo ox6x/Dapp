@@ -8,7 +8,18 @@ import {
 } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { Text, Box, Card, Stack, Flex, Button, Divider, Input, Collapse } from "@chakra-ui/react";
+import {
+    Text,
+    Box,
+    Card,
+    Stack,
+    Flex,
+    Button,
+    Divider,
+    Input,
+    Collapse,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { useState, useMemo } from "react";
 
 interface EquippedProps {
@@ -25,8 +36,9 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
         "getStakeInfoForToken",
         [tokenId, address]
     );
+
+    const { isOpen, onToggle } = useDisclosure(); // 控制展開/收起
     const [quantity, setQuantity] = useState<number>(1);
-    const [isExpanded, setIsExpanded] = useState(false); // 控制展開與收起
 
     const handleQuantityChange = (newQuantity: number) => {
         setQuantity(Math.max(1, newQuantity));
@@ -45,37 +57,36 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
     );
 
     return (
-        <Box>
+        <Box maxWidth="400px" mx="auto" mt={4}>
             {nft && (
                 <Card p={5} shadow="md" borderWidth="1px" borderRadius="lg">
-                    <Flex
-                        direction="column"
-                        align="center"
-                        gap={3}
-                        onClick={() => setIsExpanded(!isExpanded)} // 點擊切換展開狀態
-                        cursor="pointer"
-                    >
+                    <Flex direction="column" align="center" gap={3}>
                         {/* NFT 圖片 */}
-                        <Box>
+                        <Box
+                            onClick={onToggle}
+                            cursor="pointer"
+                            _hover={{ transform: "scale(1.05)", transition: "0.3s" }}
+                        >
                             <MediaRenderer
                                 src={nft.metadata.image}
                                 height="150px"
                                 width="150px"
-                                style={{
-                                    borderRadius: "10px",
-                                    transition: "transform 0.3s",
-                                    transform: isExpanded ? "scale(1.05)" : "scale(1)",
-                                }}
+                                style={{ borderRadius: "10px" }}
                             />
                         </Box>
 
+                        {/* NFT 名稱 */}
+                        <Text fontSize="xl" fontWeight="bold" textAlign="center">
+                            {nft.metadata.name}
+                        </Text>
+
                         {/* 展開區域 */}
-                        <Collapse in={isExpanded} animateOpacity>
-                            <Stack spacing={3} width="100%">
-                                <Text fontSize="xl" fontWeight="bold" textAlign="center">
-                                    {nft.metadata.name}
+                        <Collapse in={isOpen} animateOpacity>
+                            <Stack spacing={3} mt={3} width="100%">
+                                {/* Equipped 資訊 */}
+                                <Text fontSize="md" textAlign="center">
+                                    Equipped: {equipped}
                                 </Text>
-                                <Text>Equipped: {equipped}</Text>
 
                                 {/* 數量選擇器 */}
                                 <Flex align="center" gap={2} justify="center">
@@ -112,6 +123,8 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                                         +
                                     </Button>
                                 </Flex>
+
+                                {/* Unequip 按鈕 */}
                                 <Web3Button
                                     contractAddress={STAKING_ADDRESS}
                                     action={async (contract) => {
@@ -125,6 +138,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                                     Unequip {quantity}
                                 </Web3Button>
 
+                                {/* 分隔線 */}
                                 <Divider my={4} />
 
                                 {/* Claimable rewards */}
