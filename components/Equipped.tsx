@@ -54,6 +54,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
             shadow="md"
             my={4}
             alignItems="center"
+            width="100%" // 每个NFT占据一行的宽度
         >
             {/* 左侧 NFT 图片 */}
             <Box flexShrink={0} mr={4}>
@@ -135,6 +136,24 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                     </Web3Button>
                 </Flex>
             </VStack>
+        </Flex>
+    );
+};
+
+export const EquippedList = ({ tokenIds }: { tokenIds: number[] }) => {
+    return (
+        <Flex
+            direction="row" // 水平方向排列
+            wrap="wrap" // 自动换行
+            justify="center" // 水平居中对齐
+            gap={4} // 设置NFT之间的间距
+            p={4} // 设置整体内边距
+        >
+            {tokenIds.map((tokenId) => (
+                <Box key={tokenId} width="100%"> {/* 每个NFT占满整行 */}
+                    <Equipped tokenId={tokenId} />
+                </Box>
+            ))}
         </Flex>
     );
 };
