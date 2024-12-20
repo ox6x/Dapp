@@ -8,18 +8,42 @@ import {
 } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { Box, Text, VStack, HStack, Button, Input, Divider, Stack } from "@chakra-ui/react";
+import { Box, Text, VStack, HStack, Button, Input, Divider, SimpleGrid } from "@chakra-ui/react";
 import { useState, useMemo } from "react";
 
 interface EquippedProps {
-    tokenId: number;
+    tokenIds: number[];
 }
 
-export const Equipped = ({ tokenId }: EquippedProps) => {
+export const Equipped = ({ tokenIds }: EquippedProps) => {
     const address = useAddress();
     const { contract: toolContract } = useContract(TOOLS_ADDRESS);
-    const { data: nft } = useNFT(toolContract, tokenId);
     const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+
+    return (
+        <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={4} p={4}>
+            {tokenIds.map((tokenId) => (
+                <NFTCard
+                    key={tokenId}
+                    tokenId={tokenId}
+                    toolContract={toolContract}
+                    stakingContract={stakingContract}
+                    address={address}
+                />
+            ))}
+        </SimpleGrid>
+    );
+};
+
+interface NFTCardProps {
+    tokenId: number;
+    toolContract: any;
+    stakingContract: any;
+    address: string | undefined;
+}
+
+const NFTCard = ({ tokenId, toolContract, stakingContract, address }: NFTCardProps) => {
+    const { data: nft } = useNFT(toolContract, tokenId);
     const { data: claimableRewards } = useContractRead(
         stakingContract,
         "getStakeInfoForToken",
@@ -47,14 +71,11 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
     return (
         <Box
             p={4}
-            maxW="sm"
-            mx="auto"
             bg="gray.50"
             border="1px"
             borderColor="gray.200"
             borderRadius="md"
             shadow="md"
-            my={4}
         >
             {nft && (
                 <VStack spacing={4}>
@@ -128,7 +149,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                     {/* Claimable rewards */}
                     <VStack spacing={2}>
                         <Text fontSize="lg" fontWeight="medium">
-                            Claimable $CARROT:
+                            Claimable:
                         </Text>
                         <Text fontSize="md">{rewards}</Text>
                         <Web3Button
@@ -141,7 +162,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                                 }
                             }}
                         >
-                            Claim $CARROT
+                            Claim
                         </Web3Button>
                     </VStack>
                 </VStack>
