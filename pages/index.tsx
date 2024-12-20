@@ -5,7 +5,7 @@ import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Inventory } from "../components/Inventory";
 import { Equipped } from "../components/Equipped";
 import { BigNumber, ethers } from "ethers";
-import { Text, Box, Card, Container, Flex, Heading, SimpleGrid, Spinner, Skeleton } from "@chakra-ui/react";
+import { Text, Box, Card, Container, Flex, Heading, Skeleton, VStack } from "@chakra-ui/react";
 
 const Home: NextPage = () => {
   const address = useAddress();
@@ -57,10 +57,10 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"1200px"}>
-      <SimpleGrid columns={2} spacing={10}>
+      <VStack spacing={10} align="stretch">
         <Card p={5}>
           <Heading>Farmer:</Heading>
-          <SimpleGrid columns={2} spacing={10}>
+          <VStack spacing={5} align="stretch">
             <Box>
               {ownedFarmers?.map((nft) => (
                 <div key={nft.metadata.id}>
@@ -74,11 +74,11 @@ const Home: NextPage = () => {
             </Box>
             <Box>
               <Text fontSize={"small"} fontWeight={"bold"}>$CARROT Balance:</Text>
-                {rewardBalance && (
-                    <p>{ethers.utils.formatUnits(rewardBalance, 18)}</p>
-                  )}
-              </Box>
-          </SimpleGrid>
+              {rewardBalance && (
+                <p>{ethers.utils.formatUnits(rewardBalance, 18)}</p>
+              )}
+            </Box>
+          </VStack>
         </Card>
         <Card p={5}>
           <Heading>Inventory:</Heading>
@@ -88,10 +88,9 @@ const Home: NextPage = () => {
             />     
           </Skeleton>
         </Card>
-      </SimpleGrid>
-      <Card p={5} my={10}>
-        <Heading mb={"30px"}>Equiped Tools:</Heading>
-        <SimpleGrid columns={3} spacing={10}>
+        <Card p={5}>
+          <Heading mb={"30px"}>Equipped Tools:</Heading>
+          <VStack spacing={5} align="stretch">
             {equippedTools &&
               equippedTools[0].map((nft: BigNumber) => (
                 <Equipped
@@ -99,8 +98,9 @@ const Home: NextPage = () => {
                   tokenId={nft.toNumber()}
                 />
               ))}
-        </SimpleGrid>
-      </Card>
+          </VStack>
+        </Card>
+      </VStack>
     </Container>
   );
 };
