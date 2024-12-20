@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import Slider from "react-slick";
 import NFT from "./NFT";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function Store() {
   const { contract } = useContract(TOOLS_ADDRESS);
@@ -26,6 +28,8 @@ export default function Store() {
     slidesToScroll: 1,
     autoplay: true, // 自動播放
     autoplaySpeed: 3000, // 每 3 秒切換
+    centerMode: true, // 居中模式
+    centerPadding: "0px", // 避免內邊距造成偏移
   };
 
   return (
@@ -60,7 +64,12 @@ export default function Store() {
         <Box mt={10} width="100%" maxW="800px">
           <Slider {...sliderSettings}>
             {nfts?.map((nftItem) => (
-              <Box key={nftItem.metadata.id} p={5} textAlign="center">
+              <Box
+                key={nftItem.metadata.id}
+                p={5}
+                textAlign="center"
+                style={{ margin: "0 auto", maxWidth: "400px" }} // 確保內容居中
+              >
                 <NFT nft={nftItem} />
               </Box>
             ))}
