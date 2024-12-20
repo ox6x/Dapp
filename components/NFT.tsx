@@ -61,7 +61,19 @@ export default function NFTComponent({ nft }: Props) {
       )}
       {/* 数量选择器 */}
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px", margin: "10px 0" }}>
-        <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
+        <button
+          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+          style={{
+            padding: "5px 10px",
+            backgroundColor: "#f56565",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          -
+        </button>
         <input
           type="number"
           value={quantity}
@@ -69,9 +81,27 @@ export default function NFTComponent({ nft }: Props) {
             const value = parseInt(e.target.value);
             setQuantity(isNaN(value) ? 1 : Math.max(1, value));
           }}
-          style={{ width: "60px", textAlign: "center" }}
+          style={{
+            width: "60px",
+            textAlign: "center",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            padding: "5px",
+          }}
         />
-        <button onClick={() => setQuantity(quantity + 1)}>+</button>
+        <button
+          onClick={() => setQuantity(quantity + 1)}
+          style={{
+            padding: "5px 10px",
+            backgroundColor: "#48bb78",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          +
+        </button>
       </div>
       {/* Claim 按钮 */}
       <TransactionButton
