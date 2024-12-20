@@ -56,29 +56,32 @@ export const Equipped = (props: EquippedProps) => {
 
     return (
         <Box>
-            <Slider {...sliderSettings} style={{ maxWidth: "80%", margin: "0 auto" }}>
-                {props.nftArray.map((nftItem) => (
-                    <Box
-                        key={nftItem.id}
-                        maxWidth="300px"
-                        maxHeight="300px"
-                        overflow="hidden"
-                        borderRadius="10px"
-                        padding="10px"
-                        bgColor="white"
-                    >
-                        <MediaRenderer
-                            src={nftItem.image}
-                            height="100%"
-                            width="100%"
-                            style={{ objectFit: "contain" }}
-                        />
-                        <Text fontWeight="bold" textAlign="center" mt={2}>
-                            {nftItem.name}
-                        </Text>
-                    </Box>
-                ))}
-            </Slider>
+            {/* 外部容器添加樣式 */}
+            <Box maxWidth="80%" margin="0 auto">
+                <Slider {...sliderSettings}>
+                    {props.nftArray.map((nftItem) => (
+                        <Box
+                            key={nftItem.id}
+                            maxWidth="300px"
+                            maxHeight="300px"
+                            overflow="hidden"
+                            borderRadius="10px"
+                            padding="10px"
+                            bgColor="white"
+                        >
+                            <MediaRenderer
+                                src={nftItem.image}
+                                height="100%"
+                                width="100%"
+                                style={{ objectFit: "contain" }}
+                            />
+                            <Text fontWeight="bold" textAlign="center" mt={2}>
+                                {nftItem.name}
+                            </Text>
+                        </Box>
+                    ))}
+                </Slider>
+            </Box>
 
             {nft && (
                 <Card p={5} mt={5}>
