@@ -138,15 +138,16 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
                                             await contract.call("claimRewards", [tokenId]);
                                         } catch (error) {
                                             console.error("Claim rewards failed:", error);
-                                        }}
-                                    >
-                                        Claim $CARROT
-                                    </Web3Button>
-                                </Box>
-                            </Stack>
+                                        }
+                                    }}
+                                >
+                                    Claim $CARROT
+                                </Web3Button>
+                            </Box>
                         </Stack>
-                    </Card>
-                )}
-            </Flex>
-        );
-    };
+                    </Stack>
+                </Card>
+            )}
+        </Flex>
+    );
+};
