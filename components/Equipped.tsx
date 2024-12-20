@@ -8,7 +8,7 @@ import {
 } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { Text, Box, Card, Stack, Flex, Button, Divider, Input } from "@chakra-ui/react";
+import { Text, Box, Card, Stack, Flex, Button, Divider, Input, Collapse } from "@chakra-ui/react";
 import { useState, useMemo } from "react";
 
 interface EquippedProps {
@@ -26,6 +26,7 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
         [tokenId, address]
     );
     const [quantity, setQuantity] = useState<number>(1);
+    const [isExpanded, setIsExpanded] = useState(false); // 控制展開與收起
 
     const handleQuantityChange = (newQuantity: number) => {
         setQuantity(Math.max(1, newQuantity));
@@ -47,88 +48,107 @@ export const Equipped = ({ tokenId }: EquippedProps) => {
         <Box>
             {nft && (
                 <Card p={5} shadow="md" borderWidth="1px" borderRadius="lg">
-                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={5}>
-                        {/* 左側圖片 */}
+                    <Flex
+                        direction="column"
+                        align="center"
+                        gap={3}
+                        onClick={() => setIsExpanded(!isExpanded)} // 點擊切換展開狀態
+                        cursor="pointer"
+                    >
+                        {/* NFT 圖片 */}
                         <Box>
                             <MediaRenderer
                                 src={nft.metadata.image}
-                                height="100px"
-                                width="100px"
+                                height="150px"
+                                width="150px"
+                                style={{
+                                    borderRadius: "10px",
+                                    transition: "transform 0.3s",
+                                    transform: isExpanded ? "scale(1.05)" : "scale(1)",
+                                }}
                             />
                         </Box>
 
-                        {/* 中間文字 */}
-                        <Stack spacing={3} flex="1">
-                            <Text fontSize="xl" fontWeight="bold">
-                                {nft.metadata.name}
-                            </Text>
-                            <Text>Equipped: {equipped}</Text>
+                        {/* 展開區域 */}
+                        <Collapse in={isExpanded} animateOpacity>
+                            <Stack spacing={3} width="100%">
+                                <Text fontSize="xl" fontWeight="bold" textAlign="center">
+                                    {nft.metadata.name}
+                                </Text>
+                                <Text>Equipped: {equipped}</Text>
 
-                            {/* 數量選擇器 */}
-                            <Flex align="center" gap={2}>
-                                <Button
-                                    size="sm"
-                                    colorScheme="red"
-                                    onClick={() => handleQuantityChange(quantity - 1)}
-                                >
-                                    -
-                                </Button>
-                                <Input
-                                    size="sm"
-                                    type="number"
-                                    value={quantity}
-                                    onChange={(e) => {
-                                        const value = parseInt(e.target.value);
-                                        handleQuantityChange(isNaN(value) ? 1 : value);
+                                {/* 數量選擇器 */}
+                                <Flex align="center" gap={2} justify="center">
+                                    <Button
+                                        size="sm"
+                                        colorScheme="red"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // 防止點擊觸發展開/收起
+                                            handleQuantityChange(quantity - 1);
+                                        }}
+                                    >
+                                        -
+                                    </Button>
+                                    <Input
+                                        size="sm"
+                                        type="number"
+                                        value={quantity}
+                                        onClick={(e) => e.stopPropagation()} // 防止點擊觸發展開/收起
+                                        onChange={(e) => {
+                                            const value = parseInt(e.target.value);
+                                            handleQuantityChange(isNaN(value) ? 1 : value);
+                                        }}
+                                        width="60px"
+                                        textAlign="center"
+                                    />
+                                    <Button
+                                        size="sm"
+                                        colorScheme="green"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // 防止點擊觸發展開/收起
+                                            handleQuantityChange(quantity + 1);
+                                        }}
+                                    >
+                                        +
+                                    </Button>
+                                </Flex>
+                                <Web3Button
+                                    contractAddress={STAKING_ADDRESS}
+                                    action={async (contract) => {
+                                        try {
+                                            await contract.call("withdraw", [tokenId, quantity]);
+                                        } catch (error) {
+                                            console.error("Withdraw failed:", error);
+                                        }
                                     }}
-                                    width="60px"
-                                    textAlign="center"
-                                />
-                                <Button
-                                    size="sm"
-                                    colorScheme="green"
-                                    onClick={() => handleQuantityChange(quantity + 1)}
                                 >
-                                    +
-                                </Button>
-                            </Flex>
-                            <Web3Button
-                                contractAddress={STAKING_ADDRESS}
-                                action={async (contract) => {
-                                    try {
-                                        await contract.call("withdraw", [tokenId, quantity]);
-                                    } catch (error) {
-                                        console.error("Withdraw failed:", error);
-                                    }
-                                }}
-                            >
-                                Unequip {quantity}
-                            </Web3Button>
-                        </Stack>
+                                    Unequip {quantity}
+                                </Web3Button>
+
+                                <Divider my={4} />
+
+                                {/* Claimable rewards */}
+                                <Box textAlign="center">
+                                    <Text fontSize="lg" fontWeight="medium">
+                                        Claimable $CARROT:
+                                    </Text>
+                                    <Text fontSize="md">{rewards}</Text>
+                                    <Web3Button
+                                        contractAddress={STAKING_ADDRESS}
+                                        action={async (contract) => {
+                                            try {
+                                                await contract.call("claimRewards", [tokenId]);
+                                            } catch (error) {
+                                                console.error("Claim rewards failed:", error);
+                                            }
+                                        }}
+                                    >
+                                        Claim $CARROT
+                                    </Web3Button>
+                                </Box>
+                            </Stack>
+                        </Collapse>
                     </Flex>
-
-                    {/* 分隔線 */}
-                    <Divider my={4} />
-
-                    {/* 底部按鈕與資訊 */}
-                    <Box textAlign="center">
-                        <Text fontSize="lg" fontWeight="medium">
-                            Claimable $CARROT:
-                        </Text>
-                        <Text fontSize="md">{rewards}</Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS}
-                            action={async (contract) => {
-                                try {
-                                    await contract.call("claimRewards", [tokenId]);
-                                } catch (error) {
-                                    console.error("Claim rewards failed:", error);
-                                }
-                            }}
-                        >
-                            Claim $CARROT
-                        </Web3Button>
-                    </Box>
                 </Card>
             )}
         </Box>
