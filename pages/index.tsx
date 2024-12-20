@@ -113,7 +113,7 @@ const Home: NextPage = () => {
         <Card p={5}>
           <Heading
             cursor="pointer" // 鼠标指针样式
-            onClick={() => router.push("/store")} // 点击跳转到 Store 页面
+            onClick={() => router.push("/Store")} // 点击跳转到 Store 页面
           >
             Inventory:
           </Heading>
