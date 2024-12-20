@@ -70,16 +70,8 @@ export function Inventory({ nft }: Props) {
   return (
     <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
       {nft?.map((nft) => (
-        <Card
-          key={nft.metadata.id}
-          p={5}
-          shadow="md"
-          borderWidth="1px"
-          borderRadius="lg"
-          transition="transform 0.2s, box-shadow 0.2s"
-          _hover={{ transform: "scale(1.05)", boxShadow: "lg" }}
-        >
-          <Stack alignItems="center" spacing={3}>
+        <Card key={nft.metadata.id} p={5} shadow="md" borderWidth="1px">
+          <Stack alignItems="center">
             {/* NFT 圖片 */}
             <MediaRenderer
               src={nft.metadata.image}
@@ -107,7 +99,6 @@ export function Inventory({ nft }: Props) {
                   )
                 }
                 isDisabled={(quantities[nft.metadata.id] || 1) <= 1} // 禁用負數數量
-                borderRadius="full"
               >
                 -
               </Button>
@@ -124,7 +115,6 @@ export function Inventory({ nft }: Props) {
                 }}
                 textAlign="center"
                 w="60px"
-                borderRadius="md"
               />
               <Button
                 size="sm"
@@ -135,7 +125,6 @@ export function Inventory({ nft }: Props) {
                     (quantities[nft.metadata.id] || 1) + 1
                   )
                 }
-                borderRadius="full"
               >
                 +
               </Button>
@@ -147,17 +136,7 @@ export function Inventory({ nft }: Props) {
               action={() =>
                 stakeNFT(nft.metadata.id, quantities[nft.metadata.id] || 1)
               }
-              style={{
-                marginTop: "10px",
-                padding: "10px 20px",
-                borderRadius: "8px",
-                backgroundColor: "#3182ce",
-                color: "#fff",
-                fontWeight: "bold",
-              }}
-              _hover={{
-                backgroundColor: "#2b6cb0",
-              }}
+              style={{ marginTop: "10px" }}
             >
               {`Equip (${quantities[nft.metadata.id] || 1})`}
             </Web3Button>
