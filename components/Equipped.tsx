@@ -8,42 +8,28 @@ import {
 } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { Box, Text, VStack, HStack, Button, Input, Divider, SimpleGrid } from "@chakra-ui/react";
+import {
+    Box,
+    Text,
+    VStack,
+    HStack,
+    Button,
+    Input,
+    Divider,
+    Stack,
+    SimpleGrid,
+} from "@chakra-ui/react";
 import { useState, useMemo } from "react";
 
 interface EquippedProps {
-    tokenIds: number[];
+    tokenId: number;
 }
 
-export const Equipped = ({ tokenIds }: EquippedProps) => {
+const Equipped = ({ tokenId }: EquippedProps) => {
     const address = useAddress();
     const { contract: toolContract } = useContract(TOOLS_ADDRESS);
-    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
-
-    return (
-        <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={4} p={4}>
-            {tokenIds.map((tokenId) => (
-                <NFTCard
-                    key={tokenId}
-                    tokenId={tokenId}
-                    toolContract={toolContract}
-                    stakingContract={stakingContract}
-                    address={address}
-                />
-            ))}
-        </SimpleGrid>
-    );
-};
-
-interface NFTCardProps {
-    tokenId: number;
-    toolContract: any;
-    stakingContract: any;
-    address: string | undefined;
-}
-
-const NFTCard = ({ tokenId, toolContract, stakingContract, address }: NFTCardProps) => {
     const { data: nft } = useNFT(toolContract, tokenId);
+    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
     const { data: claimableRewards } = useContractRead(
         stakingContract,
         "getStakeInfoForToken",
@@ -71,11 +57,14 @@ const NFTCard = ({ tokenId, toolContract, stakingContract, address }: NFTCardPro
     return (
         <Box
             p={4}
+            maxW="sm"
+            mx="auto"
             bg="gray.50"
             border="1px"
             borderColor="gray.200"
             borderRadius="md"
             shadow="md"
+            my={4}
         >
             {nft && (
                 <VStack spacing={4}>
@@ -168,5 +157,21 @@ const NFTCard = ({ tokenId, toolContract, stakingContract, address }: NFTCardPro
                 </VStack>
             )}
         </Box>
+    );
+};
+
+export const EquippedGrid = ({ tokenIds }: { tokenIds: number[] }) => {
+    return (
+        <SimpleGrid
+            columns={{ base: 1, sm: 2, md: 3 }}
+            spacing={4}
+            px={4}
+            py={6}
+            minChildWidth="280px"
+        >
+            {tokenIds.map((tokenId) => (
+                <Equipped key={tokenId} tokenId={tokenId} />
+            ))}
+        </SimpleGrid>
     );
 };
