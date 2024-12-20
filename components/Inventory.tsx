@@ -15,6 +15,7 @@ import {
   Flex,
   Input,
   VStack,
+  Heading,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Slider from "react-slick";
@@ -76,74 +77,87 @@ export function Inventory({ nft }: Props) {
   };
 
   return (
-    <Slider {...settings}>
-      {nft.map((nftItem) => (
-        <Box key={nftItem.metadata.id} p={4}>
-          <VStack spacing={4} align="center">
-            {/* NFT 图片 */}
-            <MediaRenderer
-              src={nftItem.metadata.image}
-              height="150px"
-              width="150px"
-            />
-            <Text fontWeight="bold">{nftItem.metadata.name}</Text>
+    <Box
+      bg="gray.100" // 外部容器背景色
+      borderRadius="md"
+      p={6}
+      maxW="600px"
+      mx="auto"
+      boxShadow="lg"
+    >
+      <Heading as="h2" size="lg" textAlign="center" mb={6}>
+        My Inventory
+      </Heading>
 
-            {/* 数量选择器 */}
-            <Flex align="center" justify="center" gap={2}>
-              <Button
-                size="sm"
-                colorScheme="red"
-                onClick={() =>
-                  handleQuantityChange(
-                    nftItem.metadata.id,
-                    (quantities[nftItem.metadata.id] || 1) - 1
-                  )
-                }
-                isDisabled={(quantities[nftItem.metadata.id] || 1) <= 1}
-              >
-                -
-              </Button>
-              <Input
-                size="sm"
-                type="number"
-                value={quantities[nftItem.metadata.id] || 1}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value);
-                  handleQuantityChange(
-                    nftItem.metadata.id,
-                    isNaN(value) ? 1 : value
-                  );
-                }}
-                textAlign="center"
-                w="60px"
+      <Slider {...settings}>
+        {nft.map((nftItem) => (
+          <Box key={nftItem.metadata.id} p={4}>
+            <VStack spacing={4} align="center">
+              {/* NFT 图片 */}
+              <MediaRenderer
+                src={nftItem.metadata.image}
+                height="150px"
+                width="150px"
               />
-              <Button
-                size="sm"
-                colorScheme="green"
-                onClick={() =>
-                  handleQuantityChange(
-                    nftItem.metadata.id,
-                    (quantities[nftItem.metadata.id] || 1) + 1
-                  )
-                }
-              >
-                +
-              </Button>
-            </Flex>
+              <Text fontWeight="bold">{nftItem.metadata.name}</Text>
 
-            {/* 质押按钮 */}
-            <Web3Button
-              contractAddress={STAKING_ADDRESS}
-              action={() =>
-                stakeNFT(nftItem.metadata.id, quantities[nftItem.metadata.id] || 1)
-              }
-              style={{ marginTop: "10px" }}
-            >
-              {`Equip (${quantities[nftItem.metadata.id] || 1})`}
-            </Web3Button>
-          </VStack>
-        </Box>
-      ))}
-    </Slider>
+              {/* 数量选择器 */}
+              <Flex align="center" justify="center" gap={2}>
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  onClick={() =>
+                    handleQuantityChange(
+                      nftItem.metadata.id,
+                      (quantities[nftItem.metadata.id] || 1) - 1
+                    )
+                  }
+                  isDisabled={(quantities[nftItem.metadata.id] || 1) <= 1}
+                >
+                  -
+                </Button>
+                <Input
+                  size="sm"
+                  type="number"
+                  value={quantities[nftItem.metadata.id] || 1}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value);
+                    handleQuantityChange(
+                      nftItem.metadata.id,
+                      isNaN(value) ? 1 : value
+                    );
+                  }}
+                  textAlign="center"
+                  w="60px"
+                />
+                <Button
+                  size="sm"
+                  colorScheme="green"
+                  onClick={() =>
+                    handleQuantityChange(
+                      nftItem.metadata.id,
+                      (quantities[nftItem.metadata.id] || 1) + 1
+                    )
+                  }
+                >
+                  +
+                </Button>
+              </Flex>
+
+              {/* 质押按钮 */}
+              <Web3Button
+                contractAddress={STAKING_ADDRESS}
+                action={() =>
+                  stakeNFT(nftItem.metadata.id, quantities[nftItem.metadata.id] || 1)
+                }
+                style={{ marginTop: "10px" }}
+              >
+                {`Equip (${quantities[nftItem.metadata.id] || 1})`}
+              </Web3Button>
+            </VStack>
+          </Box>
+        ))}
+      </Slider>
+    </Box>
   );
 }
