@@ -1,7 +1,7 @@
 import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
 import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
-import Store from './store'; // 確保 Store 的路徑正確
+import Store from './Store'; // 確保 Store 的路徑正確
 import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
 
 type Props = {
