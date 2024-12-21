@@ -55,6 +55,7 @@ export const Equipped = (props: EquippedProps) => {
                             marginRight="20px"
                         >
                             <Slider {...sliderSettings}>
+                                {/* 主圖片 */}
                                 <div>
                                     <MediaRenderer
                                         src={nft.metadata.image}
@@ -63,15 +64,17 @@ export const Equipped = (props: EquippedProps) => {
                                         style={{ objectFit: "contain" }}
                                     />
                                 </div>
-                                {/* Add more slides here if needed */}
-                                <div>
-                                    <MediaRenderer
-                                        src={nft.metadata.animation_url || nft.metadata.image}
-                                        height="100%"
-                                        width="100%"
-                                        style={{ objectFit: "contain" }}
-                                    />
-                                </div>
+                                {/* 額外圖片或動畫 (如果存在) */}
+                                {nft.metadata.animation_url && (
+                                    <div>
+                                        <MediaRenderer
+                                            src={nft.metadata.animation_url}
+                                            height="100%"
+                                            width="100%"
+                                            style={{ objectFit: "contain" }}
+                                        />
+                                    </div>
+                                )}
                             </Slider>
                         </Box>
 
