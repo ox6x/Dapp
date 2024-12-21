@@ -5,7 +5,7 @@ import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Inventory } from "../components/Inventory";
 import { Equipped } from "../components/Equipped";
 import { BigNumber, ethers } from "ethers";
-import { Text, Box, Card, Container, Flex, Heading, SimpleGrid, Spinner, Skeleton } from "@chakra-ui/react";
+import { Text, Box, Card, Container, Flex, Heading, Spinner, Skeleton } from "@chakra-ui/react";
 
 const Home: NextPage = () => {
   const address = useAddress();
@@ -64,27 +64,21 @@ const Home: NextPage = () => {
           <Heading fontSize="lg" mb={4}>
             Farmer
           </Heading>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-            <Box>
-              {ownedFarmers?.map((nft) => (
-                <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
-                  <MediaRenderer 
-                    src={nft.metadata.image} 
-                    height="150px"
-                    width="100%"
-                  />
-                </Box>
-              ))}
+          {ownedFarmers?.map((nft) => (
+            <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
+              <MediaRenderer 
+                src={nft.metadata.image} 
+                height="150px"
+                width="100%"
+              />
             </Box>
-            <Box>
-              <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
-                $CARROT Balance:
-              </Text>
-              {rewardBalance && (
-                <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
-              )}
-            </Box>
-          </SimpleGrid>
+          ))}
+          <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
+            $CARROT Balance:
+          </Text>
+          {rewardBalance && (
+            <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
+          )}
         </Card>
       </Box>
       
@@ -106,15 +100,13 @@ const Home: NextPage = () => {
           <Heading fontSize="lg" mb={4}>
             Equipped Tools
           </Heading>
-          <SimpleGrid columns={1} spacing={4}>
-            {equippedTools &&
-              equippedTools[0].map((nft: BigNumber) => (
-                <Equipped
-                  key={nft.toNumber()}
-                  tokenId={nft.toNumber()}
-                />
-              ))}
-          </SimpleGrid>
+          {equippedTools &&
+            equippedTools[0].map((nft: BigNumber) => (
+              <Equipped
+                key={nft.toNumber()}
+                tokenId={nft.toNumber()}
+              />
+            ))}
         </Card>
       </Box>
     </Container>
