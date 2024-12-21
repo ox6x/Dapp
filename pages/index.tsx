@@ -25,12 +25,14 @@ const Home: NextPage = () => {
   );
 
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
-  
+
   if (!address) {
     return (
-      <Container maxW={"1200px"}>
+      <Container maxW={"container.sm"} px={4}>
         <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Heading my={"40px"}>Welcom to Crypto Farm</Heading>
+          <Heading my={6} textAlign="center" fontSize="2xl">
+            Welcome to Crypto Farm
+          </Heading>
           <ConnectWallet />
         </Flex>
       </Container>
@@ -38,10 +40,10 @@ const Home: NextPage = () => {
   }
 
   if (loadingOwnedFarmers) {
-    return(
-      <Container maxW={"1200px"}>
+    return (
+      <Container maxW={"container.sm"} px={4}>
         <Flex h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Spinner />
+          <Spinner size="lg" />
         </Flex>
       </Container>
     );
@@ -49,49 +51,62 @@ const Home: NextPage = () => {
 
   if (ownedFarmers?.length === 0) {
     return (
-      <Container maxW={"1200px"}>
+      <Container maxW={"container.sm"} px={4}>
         <ClaimFarmer />
       </Container>
     );
   }
 
   return (
-    <Container maxW={"1200px"}>
-      <SimpleGrid columns={2} spacing={10}>
-        <Card p={5}>
-          <Heading>Farmer:</Heading>
-          <SimpleGrid columns={2} spacing={10}>
+    <Container maxW={"container.sm"} px={4} py={6}>
+      <Box mb={6}>
+        <Card p={4}>
+          <Heading fontSize="lg" mb={4}>
+            Farmer
+          </Heading>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <Box>
               {ownedFarmers?.map((nft) => (
-                <div key={nft.metadata.id}>
+                <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
                   <MediaRenderer 
                     src={nft.metadata.image} 
-                    height="100%"
+                    height="150px"
                     width="100%"
                   />
-                </div>
+                </Box>
               ))}
             </Box>
             <Box>
-              <Text fontSize={"small"} fontWeight={"bold"}>$CARROT Balance:</Text>
-                {rewardBalance && (
-                    <p>{ethers.utils.formatUnits(rewardBalance, 18)}</p>
-                  )}
-              </Box>
+              <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
+                $CARROT Balance:
+              </Text>
+              {rewardBalance && (
+                <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
+              )}
+            </Box>
           </SimpleGrid>
         </Card>
-        <Card p={5}>
-          <Heading>Inventory:</Heading>
+      </Box>
+      
+      <Box mb={6}>
+        <Card p={4}>
+          <Heading fontSize="lg" mb={4}>
+            Inventory
+          </Heading>
           <Skeleton isLoaded={!loadingOwnedTools}>
             <Inventory
               nft={ownedTools}
-            />     
+            />
           </Skeleton>
         </Card>
-      </SimpleGrid>
-      <Card p={5} my={10}>
-        <Heading mb={"30px"}>Equiped Tools:</Heading>
-        <SimpleGrid columns={3} spacing={10}>
+      </Box>
+
+      <Box>
+        <Card p={4}>
+          <Heading fontSize="lg" mb={4}>
+            Equipped Tools
+          </Heading>
+          <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4}>
             {equippedTools &&
               equippedTools[0].map((nft: BigNumber) => (
                 <Equipped
@@ -99,8 +114,9 @@ const Home: NextPage = () => {
                   tokenId={nft.toNumber()}
                 />
               ))}
-        </SimpleGrid>
-      </Card>
+          </SimpleGrid>
+        </Card>
+      </Box>
     </Container>
   );
 };
