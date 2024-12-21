@@ -2,7 +2,7 @@ import { useContract, useNFTs } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS } from "../const/addresses";
 import Link from "next/link";
 import { Text, Button, Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
-import NFT from "../components/NFT";
+import NFT from "./NFT";
 
 export default function Store()  {
     const { contract } = useContract(TOOLS_ADDRESS);
