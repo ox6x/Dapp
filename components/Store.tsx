@@ -17,20 +17,26 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function Store() {
   const { contract } = useContract(TOOLS_ADDRESS);
-  const { data: nfts } = useNFTs(contract);
+  const { data: nfts, isLoading } = useNFTs(contract);
 
   // 配置 Slick 的輪播設置
   const sliderSettings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1, // 一次顯示一個 NFT
+    slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true, // 自動播放
-    autoplaySpeed: 30000, // 每 3 秒切換
-    centerMode: true, // 居中模式
-    centerPadding: "0px", // 避免內邊距造成偏移
+    autoplay: true,
+    autoplaySpeed: 3000,
   };
+
+  if (isLoading) {
+    return (
+      <Flex h="100vh" justifyContent="center" alignItems="center">
+        <Spinner size="lg" />
+      </Flex>
+    );
+  }
 
   return (
     <Container maxW={"1200px"} mt={5} centerContent>
@@ -56,25 +62,23 @@ export default function Store() {
       </Text>
 
       {/* NFT Carousel */}
-      {!nfts ? (
-        <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"} mt={10}>
-          <Spinner size="lg" />
-        </Flex>
-      ) : (
+      {nfts && nfts.length > 0 ? (
         <Box mt={10} width="100%" maxW="800px">
           <Slider {...sliderSettings}>
-            {nfts?.map((nftItem) => (
+            {nfts.map((nftItem) => (
               <Box
                 key={nftItem.metadata.id}
                 p={5}
                 textAlign="center"
-                style={{ margin: "0 auto", maxWidth: "400px" }} // 確保內容居中
+                style={{ margin: "0 auto", maxWidth: "400px" }}
               >
                 <NFT nft={nftItem} />
               </Box>
             ))}
           </Slider>
         </Box>
+      ) : (
+        <Text mt={10}>No NFTs available in the store.</Text>
       )}
     </Container>
   );
