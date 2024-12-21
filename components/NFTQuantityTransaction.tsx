@@ -1,13 +1,13 @@
-
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
+import "./NFTQuantityTransaction.css";
 
 interface NFTQuantityTransactionProps {
-  initialQuantity?: number; // 初始数量
-  minQuantity?: number; // 最小数量
-  onTransaction: (quantity: number) => Promise<void>; // 交易回调函数
-  onTransactionConfirmed?: () => void; // 交易成功后的回调
-  getPrice: (quantity: number) => string; // 价格计算函数
-  buttonText?: string; // 按钮文本
+  initialQuantity?: number;
+  minQuantity?: number;
+  onTransaction: (quantity: number) => Promise<void>;
+  onTransactionConfirmed?: () => void;
+  getPrice: (quantity: number) => string;
+  buttonText?: string;
 }
 
 const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
@@ -16,40 +16,56 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   onTransaction,
   onTransactionConfirmed,
   getPrice,
-  buttonText = "Button", // 默认按钮文本
+  buttonText = "Button",
 }) => {
-  const [quantity, setQuantity] = useState(initialQuantity);
+  if (minQuantity < 1) throw new Error("minQuantity must be at least 1");
+  if (initialQuantity < minQuantity)
+    throw new Error("initialQuantity cannot be less than minQuantity");
 
-  const handleIncrement = () => setQuantity(quantity + 1);
-  const handleDecrement = () => setQuantity(Math.max(minQuantity, quantity - 1));
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    setQuantity(value > 0 ? value : minQuantity);
-  };
+  const [quantity, setQuantity] = useState(initialQuantity);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleIncrement = useCallback(() => setQuantity(q => q + 1), []);
+  const handleDecrement = useCallback(
+    () => setQuantity(q => Math.max(minQuantity, q - 1)),
+    [minQuantity]
+  );
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = parseInt(e.target.value);
+      setQuantity(!isNaN(value) && value >= minQuantity ? value : minQuantity);
+    },
+    [minQuantity]
+  );
 
   const handleTransaction = async () => {
-    await onTransaction(quantity); // 调用交易逻辑
-    setQuantity(initialQuantity); // 重置数量
-    if (onTransactionConfirmed) onTransactionConfirmed(); // 调用确认回调
+    if (isProcessing) return;
+    setIsProcessing(true);
+    try {
+      await onTransaction(quantity);
+      setQuantity(initialQuantity);
+      if (onTransactionConfirmed) onTransactionConfirmed();
+    } finally {
+      setIsProcessing(false);
+    }
   };
+
+  const price = useMemo(() => getPrice(quantity), [quantity, getPrice]);
 
   return (
     <div>
-      {/* 数量选择器 */}
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+      <div className="quantity-container">
         <button onClick={handleDecrement}>-</button>
         <input
           type="number"
           value={quantity}
           onChange={handleInputChange}
-          style={{ width: "50px", textAlign: "center", margin: "0 10px" }}
+          className="quantity-input"
         />
         <button onClick={handleIncrement}>+</button>
       </div>
-
-      {/* 交易按钮 */}
-      <button onClick={handleTransaction}>
-        {`${buttonText} (${getPrice(quantity)} BNB)`}
+      <button onClick={handleTransaction} disabled={isProcessing}>
+        {isProcessing ? "Processing..." : `${buttonText} (${price} BNB)`}
       </button>
     </div>
   );
