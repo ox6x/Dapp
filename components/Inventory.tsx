@@ -35,8 +35,8 @@ export function Inventory({ nft }: Props) {
         fetchBalances();
     }, [address, toolContract, nft]);
 
-    // 处理领取逻辑
-    async function claimNFT(id: string, quantity: number) {
+    // 处理装备逻辑
+    async function equipNFT(id: string, quantity: number) {
         if (!address) {
             return;
         }
@@ -52,8 +52,8 @@ export function Inventory({ nft }: Props) {
                 true,
             );
         }
-        await stakingContract?.call("claim", [id, quantity]); // 根据数量领取
-        alert(`Successfully claimed ${quantity} NFTs!`);
+        await stakingContract?.call("stake", [id, quantity]); // 根据数量装备
+        alert(`Successfully equipped ${quantity} NFTs!`);
     }
 
     if (nft?.length === 0) {
@@ -88,10 +88,9 @@ export function Inventory({ nft }: Props) {
                         {/* 使用 NFTQuantityTransaction 组件 */}
                         <NFTQuantityTransaction
                             initialQuantity={1}
-                            onTransaction={(quantity) => claimNFT(nftItem.metadata.id, quantity)}
+                            onTransaction={(quantity) => equipNFT(nftItem.metadata.id, quantity)}
                             getPrice={() => "Free"} // 如果没有价格概念，可以写固定值
-                            onTransactionConfirmed={() => alert("Claim confirmed!")}
-                            buttonText="Claim" // 将按钮文字改为“Claim”
+                            onTransactionConfirmed={() => alert("Equipment confirmed!")}
                         />
                     </Stack>
                 </Card>
