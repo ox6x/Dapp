@@ -1,7 +1,7 @@
 import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
 import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
-import Store from './Store'; // 確保 Store 的路徑正確
+import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
 
 type Props = {
@@ -32,15 +32,17 @@ export function Inventory({ nft }: Props) {
         await stakingContract?.call("stake", [id, 1]);
     };
 
-    if (nft?.length === 0) {
+    if(nft?.length === 0) {
         return (
             <Box>
                 <Text>No tools.</Text>
-                <Box mt={5}>
-                    <Store /> {/* 直接嵌入 Store 組件 */}
-                </Box>
+                <Link
+                    href="/shop"
+                >
+                    <Button>Shop Tool</Button>
+                </Link>
             </Box>
-        );
+        )
     }
 
     return (
@@ -48,18 +50,16 @@ export function Inventory({ nft }: Props) {
             {nft?.map((nft) => (
                 <Card key={nft.metadata.id} p={5}>
                     <Stack alignItems={"center"}>
-                        <MediaRenderer 
-                            src={nft.metadata.image} 
-                            height="100px"
-                            width="100px"
-                        />
-                        <Text>{nft.metadata.name}</Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS}
-                            action={() => stakeNFT(nft.metadata.id)}
-                        >
-                            Equip
-                        </Web3Button>
+                    <MediaRenderer 
+                        src={nft.metadata.image} 
+                        height="100px"
+                        width="100px"
+                    />
+                    <Text>{nft.metadata.name}</Text>
+                    <Web3Button
+                        contractAddress={STAKING_ADDRESS}
+                        action={() => stakeNFT(nft.metadata.id)}
+                    >Equip</Web3Button>
                     </Stack>
                 </Card>
             ))}
