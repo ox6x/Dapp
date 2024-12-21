@@ -31,7 +31,7 @@ export default function Store() {
                     <Button>Back</Button>
                 </Link>
             </Flex>
-            <Heading mt={"40px"}>Shop</Heading>
+            <Heading mt={"40px"}>Store</Heading>
             <Text>Purchase tools with $CARROTS to increase your earnings.</Text>
             {!nfts ? (
                 <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
