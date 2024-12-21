@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 interface NFTQuantityTransactionProps {
   initialQuantity?: number; // 初始数量
   minQuantity?: number; // 最小数量
