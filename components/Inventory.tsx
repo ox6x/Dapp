@@ -78,10 +78,10 @@ export function Inventory({ nft }: Props) {
                             width="100px"
                         />
                         <Text>{nftItem.metadata.name}</Text>
-                        {/* 显示用户持有数量，调整字体大小 */}
+                        {/* 将 Held 和数量放在同一行 */}
                         <Text fontSize="sm">
                             Held:{" "}
-                            <Text as="span" fontWeight="bold">
+                            <Text as="span" fontWeight="bold" display="inline">
                                 {balances[nftItem.metadata.id] || "0"}
                             </Text>
                         </Text>
