@@ -16,10 +16,12 @@ export default function Store() {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 3,
+        slidesToShow: 1, // 一次只顯示一個
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
+        centerMode: true, // 啟用置中
+        centerPadding: "0", // 確保內容完全置中
     };
 
     return (
