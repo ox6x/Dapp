@@ -48,7 +48,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
 
       {/* 交易按钮 */}
       <button onClick={handleTransaction}>
-        {`${buttonText} (${getPrice(quantity)} BNB)`}
+        {buttonText}
       </button>
     </div>
   );
