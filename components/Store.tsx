@@ -10,12 +10,14 @@ import {
   Spinner,
   Box,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router"; // 引入 useRouter
 import Slider from "react-slick";
 import NFT from "./NFT";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Store() {
+  const router = useRouter(); // 初始化 useRouter
   const { contract } = useContract(TOOLS_ADDRESS);
   const { data: nfts } = useNFTs(contract);
 
@@ -42,9 +44,7 @@ export default function Store() {
         width="100%"
         maxW="800px"
       >
-        <Link href="/">
-          <Button>Back</Button>
-        </Link>
+        <Button onClick={() => router.back()}>Back</Button> {/* 返回上一頁 */}
       </Flex>
 
       {/* Store Heading */}
