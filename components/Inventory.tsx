@@ -3,7 +3,7 @@ import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
 import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
-import NFTQuantityTransaction from './NFTQuantityTransaction'; // 引入数量选择组件
+import NFTQuantityTransaction from './NFTQuantityTransaction'; // 引入已修改的组件
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -85,11 +85,11 @@ export function Inventory({ nft }: Props) {
                                 {balances[nftItem.metadata.id] || "0"}
                             </Text>
                         </Text>
-                        {/* 使用 NFTQuantityTransaction 组件 */}
+                        {/* 使用已修改的 NFTQuantityTransaction 组件 */}
                         <NFTQuantityTransaction
                             initialQuantity={1}
                             onTransaction={(quantity) => equipNFT(nftItem.metadata.id, quantity)}
-                            getPrice={() => "Free"} // 如果没有价格概念，可以写固定值
+                            getPrice={() => "Free"} // 价格逻辑保留，但不显示
                             onTransactionConfirmed={() => alert("Equipment confirmed!")}
                             buttonText="Start" // 自定义按钮文本为 "Start"
                         />
