@@ -12,7 +12,7 @@ import {
   Card,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import NFT from "../components/NFT";
+import NFT from "./NFT";
 import { useEffect, useState } from "react";
 
 export default function Store() {
