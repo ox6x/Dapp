@@ -1,98 +1,78 @@
-import { MediaRenderer, Web3Button, useContract } from "@thirdweb-dev/react";
+import { MediaRenderer, Web3Button, useAddress, useContract } from "@thirdweb-dev/react";
 import { NFT } from "@thirdweb-dev/sdk";
-import { TOOLS_ADDRESS } from "../const/addresses";
-import { Text, Box, Button, Card, Stack, Heading, SimpleGrid } from "@chakra-ui/react";
+import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
+import { Text, Box, Button, Card, SimpleGrid, Stack } from "@chakra-ui/react";
 import { useState } from "react";
+import Store from "../components/Store"; // Import Store for inline display
 
 type Props = {
-  nft: NFT[] | undefined;
+    nft: NFT[] | undefined;
 };
 
-export default function Store({ nft }: Props) {
-  const { contract } = useContract(TOOLS_ADDRESS);
-  const [quantities, setQuantities] = useState<Record<string, number>>({});
+export function Inventory({ nft }: Props) {
+    const address = useAddress();
+    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
+    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+    const [showStore, setShowStore] = useState(false); // State to toggle Store view
 
-  const handleQuantityChange = (id: string, newQuantity: number) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: Math.max(1, newQuantity), // 確保數量至少為 1
-    }));
-  };
+    async function stakeNFT(id: string) {
+        if (!address) {
+            return;
+        }
 
-  async function buyTool(id: string, quantity: number) {
-    try {
-      await contract?.erc1155.claim(id, quantity);
-      alert(`Successfully purchased ${quantity} tool(s)!`);
-      setQuantities((prev) => ({ ...prev, [id]: 1 })); // 重置數量
-    } catch (error) {
-      console.error(error);
-      alert("Purchase failed. Please try again.");
+        const isApproved = await toolContract?.erc1155.isApproved(
+            address,
+            STAKING_ADDRESS,
+        );
+
+        if (!isApproved) {
+            await toolContract?.erc1155.setApprovalForAll(
+                STAKING_ADDRESS,
+                true,
+            );
+        }
+        await stakingContract?.call("stake", [id, 1]);
     }
-  }
 
-  if (!nft || nft.length === 0) {
+    if (nft?.length === 0) {
+        return (
+            <Box textAlign="center" mt={10}>
+                <Text mb={4}>No tools available in your inventory.</Text>
+                <Button
+                    colorScheme="teal"
+                    onClick={() => setShowStore(true)} // Show Store inline
+                >
+                    Go to Store
+                </Button>
+                {showStore && (
+                    <Box mt={6}>
+                        <Store />
+                    </Box>
+                )}
+            </Box>
+        );
+    }
+
     return (
-      <Box textAlign="center" mt={10}>
-        <Text>No tools available in the store.</Text>
-      </Box>
+        <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6}>
+            {nft?.map((nft) => (
+                <Card key={nft.metadata.id} p={5} boxShadow="md">
+                    <Stack alignItems={"center"}>
+                        <MediaRenderer
+                            src={nft.metadata.image}
+                            height="100px"
+                            width="100px"
+                        />
+                        <Text>{nft.metadata.name}</Text>
+                        <Web3Button
+                            contractAddress={STAKING_ADDRESS}
+                            action={() => stakeNFT(nft.metadata.id)}
+                        >
+                            Equip
+                        </Web3Button>
+                    </Stack>
+                </Card>
+            ))}
+        </SimpleGrid>
     );
-  }
-
-  return (
-    <Box maxWidth="1000px" margin="0 auto" padding="20px">
-      <Heading mb={6} textAlign="center">Tool Store</Heading>
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6}>
-        {nft.map((item) => (
-          <Card key={item.metadata.id} p={5} boxShadow="md">
-            <Stack alignItems={"center"}>
-              <MediaRenderer src={item.metadata.image} height="150px" width="150px" />
-              <Text fontWeight="bold">{item.metadata.name}</Text>
-
-              {/* 數量選擇器 */}
-              <Box display="flex" justifyContent="center" alignItems="center" gap={3} my={3}>
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  onClick={() => handleQuantityChange(item.metadata.id, (quantities[item.metadata.id] || 1) - 1)}
-                >
-                  -
-                </Button>
-                <input
-                  type="number"
-                  value={quantities[item.metadata.id] || 1}
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    handleQuantityChange(item.metadata.id, isNaN(value) ? 1 : value);
-                  }}
-                  style={{
-                    width: "60px",
-                    textAlign: "center",
-                    border: "1px solid #ccc",
-                    borderRadius: "5px",
-                    padding: "5px",
-                  }}
-                />
-                <Button
-                  size="sm"
-                  colorScheme="green"
-                  onClick={() => handleQuantityChange(item.metadata.id, (quantities[item.metadata.id] || 1) + 1)}
-                >
-                  +
-                </Button>
-              </Box>
-
-              {/* 購買按鈕 */}
-              <Button
-                colorScheme="teal"
-                width="100%"
-                onClick={() => buyTool(item.metadata.id, quantities[item.metadata.id] || 1)}
-              >
-                Buy {quantities[item.metadata.id] || 1} for {(0.05 * (quantities[item.metadata.id] || 1)).toFixed(2)} ETH
-              </Button>
-            </Stack>
-          </Card>
-        ))}
-      </SimpleGrid>
-    </Box>
-  );
 }
