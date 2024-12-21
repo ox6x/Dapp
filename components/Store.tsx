@@ -1,6 +1,5 @@
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS } from "../const/addresses";
-import Link from "next/link";
 import {
   Text,
   Button,
@@ -9,72 +8,83 @@ import {
   Heading,
   Spinner,
   Box,
+  SimpleGrid,
+  Card,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router"; // 引入 useRouter
-import Slider from "react-slick";
-import NFT from "./NFT";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { useRouter } from "next/router";
+import NFT from "../components/NFT";
+import { useEffect, useState } from "react";
 
 export default function Store() {
-  const router = useRouter(); // 初始化 useRouter
+  const router = useRouter();
   const { contract } = useContract(TOOLS_ADDRESS);
-  const { data: nfts } = useNFTs(contract);
+  const { data: nfts, isLoading } = useNFTs(contract);
 
-  // 配置 Slick 的輪播設置
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1, // 一次顯示一個 NFT
-    slidesToScroll: 1,
-    autoplay: true, // 自動播放
-    autoplaySpeed: 30000, // 每 3 秒切換
-    centerMode: true, // 居中模式
-    centerPadding: "0px", // 避免內邊距造成偏移
-  };
+  const [address, setAddress] = useState<string | null>(null);
+
+  // 偵測使用者地址是否已連接
+  useEffect(() => {
+    const fetchAddress = async () => {
+      const walletAddress = await contract?.wallet.getAddress();
+      setAddress(walletAddress || null);
+    };
+    fetchAddress();
+  }, [contract]);
+
+  if (!address) {
+    return (
+      <Container maxW="container.sm">
+        <Flex
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          height="100vh"
+        >
+          <Heading size="md" mb={4}>
+            Please Connect Your Wallet
+          </Heading>
+          <Button onClick={() => router.push("/")}>Go to Home</Button>
+        </Flex>
+      </Container>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Container maxW="container.sm">
+        <Flex
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          height="100vh"
+        >
+          <Spinner size="lg" />
+        </Flex>
+      </Container>
+    );
+  }
 
   return (
-    <Container maxW={"1200px"} mt={5} centerContent>
-      {/* Header Section */}
-      <Flex
-        direction={"row"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
-        width="100%"
-        maxW="800px"
-      >
-        <Button onClick={() => router.back()}>Back</Button> {/* 返回上一頁 */}
+    <Container maxW={"container.lg"} py={6}>
+      <Flex justifyContent="space-between" mb={6}>
+        <Button onClick={() => router.back()}>Back</Button>
+        <Heading>Store</Heading>
       </Flex>
 
-      {/* Store Heading */}
-      <Heading mt={5} textAlign="center">
-        Store
-      </Heading>
-      <Text textAlign="center" mt={2}>
+      <Text mb={4}>
         Purchase tools with $CARROTS to increase your earnings.
       </Text>
 
-      {/* NFT Carousel */}
-      {!nfts ? (
-        <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"} mt={10}>
-          <Spinner size="lg" />
-        </Flex>
+      {nfts?.length === 0 ? (
+        <Text>No tools available for purchase.</Text>
       ) : (
-        <Box mt={10} width="100%" maxW="800px">
-          <Slider {...sliderSettings}>
-            {nfts?.map((nftItem) => (
-              <Box
-                key={nftItem.metadata.id}
-                p={5}
-                textAlign="center"
-                style={{ margin: "0 auto", maxWidth: "400px" }} // 確保內容居中
-              >
-                <NFT nft={nftItem} />
-              </Box>
-            ))}
-          </Slider>
-        </Box>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+          {nfts?.map((nftItem) => (
+            <Card key={nftItem.metadata.id} p={4}>
+              <NFT nft={nftItem} />
+            </Card>
+          ))}
+        </SimpleGrid>
       )}
     </Container>
   );
