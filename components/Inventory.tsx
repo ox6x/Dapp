@@ -66,3 +66,4 @@ export function Inventory({ nft }: Props) {
         </SimpleGrid>
     );
 };
+
