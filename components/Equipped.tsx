@@ -2,9 +2,6 @@ import { MediaRenderer, Web3Button, useAddress, useContract, useContractRead, us
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 interface EquippedProps {
     tokenId: number;
@@ -24,57 +21,37 @@ export const Equipped = (props: EquippedProps) => {
         [props.tokenId, address]
     );
 
-    // Slider settings
-    const sliderSettings = {
-        dots: true,
-        infinite: false, // 禁用无限滚动（可选）
-        speed: 500,
-        slidesToShow: 1, // 确保一次只显示一个滑块
-        slidesToScroll: 1,
-    };
-
     return (
         <Box>
             {nft && (
                 <Card p={5}>
-                    <Slider {...sliderSettings}>
-                        {/* 第一部分：显示 NFT 图像和基本信息 */}
+                    <Flex>
                         <Box>
-                            <Flex>
-                                <Box>
-                                    <MediaRenderer
-                                        src={nft.metadata.image}
-                                        height="80%"
-                                        width="80%"
-                                    />
-                                </Box>
-                                <Stack spacing={1}>
-                                    <Text fontSize={"2xl"} fontWeight={"bold"}>{nft.metadata.name}</Text>
-                                    <Text>Equipped: {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}</Text>
-                                    <Web3Button
-                                        contractAddress={STAKING_ADDRESS}
-                                        action={(contract) => contract.call("withdraw", [props.tokenId, 1])}
-                                    >
-                                        Unequip
-                                    </Web3Button>
-                                </Stack>
-                            </Flex>
+                            <MediaRenderer
+                                src={nft.metadata.image}
+                                height="80%"
+                                width="80%"
+                            />
                         </Box>
-
-                        {/* 第二部分：显示奖励信息 */}
-                        <Box>
-                            <Text>Claimable $CARROT:</Text>
-                            <Text>{ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}</Text>
+                        <Stack spacing={1}>
+                            <Text fontSize={"2xl"} fontWeight={"bold"}>{nft.metadata.name}</Text>
+                            <Text>Equipped: {ethers.utils.formatUnits(claimableRewards[0], 0)}</Text>
                             <Web3Button
                                 contractAddress={STAKING_ADDRESS}
-                                action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                            >
-                                Claim $CARROT
-                            </Web3Button>
-                        </Box>
-                    </Slider>
+                                action={(contract) => contract.call("withdraw", [props.tokenId, 1])}
+                            >Unequip</Web3Button>
+                        </Stack>
+                    </Flex>
+                    <Box mt={5}>
+                        <Text>Claimable $CARROT:</Text>
+                        <Text>{ethers.utils.formatUnits(claimableRewards[1], 18)}</Text>
+                        <Web3Button
+                            contractAddress={STAKING_ADDRESS}
+                            action={(contract) => contract.call("claimRewards", [props.tokenId])}
+                        >Claim $CARROT</Web3Button>
+                    </Box>
                 </Card>
             )}
         </Box>
-    );
+    )
 };
