@@ -75,6 +75,7 @@ export const Equipped = (props: EquippedProps) => {
                                     onTransaction={(quantity) => handleUnequip(quantity)}
                                     getPrice={() => "Free"} // 无价格概念
                                     onTransactionConfirmed={() => alert("Unequip confirmed!")}
+                                    buttonText="Stop" // 按钮文字改为 Stop
                                 />
 
                                 {/* 直接 Claim Rewards 按钮 */}
@@ -90,7 +91,7 @@ export const Equipped = (props: EquippedProps) => {
                                             cursor: "pointer",
                                         }}
                                     >
-                                        Claim $CARROT
+                                        Claim
                                     </button>
                                 </Box>
                             </Stack>
