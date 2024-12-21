@@ -1,13 +1,12 @@
 import React, { useState, useCallback, useMemo } from "react";
-import "./NFTQuantityTransaction.css";
 
 interface NFTQuantityTransactionProps {
-  initialQuantity?: number;
-  minQuantity?: number;
-  onTransaction: (quantity: number) => Promise<void>;
-  onTransactionConfirmed?: () => void;
-  getPrice: (quantity: number) => string;
-  buttonText?: string;
+  initialQuantity?: number; // 初始数量
+  minQuantity?: number; // 最小数量
+  onTransaction: (quantity: number) => Promise<void>; // 交易回调函数
+  onTransactionConfirmed?: () => void; // 交易成功后的回调
+  getPrice: (quantity: number) => string; // 价格计算函数
+  buttonText?: string; // 按钮文本
 }
 
 const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
@@ -16,21 +15,12 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   onTransaction,
   onTransactionConfirmed,
   getPrice,
-  buttonText = "Button",
+  buttonText = "Button", // 默认按钮文本
 }) => {
-  // 確保傳入的初始值符合條件
-  if (minQuantity < 1) {
-    throw new Error("minQuantity must be at least 1");
-  }
+  const [quantity, setQuantity] = useState(initialQuantity);
+  const [isProcessing, setIsProcessing] = useState(false); // 防止重复提交
 
-  if (initialQuantity < minQuantity) {
-    throw new Error("initialQuantity cannot be less than minQuantity");
-  }
-
-  const [quantity, setQuantity] = useState<number>(initialQuantity);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-
-  // 使用 useCallback 以確保穩定的引用，避免子組件不必要的重新渲染
+  // 使用 useCallback 优化函数定义
   const handleIncrement = useCallback(() => {
     setQuantity((prev) => prev + 1);
   }, []);
@@ -42,61 +32,46 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= minQuantity) {
-        setQuantity(value);
-      } else {
-        setQuantity(minQuantity);
-      }
+      setQuantity(value > 0 ? value : minQuantity);
     },
     [minQuantity]
   );
 
   const handleTransaction = useCallback(async () => {
-    if (isProcessing) return;
-
+    if (isProcessing) return; // 避免重复提交
     setIsProcessing(true);
     try {
       await onTransaction(quantity);
-      setQuantity(initialQuantity); // 重置數量到初始值
-      onTransactionConfirmed?.(); // 可選回調
+      onTransactionConfirmed?.();
     } catch (error) {
-      console.error("Transaction failed:", error); // 更好的錯誤處理
+      console.error("Transaction failed:", error);
     } finally {
       setIsProcessing(false);
     }
-  }, [isProcessing, onTransaction, quantity, initialQuantity, onTransactionConfirmed]);
+  }, [isProcessing, onTransaction, onTransactionConfirmed, quantity]);
 
-  // 使用 useMemo 優化計算避免不必要的重複執行
-  const price = useMemo(() => getPrice(quantity), [quantity, getPrice]);
+  // 使用 useMemo 优化价格计算
+  const price = useMemo(() => getPrice(quantity), [getPrice, quantity]);
 
   return (
     <div>
-      <div className="quantity-container">
-        <button
-          onClick={handleDecrement}
-          disabled={isProcessing} // 禁用按鈕在處理過程中
-        >
+      <div>
+        <button onClick={handleDecrement} disabled={isProcessing}>
           -
         </button>
         <input
           type="number"
           value={quantity}
           onChange={handleInputChange}
-          className="quantity-input"
-          disabled={isProcessing} // 禁用輸入框在處理過程中
+          disabled={isProcessing}
         />
-        <button
-          onClick={handleIncrement}
-          disabled={isProcessing} // 禁用按鈕在處理過程中
-        >
+        <button onClick={handleIncrement} disabled={isProcessing}>
           +
         </button>
       </div>
-      <button
-        onClick={handleTransaction}
-        disabled={isProcessing} // 顯示當前按鈕狀態
-      >
-        {isProcessing ? "Processing..." : `${buttonText} (${price} BNB)`}
+      <div>Price: {price}</div>
+      <button onClick={handleTransaction} disabled={isProcessing}>
+        {buttonText}
       </button>
     </div>
   );
