@@ -3,9 +3,13 @@ import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
 import { useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 interface EquippedProps {
     tokenId: number;
+    additionalImages?: string[]; // 傳入額外的圖片URL
 }
 
 export const Equipped = (props: EquippedProps) => {
@@ -21,11 +25,19 @@ export const Equipped = (props: EquippedProps) => {
         [props.tokenId, address]
     );
 
-    // 數量選擇的狀態
     const [quantity, setQuantity] = useState<number>(1);
 
     const handleQuantityChange = (newQuantity: number) => {
         setQuantity(Math.max(1, newQuantity)); // 確保數量至少為 1
+    };
+
+    // react-slick 的設定
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
     };
 
     return (
@@ -33,6 +45,7 @@ export const Equipped = (props: EquippedProps) => {
             {nft && claimableRewards && (
                 <Card p={5}>
                     <Flex>
+                        {/* 使用 Slider 來顯示圖片 */}
                         <Box
                             maxWidth="200px"
                             maxHeight="200px"
@@ -40,12 +53,27 @@ export const Equipped = (props: EquippedProps) => {
                             borderRadius="10px"
                             marginRight="20px"
                         >
-                            <MediaRenderer
-                                src={nft.metadata.image}
-                                height="100%"
-                                width="100%"
-                                style={{ objectFit: "contain" }}
-                            />
+                            <Slider {...sliderSettings}>
+                                {/* 主 NFT 圖片 */}
+                                <div>
+                                    <MediaRenderer
+                                        src={nft.metadata.image}
+                                        height="100%"
+                                        width="100%"
+                                        style={{ objectFit: "contain" }}
+                                    />
+                                </div>
+                                {/* 額外圖片（如果有） */}
+                                {props.additionalImages?.map((img, index) => (
+                                    <div key={index}>
+                                        <img
+                                            src={img}
+                                            alt={`Additional ${index}`}
+                                            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                                        />
+                                    </div>
+                                ))}
+                            </Slider>
                         </Box>
                         <Stack spacing={3}>
                             <Text fontSize="2xl" fontWeight="bold">
