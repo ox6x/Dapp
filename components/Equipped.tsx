@@ -27,9 +27,9 @@ export const Equipped = (props: EquippedProps) => {
     // Slider settings
     const sliderSettings = {
         dots: true,
-        infinite: true,
+        infinite: false, // 禁用无限滚动（可选）
         speed: 500,
-        slidesToShow: 1,
+        slidesToShow: 1, // 确保一次只显示一个滑块
         slidesToScroll: 1,
     };
 
@@ -38,6 +38,7 @@ export const Equipped = (props: EquippedProps) => {
             {nft && (
                 <Card p={5}>
                     <Slider {...sliderSettings}>
+                        {/* 第一部分：显示 NFT 图像和基本信息 */}
                         <Box>
                             <Flex>
                                 <Box>
@@ -53,22 +54,27 @@ export const Equipped = (props: EquippedProps) => {
                                     <Web3Button
                                         contractAddress={STAKING_ADDRESS}
                                         action={(contract) => contract.call("withdraw", [props.tokenId, 1])}
-                                    >Unequip</Web3Button>
+                                    >
+                                        Unequip
+                                    </Web3Button>
                                 </Stack>
                             </Flex>
                         </Box>
 
+                        {/* 第二部分：显示奖励信息 */}
                         <Box>
                             <Text>Claimable $CARROT:</Text>
                             <Text>{ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}</Text>
                             <Web3Button
                                 contractAddress={STAKING_ADDRESS}
                                 action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                            >Claim $CARROT</Web3Button>
+                            >
+                                Claim $CARROT
+                            </Web3Button>
                         </Box>
                     </Slider>
                 </Card>
             )}
         </Box>
-    )
+    );
 };
