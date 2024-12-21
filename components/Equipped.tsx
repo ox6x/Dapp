@@ -25,31 +25,50 @@ export const Equipped = (props: EquippedProps) => {
         <Box>
             {nft && (
                 <Card p={5}>
-                    <Flex>
+                    <Flex alignItems="center">
+                        {/* 圖片區域 */}
                         <Box>
                             <MediaRenderer
                                 src={nft.metadata.image}
-                                height="80%"
-                                width="80%"
+                                height="150px"
+                                width="150px"
                             />
+                            <Text fontSize="lg" fontWeight="bold" textAlign="center" mt={2}>
+                                {nft.metadata.name}
+                            </Text>
                         </Box>
-                        <Stack spacing={1}>
-                            <Text fontSize={"2xl"} fontWeight={"bold"}>{nft.metadata.name}</Text>
-                            <Text>Equipped: {ethers.utils.formatUnits(claimableRewards[0], 0)}</Text>
-                            <Web3Button
-                                contractAddress={STAKING_ADDRESS}
-                                action={(contract) => contract.call("withdraw", [props.tokenId, 1])}
-                            >Unequip</Web3Button>
-                        </Stack>
+
+                        {/* 按鈕及屬性區域 */}
+                        <Flex flex={1} justifyContent="space-between" ml={5}>
+                            {/* 按鈕區域 */}
+                            <Stack spacing={3} justifyContent="center">
+                                <Web3Button
+                                    contractAddress={STAKING_ADDRESS}
+                                    action={(contract) => contract.call("withdraw", [props.tokenId, 1])}
+                                >
+                                    Unequip
+                                </Web3Button>
+                                <Web3Button
+                                    contractAddress={STAKING_ADDRESS}
+                                    action={(contract) => contract.call("claimRewards", [props.tokenId])}
+                                >
+                                    Claim $CARROT
+                                </Web3Button>
+                            </Stack>
+
+                            {/* 數值屬性區域 */}
+                            <Stack spacing={2} textAlign="right">
+                                <Text fontSize="md">Equipped:</Text>
+                                <Text fontWeight="bold">
+                                    {ethers.utils.formatUnits(claimableRewards[0], 0)}
+                                </Text>
+                                <Text fontSize="md">Claimable $CARROT:</Text>
+                                <Text fontWeight="bold">
+                                    {ethers.utils.formatUnits(claimableRewards[1], 18)}
+                                </Text>
+                            </Stack>
+                        </Flex>
                     </Flex>
-                    <Box mt={5}>
-                        <Text>Claimable $CARROT:</Text>
-                        <Text>{ethers.utils.formatUnits(claimableRewards[1], 18)}</Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS}
-                            action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                        >Claim $CARROT</Web3Button>
-                    </Box>
                 </Card>
             )}
         </Box>
