@@ -1,4 +1,3 @@
-相同方法
 import { MediaRenderer, useAddress, useContract } from '@thirdweb-dev/react';
 import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
