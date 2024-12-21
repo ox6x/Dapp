@@ -106,7 +106,7 @@ const Home: NextPage = () => {
           <Heading fontSize="lg" mb={4}>
             Equipped Tools
           </Heading>
-          <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4}>
+          <SimpleGrid columns={1} spacing={4}>
             {equippedTools &&
               equippedTools[0].map((nft: BigNumber) => (
                 <Equipped
