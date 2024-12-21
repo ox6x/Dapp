@@ -9,7 +9,6 @@ import "slick-carousel/slick/slick-theme.css";
 
 interface EquippedProps {
     tokenId: number;
-    additionalImages?: string[]; // 傳入額外的圖片URL
 }
 
 export const Equipped = (props: EquippedProps) => {
@@ -25,19 +24,21 @@ export const Equipped = (props: EquippedProps) => {
         [props.tokenId, address]
     );
 
+    // State for quantity selection
     const [quantity, setQuantity] = useState<number>(1);
 
     const handleQuantityChange = (newQuantity: number) => {
-        setQuantity(Math.max(1, newQuantity)); // 確保數量至少為 1
+        setQuantity(Math.max(1, newQuantity)); // Ensure quantity is at least 1
     };
 
-    // react-slick 的設定
+    // Slider settings
     const sliderSettings = {
         dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
+        arrows: true,
     };
 
     return (
@@ -45,7 +46,7 @@ export const Equipped = (props: EquippedProps) => {
             {nft && claimableRewards && (
                 <Card p={5}>
                     <Flex>
-                        {/* 使用 Slider 來顯示圖片 */}
+                        {/* Slider for NFTs */}
                         <Box
                             maxWidth="200px"
                             maxHeight="200px"
@@ -54,7 +55,6 @@ export const Equipped = (props: EquippedProps) => {
                             marginRight="20px"
                         >
                             <Slider {...sliderSettings}>
-                                {/* 主 NFT 圖片 */}
                                 <div>
                                     <MediaRenderer
                                         src={nft.metadata.image}
@@ -63,18 +63,19 @@ export const Equipped = (props: EquippedProps) => {
                                         style={{ objectFit: "contain" }}
                                     />
                                 </div>
-                                {/* 額外圖片（如果有） */}
-                                {props.additionalImages?.map((img, index) => (
-                                    <div key={index}>
-                                        <img
-                                            src={img}
-                                            alt={`Additional ${index}`}
-                                            style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                                        />
-                                    </div>
-                                ))}
+                                {/* Add more slides here if needed */}
+                                <div>
+                                    <MediaRenderer
+                                        src={nft.metadata.animation_url || nft.metadata.image}
+                                        height="100%"
+                                        width="100%"
+                                        style={{ objectFit: "contain" }}
+                                    />
+                                </div>
                             </Slider>
                         </Box>
+
+                        {/* Details Section */}
                         <Stack spacing={3}>
                             <Text fontSize="2xl" fontWeight="bold">
                                 {nft.metadata.name}
@@ -83,7 +84,7 @@ export const Equipped = (props: EquippedProps) => {
                                 Equipped: {ethers.utils.formatUnits(claimableRewards[0] || 0, 0)}
                             </Text>
 
-                            {/* 數量選擇器 */}
+                            {/* Quantity Selector */}
                             <Flex align="center" gap={2}>
                                 <button
                                     onClick={() => handleQuantityChange(quantity - 1)}
