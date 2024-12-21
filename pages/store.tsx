@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Text, Button, Container, Flex, Heading, Spinner, Box } from "@chakra-ui/react";
-import NFT from "../components/NFT";
+import NFTQuantityTransaction from "../components/NFTQuantityTransaction"; // 引用封装组件
 
 export default function Store() {
     const { contract } = useContract(TOOLS_ADDRESS);
@@ -22,6 +22,25 @@ export default function Store() {
         centerMode: true,
         centerPadding: "30px", // Adds some padding to center the slides
         autoplay: false, // Disable auto-play
+    };
+
+    // 定义单个 NFT 的购买逻辑
+    const handleTransaction = async (nft, quantity) => {
+        if (!contract) return;
+
+        try {
+            await contract.erc1155.claim(nft.metadata.id, quantity);
+            alert(`Successfully purchased ${quantity} ${nft.metadata.name}!`);
+        } catch (error) {
+            console.error("Transaction failed:", error);
+            alert("Transaction failed, please try again.");
+        }
+    };
+
+    // 价格计算函数
+    const getNFTPrice = (nft, quantity) => {
+        const pricePerNFT = parseFloat(nft?.price || "0");
+        return (pricePerNFT * quantity).toFixed(2);
     };
 
     return (
@@ -43,7 +62,13 @@ export default function Store() {
                     <Slider {...sliderSettings}>
                         {nfts?.map((nftItem) => (
                             <Box key={nftItem.metadata.id} p={4}>
-                                <NFT nft={nftItem} />
+                                <Text fontSize={"xl"} fontWeight={"bold"} textAlign={"center"}>{nftItem.metadata.name}</Text>
+                                <NFTQuantityTransaction
+                                    initialQuantity={1}
+                                    onTransaction={(quantity) => handleTransaction(nftItem, quantity)}
+                                    getPrice={(quantity) => getNFTPrice(nftItem, quantity)}
+                                    onTransactionConfirmed={() => alert("Transaction confirmed!")}
+                                />
                             </Box>
                         ))}
                     </Slider>
