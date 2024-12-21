@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS } from "../const/addresses";
 import Link from "next/link";
@@ -16,66 +17,67 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Store() {
-  const { contract } = useContract(TOOLS_ADDRESS);
-  const { data: nfts } = useNFTs(contract);
+  const { contract, isLoading: isContractLoading } = useContract(TOOLS_ADDRESS);
+  const { data: nfts, isLoading: isNFTsLoading } = useNFTs(contract);
+  const [sliderReady, setSliderReady] = useState(false);
 
-  // 配置 Slick 的輪播設置
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1, // 一次顯示一個 NFT
-    slidesToScroll: 1,
-    autoplay: true, // 自動播放
-    autoplaySpeed: 30000, // 每 3 秒切換
-    centerMode: true, // 居中模式
-    centerPadding: "0px", // 避免內邊距造成偏移
-  };
+  useEffect(() => {
+    if (!isContractLoading && !isNFTsLoading) {
+      setSliderReady(true);
+    }
+  }, [isContractLoading, isNFTsLoading]);
+
+  if (isContractLoading || isNFTsLoading) {
+    return (
+      <Flex h="100vh" justifyContent="center" alignItems="center">
+        <Spinner size="lg" />
+      </Flex>
+    );
+  }
+
+  if (!nfts || nfts.length === 0) {
+    return (
+      <Container maxW="1200px" mt={5} centerContent>
+        <Heading>No NFTs Available</Heading>
+        <Text mt={2}>Please check back later for new tools!</Text>
+      </Container>
+    );
+  }
 
   return (
     <Container maxW={"1200px"} mt={5} centerContent>
-      {/* Header Section */}
-      <Flex
-        direction={"row"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
-        width="100%"
-        maxW="800px"
-      >
+      <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"} width="100%" maxW="800px">
         <Link href="/">
           <Button>Back</Button>
         </Link>
       </Flex>
 
-      {/* Store Heading */}
-      <Heading mt={5} textAlign="center">
-        Store
-      </Heading>
-      <Text textAlign="center" mt={2}>
-        Purchase tools with $CARROTS to increase your earnings.
-      </Text>
+      <Heading mt={5} textAlign="center">Store</Heading>
+      <Text textAlign="center" mt={2}>Purchase tools with $CARROTS to increase your earnings.</Text>
 
-      {/* NFT Carousel */}
-      {!nfts ? (
-        <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"} mt={10}>
-          <Spinner size="lg" />
-        </Flex>
-      ) : (
-        <Box mt={10} width="100%" maxW="800px">
-          <Slider {...sliderSettings}>
-            {nfts?.map((nftItem) => (
-              <Box
-                key={nftItem.metadata.id}
-                p={5}
-                textAlign="center"
-                style={{ margin: "0 auto", maxWidth: "400px" }} // 確保內容居中
-              >
+      <Box mt={10} width="100%" maxW="800px">
+        {sliderReady ? (
+          <Slider
+            dots
+            infinite
+            speed={500}
+            slidesToShow={1}
+            slidesToScroll={1}
+            autoplay
+            autoplaySpeed={3000}
+            centerMode
+            centerPadding="0px"
+          >
+            {nfts.map((nftItem) => (
+              <Box key={nftItem.metadata.id} p={5} textAlign="center" style={{ margin: "0 auto", maxWidth: "400px" }}>
                 <NFT nft={nftItem} />
               </Box>
             ))}
           </Slider>
-        </Box>
-      )}
+        ) : (
+          <Spinner size="lg" />
+        )}
+      </Box>
     </Container>
   );
 }
