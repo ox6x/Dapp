@@ -69,6 +69,12 @@ export const Equipped = (props: EquippedProps) => {
                         <Flex flex={1} justifyContent="space-between" ml={5}>
                             {/* 按钮区域 */}
                             <Stack spacing={3} justifyContent="center">
+                                {/* 显示持有数量 */}
+                                <Text fontSize="md" fontWeight="bold" textAlign="center">
+                                    Equipped:{" "}
+                                    {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}
+                                </Text>
+
                                 {/* 使用 NFTQuantityTransaction 实现 Unequip 的数量选择 */}
                                 <NFTQuantityTransaction
                                     initialQuantity={1}
@@ -79,7 +85,7 @@ export const Equipped = (props: EquippedProps) => {
                                 />
 
                                 {/* 直接 Claim Rewards 按钮 */}
-                                <Box>
+                                <Box textAlign="center">
                                     <button
                                         onClick={handleClaimRewards}
                                         style={{
@@ -93,19 +99,10 @@ export const Equipped = (props: EquippedProps) => {
                                     >
                                         Claim
                                     </button>
+                                    <Text fontSize="md" fontWeight="bold" mt={2}>
+                                        {ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}
+                                    </Text>
                                 </Box>
-                            </Stack>
-
-                            {/* 数值属性区域 */}
-                            <Stack spacing={2} textAlign="right">
-                                <Text fontSize="md">Equipped:</Text>
-                                <Text fontWeight="bold">
-                                    {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}
-                                </Text>
-                                <Text fontSize="md">Claimable $CARROT:</Text>
-                                <Text fontWeight="bold">
-                                    {ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}
-                                </Text>
                             </Stack>
                         </Flex>
                     </Flex>
