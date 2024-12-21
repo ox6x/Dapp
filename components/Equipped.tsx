@@ -2,7 +2,7 @@ import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from 
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
-import NFTQuantityTransaction from "./NFTQuantityTransaction"; // 引入已修改的组件
+import NFTQuantityTransaction from "./NFTQuantityTransaction"; // 引入数量选择组件
 
 interface EquippedProps {
     tokenId: number;
@@ -75,13 +75,13 @@ export const Equipped = (props: EquippedProps) => {
                                     {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}
                                 </Text>
 
-                                {/* 使用已修改的 NFTQuantityTransaction 实现 Unequip 的数量选择 */}
+                                {/* 使用 NFTQuantityTransaction 实现 Unequip 的数量选择 */}
                                 <NFTQuantityTransaction
                                     initialQuantity={1}
                                     onTransaction={(quantity) => handleUnequip(quantity)}
-                                    getPrice={() => "Free"} // 价格逻辑保留，但不显示
+                                    getPrice={() => "Free"} // 无价格概念
                                     onTransactionConfirmed={() => alert("Unequip confirmed!")}
-                                    buttonText="Stop" // 按钮文字为 Stop
+                                    buttonText="Stop" // 按钮文字改为 Stop
                                 />
 
                                 {/* 直接 Claim Rewards 按钮 */}
