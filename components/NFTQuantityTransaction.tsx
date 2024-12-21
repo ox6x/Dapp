@@ -1,113 +1,58 @@
-import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
-import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
-import { ethers } from "ethers";
-import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
-import NFTQuantityTransaction from "./NFTQuantityTransaction"; // 引入数量选择组件
 
-interface EquippedProps {
-    tokenId: number;
+import React, { useState } from "react";
+
+interface NFTQuantityTransactionProps {
+  initialQuantity?: number; // 初始数量
+  minQuantity?: number; // 最小数量
+  onTransaction: (quantity: number) => Promise<void>; // 交易回调函数
+  onTransactionConfirmed?: () => void; // 交易成功后的回调
+  getPrice: (quantity: number) => string; // 价格计算函数
+  buttonText?: string; // 按钮文本
 }
 
-export const Equipped = (props: EquippedProps) => {
-    const address = useAddress();
+const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
+  initialQuantity = 1,
+  minQuantity = 1,
+  onTransaction,
+  onTransactionConfirmed,
+  getPrice,
+  buttonText = "Button", // 默认按钮文本
+}) => {
+  const [quantity, setQuantity] = useState(initialQuantity);
 
-    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
-    const { data: nft } = useNFT(toolContract, props.tokenId);
+  const handleIncrement = () => setQuantity(quantity + 1);
+  const handleDecrement = () => setQuantity(Math.max(minQuantity, quantity - 1));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    setQuantity(value > 0 ? value : minQuantity);
+  };
 
-    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+  const handleTransaction = async () => {
+    await onTransaction(quantity); // 调用交易逻辑
+    setQuantity(initialQuantity); // 重置数量
+    if (onTransactionConfirmed) onTransactionConfirmed(); // 调用确认回调
+  };
 
-    const { data: claimableRewards } = useContractRead(
-        stakingContract,
-        "getStakeInfoForToken",
-        [props.tokenId, address]
-    );
+  return (
+    <div>
+      {/* 数量选择器 */}
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+        <button onClick={handleDecrement}>-</button>
+        <input
+          type="number"
+          value={quantity}
+          onChange={handleInputChange}
+          style={{ width: "50px", textAlign: "center", margin: "0 10px" }}
+        />
+        <button onClick={handleIncrement}>+</button>
+      </div>
 
-    // Unequip 逻辑
-    const handleUnequip = async (quantity: number) => {
-        if (!stakingContract) return;
-
-        try {
-            await stakingContract.call("withdraw", [props.tokenId, quantity]);
-            alert(`Successfully unequipped ${quantity} NFTs!`);
-        } catch (error) {
-            console.error("Unequip failed:", error);
-            alert("Unequip failed, please try again.");
-        }
-    };
-
-    // Claim Rewards 逻辑（数量可选）
-    const handleClaimRewards = async () => {
-        if (!stakingContract) return;
-
-        try {
-            await stakingContract.call("claimRewards", [props.tokenId]);
-            alert("Successfully claimed rewards!");
-        } catch (error) {
-            console.error("Claim failed:", error);
-            alert("Claim rewards failed, please try again.");
-        }
-    };
-
-    return (
-        <Box>
-            {nft && (
-                <Card p={5}>
-                    <Flex alignItems="center">
-                        {/* 图片区域 */}
-                        <Box>
-                            <MediaRenderer
-                                src={nft.metadata.image}
-                                height="150px"
-                                width="150px"
-                            />
-                            <Text fontSize="lg" fontWeight="bold" textAlign="center" mt={2}>
-                                {nft.metadata.name}
-                            </Text>
-                        </Box>
-
-                        {/* 按钮及属性区域 */}
-                        <Flex flex={1} justifyContent="space-between" ml={5}>
-                            {/* 按钮区域 */}
-                            <Stack spacing={3} justifyContent="center">
-                                {/* 显示持有数量 */}
-                                <Text fontSize="md" fontWeight="bold" textAlign="center">
-                                    Equipped:{" "}
-                                    {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}
-                                </Text>
-
-                                {/* 使用 NFTQuantityTransaction 实现 Unequip 的数量选择 */}
-                                <NFTQuantityTransaction
-                                    initialQuantity={1}
-                                    onTransaction={(quantity) => handleUnequip(quantity)}
-                                    getPrice={() => "Free"} // 无价格概念
-                                    onTransactionConfirmed={() => alert("Unequip confirmed!")}
-                                    buttonText="Stop" // 按钮文字改为 Stop
-                                />
-
-                                {/* 直接 Claim Rewards 按钮 */}
-                                <Box textAlign="center">
-                                    <button
-                                        onClick={handleClaimRewards}
-                                        style={{
-                                            padding: "10px 20px",
-                                            borderRadius: "5px",
-                                            background: "#3182ce",
-                                            color: "#fff",
-                                            border: "none",
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        Claim
-                                    </button>
-                                    <Text fontSize="md" fontWeight="bold" mt={2}>
-                                        {ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}
-                                    </Text>
-                                </Box>
-                            </Stack>
-                        </Flex>
-                    </Flex>
-                </Card>
-            )}
-        </Box>
-    );
+      {/* 交易按钮 */}
+      <button onClick={handleTransaction}>
+        {`${buttonText} (${getPrice(quantity)} BNB)`}
+      </button>
+    </div>
+  );
 };
+
+export default NFTQuantityTransaction;
