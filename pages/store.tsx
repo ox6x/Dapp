@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Text, Button, Container, Flex, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
 import NFT from "../components/NFT";
 
-export default function Shop()  {
+export default function Store()  {
     const { contract } = useContract(TOOLS_ADDRESS);
     const { data: nfts } = useNFTs(contract);
     console.log(nfts);
