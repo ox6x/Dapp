@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS } from "../const/addresses";
@@ -11,7 +12,7 @@ import {
   Spinner,
   Box,
 } from "@chakra-ui/react";
-import Slider from "react-slick";
+import Slider, { Settings } from "react-slick";
 import NFT from "./NFT";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -26,6 +27,19 @@ export default function Store() {
       setSliderReady(true);
     }
   }, [isContractLoading, isNFTsLoading]);
+
+  // Slider 配置
+  const sliderSettings: Settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    centerMode: true,
+    centerPadding: "0px",
+  };
 
   if (isContractLoading || isNFTsLoading) {
     return (
@@ -57,17 +71,7 @@ export default function Store() {
 
       <Box mt={10} width="100%" maxW="800px">
         {sliderReady ? (
-          <Slider
-            dots
-            infinite
-            speed={500}
-            slidesToShow={1}
-            slidesToScroll={1}
-            autoplay
-            autoplaySpeed={3000}
-            centerMode
-            centerPadding="0px"
-          >
+          <Slider {...sliderSettings}>
             {nfts.map((nftItem) => (
               <Box key={nftItem.metadata.id} p={5} textAlign="center" style={{ margin: "0 auto", maxWidth: "400px" }}>
                 <NFT nft={nftItem} />
