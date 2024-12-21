@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-
 interface NFTQuantityTransactionProps {
   initialQuantity?: number; // 初始数量
   minQuantity?: number; // 最小数量
   onTransaction: (quantity: number) => Promise<void>; // 交易回调函数
   onTransactionConfirmed?: () => void; // 交易成功后的回调
   getPrice: (quantity: number) => string; // 价格计算函数
+  buttonText?: string; // 按钮文本
 }
 
 const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
@@ -14,6 +13,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   onTransaction,
   onTransactionConfirmed,
   getPrice,
+  buttonText = "Claim NFT", // 默认按钮文本
 }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
 
@@ -46,7 +46,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
 
       {/* 交易按钮 */}
       <button onClick={handleTransaction}>
-        {`Claim NFT (${getPrice(quantity)} ETH)`}
+        {`${buttonText} (${getPrice(quantity)} ETH)`}
       </button>
     </div>
   );
