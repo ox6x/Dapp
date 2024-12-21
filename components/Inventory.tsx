@@ -1,9 +1,8 @@
-import { MediaRenderer, Web3Button, useAddress, useContract } from "@thirdweb-dev/react";
-import { NFT } from "@thirdweb-dev/sdk";
-import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
-import { Text, Box, Button, Card, SimpleGrid, Stack } from "@chakra-ui/react";
-import { useState } from "react";
-import Store from "../components/Store"; // Import Store for inline display
+import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
+import { NFT } from '@thirdweb-dev/sdk';
+import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
+import Store from './store'; // 確保 Store 的路徑正確
+import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
 
 type Props = {
     nft: NFT[] | undefined;
@@ -13,7 +12,6 @@ export function Inventory({ nft }: Props) {
     const address = useAddress();
     const { contract: toolContract } = useContract(TOOLS_ADDRESS);
     const { contract: stakingContract } = useContract(STAKING_ADDRESS);
-    const [showStore, setShowStore] = useState(false); // State to toggle Store view
 
     async function stakeNFT(id: string) {
         if (!address) {
@@ -32,34 +30,26 @@ export function Inventory({ nft }: Props) {
             );
         }
         await stakingContract?.call("stake", [id, 1]);
-    }
+    };
 
     if (nft?.length === 0) {
         return (
-            <Box textAlign="center" mt={10}>
-                <Text mb={4}>No tools available in your inventory.</Text>
-                <Button
-                    colorScheme="teal"
-                    onClick={() => setShowStore(true)} // Show Store inline
-                >
-                    Go to Store
-                </Button>
-                {showStore && (
-                    <Box mt={6}>
-                        <Store />
-                    </Box>
-                )}
+            <Box>
+                <Text>No tools.</Text>
+                <Box mt={5}>
+                    <Store /> {/* 直接嵌入 Store 組件 */}
+                </Box>
             </Box>
         );
     }
 
     return (
-        <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6}>
+        <SimpleGrid columns={3} spacing={4}>
             {nft?.map((nft) => (
-                <Card key={nft.metadata.id} p={5} boxShadow="md">
+                <Card key={nft.metadata.id} p={5}>
                     <Stack alignItems={"center"}>
-                        <MediaRenderer
-                            src={nft.metadata.image}
+                        <MediaRenderer 
+                            src={nft.metadata.image} 
                             height="100px"
                             width="100px"
                         />
@@ -75,4 +65,4 @@ export function Inventory({ nft }: Props) {
             ))}
         </SimpleGrid>
     );
-}
+};
