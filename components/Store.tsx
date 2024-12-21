@@ -24,12 +24,15 @@ export default function Store() {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow: 1, // 一次顯示一個 NFT
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    autoplay: true, // 自動播放
+    autoplaySpeed: 3000, // 每 3 秒切換
+    centerMode: true, // 居中模式
+    centerPadding: "0px", // 避免內邊距造成偏移
   };
 
+  // 如果資料正在加載，直接返回 Spinner
   if (isLoading) {
     return (
       <Flex h="100vh" justifyContent="center" alignItems="center">
@@ -70,7 +73,7 @@ export default function Store() {
                 key={nftItem.metadata.id}
                 p={5}
                 textAlign="center"
-                style={{ margin: "0 auto", maxWidth: "400px" }}
+                style={{ margin: "0 auto", maxWidth: "400px" }} // 確保內容居中
               >
                 <NFT nft={nftItem} />
               </Box>
