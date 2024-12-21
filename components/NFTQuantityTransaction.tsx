@@ -7,6 +7,7 @@ interface NFTQuantityTransactionProps {
   onTransactionConfirmed?: () => void; // 交易成功后的回调
   getPrice: (quantity: number) => string; // 价格计算函数
   buttonText?: string; // 按钮文本
+  showPrice?: boolean; // 控制是否显示价格
 }
 
 const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
@@ -16,6 +17,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   onTransactionConfirmed,
   getPrice,
   buttonText = "Button", // 默认按钮文本
+  showPrice = true, // 默认显示价格
 }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
 
@@ -48,7 +50,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
 
       {/* 交易按钮 */}
       <button onClick={handleTransaction}>
-        {buttonText}
+        {buttonText} {showPrice ? `(${getPrice(quantity)} BNB)` : ""}
       </button>
     </div>
   );
