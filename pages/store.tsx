@@ -5,35 +5,23 @@ import { useContract, useNFTs } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS } from "../const/addresses";
 import Link from "next/link";
 import { Text, Button, Container, Flex, Heading, Spinner } from "@chakra-ui/react";
-import NFTComponent from "../components/NFT"; // 引入 NFT 组件
-import { useState } from "react";
+import NFT from "../components/NFT";
 
 export default function Store() {
     const { contract } = useContract(TOOLS_ADDRESS);
     const { data: nfts } = useNFTs(contract);
-
-    const [totalPrices, setTotalPrices] = useState<{ [key: string]: string }>({}); // 存储每个 NFT 的总价
-
-    const handleTotalPriceChange = (nftId: string, totalPrice: string) => {
-        setTotalPrices((prev) => ({
-            ...prev,
-            [nftId]: totalPrice,
-        }));
-    };
-
-    // 汇总所有 NFT 的总价
-    const grandTotal = Object.values(totalPrices).reduce((sum, price) => sum + parseFloat(price), 0);
+    console.log(nfts);
 
     const sliderSettings = {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 1,
+        slidesToShow: 1, // 一次只顯示一個
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
-        centerMode: true,
-        centerPadding: "0",
+        centerMode: true, // 啟用置中
+        centerPadding: "0", // 確保內容完全置中
     };
 
     return (
@@ -53,18 +41,11 @@ export default function Store() {
                 <Slider {...sliderSettings}>
                     {nfts?.map((nftItem) => (
                         <div key={nftItem.metadata.id}>
-                            <NFTComponent
-                                nft={nftItem}
-                                onTotalPriceChange={handleTotalPriceChange} // 传递回调函数
-                            />
+                            <NFT nft={nftItem} />
                         </div>
                     ))}
                 </Slider>
             )}
-            {/* 显示总价 */}
-            <Text fontSize={"2xl"} fontWeight={"bold"} textAlign={"center"} mt={5}>
-                Grand Total: {grandTotal.toFixed(2)} CARROTS
-            </Text>
         </Container>
     );
 }
