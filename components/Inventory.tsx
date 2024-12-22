@@ -2,7 +2,7 @@ import { MediaRenderer, useAddress, useContract } from '@thirdweb-dev/react';
 import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
 import Link from 'next/link';
-import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Text, Box, Button, Card, SimpleGrid, Stack, HStack } from '@chakra-ui/react';
 import NFTQuantityTransaction from './NFTQuantityTransaction'; // 引入数量选择组件
 import { useEffect, useState } from 'react';
 
@@ -78,13 +78,13 @@ export function Inventory({ nft }: Props) {
                             width="100px"
                         />
                         <Text>{nftItem.metadata.name}</Text>
-                        {/* 将 Held 和数量放在同一行 */}
-                        <Text fontSize="sm">
-                            Held:{" "}
-                            <Text as="span" fontWeight="bold" display="inline">
+                        {/* 调整 Held 和数量为水平布局 */}
+                        <HStack spacing={1} fontSize="sm">
+                            <Text>Held:</Text>
+                            <Text as="span" fontWeight="bold">
                                 {balances[nftItem.metadata.id] || "0"}
                             </Text>
-                        </Text>
+                        </HStack>
                         {/* 使用 NFTQuantityTransaction 组件 */}
                         <NFTQuantityTransaction
                             initialQuantity={1}
