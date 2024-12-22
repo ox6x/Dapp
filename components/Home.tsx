@@ -1,23 +1,11 @@
-import {
-  ConnectWallet,
-  MediaRenderer,
-  useAddress,
-  useContract,
-  useContractRead,
-  useOwnedNFTs,
-} from "@thirdweb-dev/react";
+import { ConnectWallet, MediaRenderer, useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import {
-  FARMER_ADDRESS,
-  REWARDS_ADDRESS,
-  STAKING_ADDRESS,
-  TOOLS_ADDRESS,
-} from "../const/addresses";
-import { ClaimFarmer } from "./ClaimFarmer";
-import { Inventory } from "./Inventory";
-import { Equipped } from "./Equipped";
+import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
+import { ClaimFarmer } from "../components/ClaimFarmer";
+import { Inventory } from "../components/Inventory";
+import { Equipped } from "../components/Equipped";
 import { BigNumber, ethers } from "ethers";
-import styles from "./Home.module.scss"; // 引入 SCSS 文件
+import { Text, Box, Card, Container, Flex, Heading, Spinner, Skeleton } from "@chakra-ui/react";
 
 const Home: NextPage = () => {
   const address = useAddress();
@@ -30,77 +18,98 @@ const Home: NextPage = () => {
   const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmercontract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
-  const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
+  const { data: equippedTools } = useContractRead(
+    stakingContract, 
+    "getStakeInfo",
+    [address]
+  );
 
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
 
   if (!address) {
     return (
-      <div className={styles.container}>
-        <div className={styles.center}>
-          <h1 className={styles.heading}>Welcome to Crypto Farm</h1>
+      <Container maxW={"container.sm"} px={4}>
+        <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+          <Heading my={6} textAlign="center" fontSize="2xl">
+            Welcome to Crypto Farm
+          </Heading>
           <ConnectWallet />
-        </div>
-      </div>
+        </Flex>
+      </Container>
     );
   }
 
   if (loadingOwnedFarmers) {
     return (
-      <div className={styles.container}>
-        <div className={styles.center}>
-          <div className={styles.spinner}></div>
-        </div>
-      </div>
+      <Container maxW={"container.sm"} px={4}>
+        <Flex h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+          <Spinner size="lg" />
+        </Flex>
+      </Container>
     );
   }
 
   if (ownedFarmers?.length === 0) {
     return (
-      <div className={styles.container}>
+      <Container maxW={"container.sm"} px={4}>
         <ClaimFarmer />
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.section}>
-        <div className={styles.card}>
-          <h2 className={styles.subheading}>Farmer</h2>
+    <Container maxW={"container.sm"} px={4} py={6}>
+      <Box mb={6}>
+        <Card p={4}>
+          <Heading fontSize="lg" mb={4}>
+            Farmer
+          </Heading>
           {ownedFarmers?.map((nft) => (
-            <div key={nft.metadata.id} className={styles.imageBox}>
-              <MediaRenderer src={nft.metadata.image} height="150px" width="100%" />
-            </div>
+            <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
+              <MediaRenderer 
+                src={nft.metadata.image} 
+                height="150px"
+                width="100%"
+              />
+            </Box>
           ))}
-          <p className={styles.text}>
-            <strong>bBNB Balance:</strong>
-          </p>
+          <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
+            bBNB Balance:
+          </Text>
           {rewardBalance && (
-            <p className={styles.text}>{ethers.utils.formatUnits(rewardBalance, 18)}</p>
+            <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
           )}
-        </div>
-      </div>
+        </Card>
+      </Box>
+      
+      <Box mb={6}>
+        <Card p={4}>
+          <Heading fontSize="lg" mb={4}>
+            Inventory
+          </Heading>
+          <Skeleton isLoaded={!loadingOwnedTools}>
+            <Inventory
+              nft={ownedTools}
+            />
+          </Skeleton>
+        </Card>
+      </Box>
 
-      <div className={styles.section}>
-        <div className={styles.card}>
-          <h2 className={styles.subheading}>Inventory</h2>
-          <div className={styles.skeleton}>
-            <Inventory nft={ownedTools} />
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.section}>
-        <div className={styles.card}>
-          <h2 className={styles.subheading}>Equipped</h2>
+      <Box>
+        <Card p={4}>
+          <Heading fontSize="lg" mb={4}>
+            Equipped
+          </Heading>
           {equippedTools &&
             equippedTools[0].map((nft: BigNumber) => (
-              <Equipped key={nft.toNumber()} tokenId={nft.toNumber()} />
+              <Equipped
+                key={nft.toNumber()}
+                tokenId={nft.toNumber()}
+              />
             ))}
-        </div>
-      </div>
-    </div>
+        </Card>
+      </Box>
+    </Container>
   );
 };
 
