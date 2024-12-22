@@ -1,32 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import type { AppProps } from "next/app";
-import { ThirdwebProvider, useAddress, useContract, useOwnedNFTs } from "@thirdweb-dev/react";
-import { ChakraProvider, Box, Container, Flex, Heading } from "@chakra-ui/react";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { ChakraProvider, Box } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
 import Head from "next/head";
-import Login from "../components/Login";
-import { ClaimFarmer } from "../components/ClaimFarmer";
-import { FARMER_ADDRESS } from "../const/addresses";
+import { useAddress } from "@thirdweb-dev/react";
 import { useEffect } from "react";
-import Home from "../components/Home"; // 引入 Home 组件
+import Login from "../components/Login";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
 function AuthWrapper({ children }: { children: React.ReactNode }) {
   const address = useAddress();
-  const { contract: farmerContract } = useContract(FARMER_ADDRESS);
-  const { data: ownedFarmers, isLoading } = useOwnedNFTs(farmerContract, address);
-
-  // 加载状态时显示 Loading
-  if (isLoading) {
-    return (
-      <Container maxW={"container.sm"} px={4}>
-        <Flex h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Heading size="lg">Loading...</Heading>
-        </Flex>
-      </Container>
-    );
-  }
 
   // 如果用户未登录，显示 Login 组件
   if (!address) {
@@ -37,25 +22,7 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // 如果已登录且持有通行证，直接渲染 Home
-  if (ownedFarmers && ownedFarmers.length > 0) {
-    return (
-      <Box minH="100vh" display="flex" justifyContent="center" alignItems="center">
-        <Home />
-      </Box>
-    );
-  }
-
-  // 如果已登录但没有通行证，显示 ClaimFarmer
-  if (ownedFarmers?.length === 0) {
-    return (
-      <Box minH="100vh" display="flex" justifyContent="center" alignItems="center">
-        <ClaimFarmer />
-      </Box>
-    );
-  }
-
-  // 默认渲染页面内容
+  // 如果已登录，渲染实际页面内容
   return <>{children}</>;
 }
 
