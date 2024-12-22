@@ -1,5 +1,5 @@
 import { Box, Card, Heading, Skeleton } from "@chakra-ui/react";
-import { Inventory } from "../components/Inventory";
+import { Inventory } from "./Inventory";
 
 const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => (
   <Box mb={6}>
