@@ -70,7 +70,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           value={quantity}
           onChange={handleInputChange}
           disabled={isProcessing}
-          style={{ width: "10px", textAlign: "center" }} // 視需求調整
+          style={{ width: "4px", textAlign: "center" }} // 視需求調整
         />
         <button onClick={handleIncrement} disabled={isProcessing}>
           +
