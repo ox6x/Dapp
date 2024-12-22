@@ -1,5 +1,6 @@
 import { ThirdwebProvider, ConnectWallet } from "@thirdweb-dev/react";
-import { ChakraProvider, Box, Flex, Container } from "@chakra-ui/react";
+
+import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
@@ -24,12 +25,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <ChakraProvider>
-        <Container maxW="container.xl" p={4}>
-          <Flex justify="flex-end" p={4}>
-            <ConnectWallet />
-          </Flex>
-          <Component {...pageProps} />
-        </Container>
+<ConnectWallet />
+        <Component {...pageProps} />
       </ChakraProvider>
     </ThirdwebProvider>
   );
