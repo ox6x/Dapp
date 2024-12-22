@@ -63,6 +63,10 @@ export const Equipped = (props: EquippedProps) => {
                             <Text fontSize="lg" fontWeight="bold" textAlign="center" mt={2}>
                                 {nft.metadata.name}
                             </Text>
+                            {/* 显示 Claimable Rewards */}
+                            <Text fontSize="md" fontWeight="bold" textAlign="center" mt={1}>
+                                Rewards: {ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}
+                            </Text>
                         </Box>
 
                         {/* 按钮及属性区域 */}
@@ -83,7 +87,7 @@ export const Equipped = (props: EquippedProps) => {
                                     buttonText="Turn off" // 按钮文字改为 Stop
                                 />
 
-                                {/* 直接 Claim Rewards 按钮，奖励金额与按钮文本合并 */}
+                                {/* 直接 Claim Rewards 按钮 */}
                                 <Box textAlign="center">
                                     <button
                                         onClick={handleClaimRewards}
@@ -96,8 +100,7 @@ export const Equipped = (props: EquippedProps) => {
                                             cursor: "pointer",
                                         }}
                                     >
-                                        Claim{" "}
-                                        {ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}
+                                        Claim
                                     </button>
                                 </Box>
                             </Stack>
