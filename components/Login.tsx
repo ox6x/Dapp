@@ -1,23 +1,26 @@
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { Flex, Heading, Container } from "@chakra-ui/react";
 
-const Login = ({ children }: { children?: React.ReactNode }) => {
+const Login = () => {
   const address = useAddress();
 
-  if (!address) {
-    return (
-      <Container maxW={"container.sm"} px={4}>
-        <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Heading my={6} textAlign="center" fontSize="2xl">
-            Welcome to Crypto Farm
-          </Heading>
-          <ConnectWallet />
-        </Flex>
-      </Container>
-    );
-  }
-
-  return <>{children}</>;
+  return (
+    <Container maxW={"1200px"}>
+      <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+        {!address ? (
+          <>
+            <Heading my={"40px"}>Welcome to Crypto Farm</Heading>
+            <ConnectWallet />
+          </>
+        ) : (
+          <Heading my={"40px"}>Wallet Connected</Heading>
+        )}
+      </Flex>
+    </Container>
+  );
 };
+
+// 不使用佈局
+Login.getLayout = (page: React.ReactNode) => <>{page}</>;
 
 export default Login;
