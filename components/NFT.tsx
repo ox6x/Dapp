@@ -90,7 +90,7 @@ export default function NFTComponent({ nft }: Props) {
                 mt={4}
                 colorScheme="blue"
             >
-                Purchase
+                Rent
             </Button>
         </Card>
     );
