@@ -1,12 +1,12 @@
 import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { Text, Box, Card, Stack, Flex, Button } from "@chakra-ui/react";
-import Quantity from "./Quantity"; // 确保路径正确
+import { Text, Box, Card, Stack, Flex, Button, Divider } from "@chakra-ui/react";
+import Quantity from "./Quantity"; // 確保路徑正確
 
 interface EquippedProps {
     tokenId: number;
-};
+}
 
 export const Equipped = (props: EquippedProps) => {
     const address = useAddress();
@@ -55,54 +55,50 @@ export const Equipped = (props: EquippedProps) => {
     const claimableCarrot = ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18);
 
     return (
-        <Box>
-            {nft && (
-                <Card p={5}>
-                    <Flex>
-                        {/* 左側圖片部分 */}
-                        <Box>
-                            <MediaRenderer
-                                src={nft.metadata.image}
-                                height="150px"
-                                width="150px"
-                                style={{ borderRadius: "8px" }}
-                            />
-                            {/* 數量選擇器與按鈕 */}
-                            <Stack spacing={4} mt={4} align="center">
-                                <Quantity
-                                    minQuantity={1}
-                                    onQuantityChange={handleOffClick}
-                                    buttonText="Off"
-                                />
-                                <Button
-                                    onClick={handleClaimClick}
-                                    style={{
-                                        padding: "6px 12px",
-                                        background: "#38a169",
-                                        color: "#fff",
-                                        border: "none",
-                                        borderRadius: "4px",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Claim
-                                </Button>
-                            </Stack>
-                        </Box>
+        <Card p={5} borderRadius="lg" boxShadow="xl">
+            <Flex align="flex-start" justify="space-between" gap={6}>
+                {/* 左側圖片與操作 */}
+                <Stack spacing={4} align="center" w="50%">
+                    {/* 圖片 */}
+                    <MediaRenderer
+                        src={nft?.metadata?.image || ""}
+                        height="200px"
+                        width="200px"
+                        style={{ borderRadius: "12px" }}
+                    />
+                    {/* 數量選擇器 */}
+                    <Quantity
+                        minQuantity={1}
+                        onQuantityChange={handleOffClick}
+                        buttonText="Off"
+                    />
+                    {/* Claim 按鈕 */}
+                    <Button
+                        onClick={handleClaimClick}
+                        bg="green.400"
+                        color="white"
+                        _hover={{ bg: "green.500" }}
+                        borderRadius="md"
+                        w="full"
+                    >
+                        Claim
+                    </Button>
+                </Stack>
 
-                        {/* 右側功能部分 */}
-                        <Stack spacing={4} ml={4} align="flex-start">
-                            {/* 名稱與數量、Token */}
-                            <Text fontSize={"lg"} fontWeight={"bold"} textAlign="center">
-                                {nft.metadata.name} ({equippedQuantity})
-                            </Text>
-                            <Text fontSize={"sm"} textAlign="center" color="gray.600">
-                                Token: {claimableCarrot}
-                            </Text>
-                        </Stack>
-                    </Flex>
-                </Card>
-            )}
-        </Box>
+                {/* 右側 NFT 信息 */}
+                <Stack spacing={4} w="50%">
+                    <Text fontSize="2xl" fontWeight="bold" textAlign="left">
+                        {nft?.metadata?.name}
+                    </Text>
+                    <Divider />
+                    <Text fontSize="lg" fontWeight="medium" color="gray.600">
+                        Equipped Quantity: {equippedQuantity}
+                    </Text>
+                    <Text fontSize="lg" fontWeight="medium" color="blue.600">
+                        Token Rewards: {claimableCarrot}
+                    </Text>
+                </Stack>
+            </Flex>
+        </Card>
     );
 };
