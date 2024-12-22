@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { ThirdwebProvider } from "@thirdweb-dev/react";
-import { ChakraProvider, Box } from "@chakra-ui/react";
+import NavBar from "../components/NavBar";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
@@ -23,11 +23,7 @@ export default function Home() {
         slug: "bsc-testnet",
       }}
     >
-      <ChakraProvider>
-        <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
-          <h1>Welcome to MyApp</h1>
-        </Box>
-      </ChakraProvider>
+      <NavBar />
     </ThirdwebProvider>
   );
 }
