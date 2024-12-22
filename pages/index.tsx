@@ -1,11 +1,5 @@
-import { ConnectWallet, MediaRenderer, useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
-import type { NextPage } from "next";
-import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
-import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Inventory } from "../components/Inventory";
-import { Equipped } from "../components/Equipped";
-import { BigNumber, ethers } from "ethers";
-import { Text, Box, Card, Container, Flex, Heading, Spinner, Skeleton } from "@chakra-ui/react";
+import EquippedCard from "../components/EquippedCard";
+import InventoryCard from "../components/InventoryCard";
 
 const Home: NextPage = () => {
   const address = useAddress();
@@ -19,7 +13,7 @@ const Home: NextPage = () => {
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
   const { data: equippedTools } = useContractRead(
-    stakingContract, 
+    stakingContract,
     "getStakeInfo",
     [address]
   );
@@ -66,11 +60,7 @@ const Home: NextPage = () => {
           </Heading>
           {ownedFarmers?.map((nft) => (
             <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
-              <MediaRenderer 
-                src={nft.metadata.image} 
-                height="150px"
-                width="100%"
-              />
+              <MediaRenderer src={nft.metadata.image} height="150px" width="100%" />
             </Box>
           ))}
           <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
@@ -81,34 +71,12 @@ const Home: NextPage = () => {
           )}
         </Card>
       </Box>
-      
-      <Box mb={6}>
-        <Card p={4}>
-          <Heading fontSize="lg" mb={4}>
-            Inventory
-          </Heading>
-          <Skeleton isLoaded={!loadingOwnedTools}>
-            <Inventory
-              nft={ownedTools}
-            />
-          </Skeleton>
-        </Card>
-      </Box>
 
-      <Box>
-        <Card p={4}>
-          <Heading fontSize="lg" mb={4}>
-            Equipped Tools
-          </Heading>
-          {equippedTools &&
-            equippedTools[0].map((nft: BigNumber) => (
-              <Equipped
-                key={nft.toNumber()}
-                tokenId={nft.toNumber()}
-              />
-            ))}
-        </Card>
-      </Box>
+      {/* 使用 InventoryCard */}
+      <InventoryCard ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
+
+      {/* 使用 EquippedCard */}
+      <EquippedCard equippedTools={equippedTools} />
     </Container>
   );
 };
