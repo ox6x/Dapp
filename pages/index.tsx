@@ -4,17 +4,13 @@ import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from 
 import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Inventory } from "../components/Inventory";
 import { Equipped } from "../components/Equipped";
-import Login from "../components/Login";
-import { BigNumber, ethers } from "ethers";
-import { Text, Box, Card, Container, Heading, Spinner, Skeleton } from "@chakra-ui/react";
+import { Farmer } from "../components/Farmer";
+import { Login } from "../components/Login";
+import { Container, Box, Card, Heading, Skeleton, Spinner, Flex } from "@chakra-ui/react";
+import { BigNumber } from "ethers";
 
 const Home: NextPage = () => {
   const address = useAddress();
-
-  // 如果未連結錢包，渲染 Login 組件
-  if (!address) {
-    return <Login />;
-  }
 
   const { contract: farmercontract } = useContract(FARMER_ADDRESS);
   const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
@@ -25,17 +21,23 @@ const Home: NextPage = () => {
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
   const { data: equippedTools } = useContractRead(
-    stakingContract, 
+    stakingContract,
     "getStakeInfo",
     [address]
   );
 
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
 
+  if (!address) {
+    return <Login />;
+  }
+
   if (loadingOwnedFarmers) {
     return (
       <Container maxW={"container.sm"} px={4}>
-        <Spinner size="lg" />
+        <Flex h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+          <Spinner size="lg" />
+        </Flex>
       </Container>
     );
   }
@@ -50,29 +52,7 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <Box mb={6}>
-        <Card p={4}>
-          <Heading fontSize="lg" mb={4}>
-            Farmer
-          </Heading>
-          {ownedFarmers?.map((nft) => (
-            <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
-              <MediaRenderer 
-                src={nft.metadata.image} 
-                height="150px"
-                width="100%"
-              />
-            </Box>
-          ))}
-          <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
-            bBNB Balance:
-          </Text>
-          {rewardBalance && (
-            <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
-          )}
-        </Card>
-      </Box>
-      
+      <Farmer ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
       <Box mb={6}>
         <Card p={4}>
           <Heading fontSize="lg" mb={4}>
@@ -85,7 +65,6 @@ const Home: NextPage = () => {
           </Skeleton>
         </Card>
       </Box>
-
       <Box>
         <Card p={4}>
           <Heading fontSize="lg" mb={4}>
