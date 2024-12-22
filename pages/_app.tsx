@@ -1,5 +1,5 @@
 import { ThirdwebProvider, ConnectWallet, useAddress } from "@thirdweb-dev/react";
-import { ChakraProvider, Container, Flex, Heading, Link } from "@chakra-ui/react";
+import { ChakraProvider, Box } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 
@@ -35,32 +35,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <ChakraProvider>
-        {/* 全局导航 */}
-        <Container maxW={"1200px"} py={4}>
-          <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
-            <Heading>
-              <Link href="/" style={{ textDecoration: "none" }}>
-                BaseBot
-              </Link>
-            </Heading>
-            <Flex alignItems={"center"} justifyContent={"flex-end"} w="auto">
-              <Link
-                href="/supplier"
-                style={{ marginRight: "1rem", fontSize: "1rem", textDecoration: "none" }}
-              >
-                Supplier
-              </Link>
-              {/* 钱包连接按钮 */}
-              <ConnectWallet style={{ fontSize: "1rem", padding: "0.5rem 1rem" }} />
-            </Flex>
-          </Flex>
-          {/* 显示已连接的钱包地址 */}
+        {/* 固定在右上角的钱包状态 */}
+        <Box position="fixed" top="10px" right="10px" zIndex="1000">
+          <ConnectWallet style={{ fontSize: "1rem", padding: "0.5rem 1rem" }} />
           {address && (
-            <div style={{ marginTop: "10px", fontSize: "0.9rem", color: "gray" }}>
+            <div style={{ marginTop: "5px", fontSize: "0.8rem", color: "gray", textAlign: "right" }}>
               已连接: {address}
             </div>
           )}
-        </Container>
+        </Box>
         {/* 页面内容 */}
         <Component {...pageProps} />
       </ChakraProvider>
