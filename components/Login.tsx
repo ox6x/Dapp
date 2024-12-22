@@ -4,7 +4,7 @@ import { Container, Flex, Heading } from "@chakra-ui/react";
 const Login: React.FC = () => {
   const address = useAddress();
 
-  if (address) return null; // 如果已連結錢包，返回 null（或重定向）。
+  if (address) return null;
 
   return (
     <Container maxW={"container.sm"} px={4}>
