@@ -2,7 +2,7 @@ import { MediaRenderer, useAddress, useContract } from '@thirdweb-dev/react';
 import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
 import Link from 'next/link';
-import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
+import { Text, Box, Button, Card, SimpleGrid, Stack, Flex } from '@chakra-ui/react';
 import Quantity from './Quantity'; // 引入动态数量选择器组件
 
 type Props = {
@@ -73,13 +73,15 @@ export function Inventory({ nft }: Props) {
                             style={{ borderRadius: "8px" }}
                         />
                         
-                        {/* 显示 NFT 名称和持有数量 */}
-                        <Text fontSize="md" fontWeight="bold">
-                            {nft.metadata.name}
-                        </Text>
-                        <Text fontSize="sm" color="gray.600">
-                            Owned: {nft.supply?.toString() || "0"}
-                        </Text>
+                        {/* 名稱和數量 */}
+                        <Flex align="center" gap={2}>
+                            <Text fontSize="md" fontWeight="bold">
+                                {nft.metadata.name}
+                            </Text>
+                            <Text fontSize="sm" color="gray.600">
+                                ({nft.supply?.toString() || "0"})
+                            </Text>
+                        </Flex>
 
                         {/* 动态选择器，整合 Equip 功能 */}
                         <Quantity
