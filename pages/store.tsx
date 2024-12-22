@@ -1,51 +1,75 @@
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useContract, useNFTs } from "@thirdweb-dev/react";
+import { Text, Card } from "@chakra-ui/react";
+import { MediaRenderer, useActiveClaimCondition, useContract } from "@thirdweb-dev/react";
+import { NFT } from "@thirdweb-dev/sdk";
 import { TOOLS_ADDRESS } from "../const/addresses";
-import Link from "next/link";
-import { Text, Button, Container, Flex, Heading, Spinner } from "@chakra-ui/react";
-import NFT from "../components/NFT";
+import { ethers } from "ethers";
+import NFTQuantityTransaction from "./NFTQuantityTransaction"; // 使用数量选择器
 
-export default function Store() {
+type Props = {
+    nft: NFT;
+};
+
+export default function NFTComponent({ nft }: Props) {
     const { contract } = useContract(TOOLS_ADDRESS);
-    const { data: nfts } = useNFTs(contract);
-    console.log(nfts);
+    const { data, isLoading } = useActiveClaimCondition(
+        contract,
+        nft.metadata.id // Token ID required for ERC1155 contracts
+    );
 
-    const sliderSettings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1, // 一次只顯示一個
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        centerMode: true, // 啟用置中
-        centerPadding: "0", // 確保內容完全置中
+    const [quantity, setQuantity] = React.useState(1); // 状态存储当前选择的数量
+
+    // 购买逻辑
+    const handleTransaction = async (selectedQuantity: number) => {
+        if (!contract) return;
+
+        try {
+            await contract.erc1155.claim(nft.metadata.id, selectedQuantity); // 根据数量进行购买
+            alert(`Successfully purchased ${selectedQuantity} ${nft.metadata.name}!`);
+        } catch (error) {
+            console.error("Transaction failed:", error);
+            alert("Transaction failed, please try again.");
+        }
     };
 
+    // 动态计算总价
+    const totalPrice =
+        data && quantity > 0
+            ? ethers.utils.formatEther(data.price.mul(quantity)) // 单价 × 数量
+            : "0";
+
     return (
-        <Container maxW={"1200px"}>
-            <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
-                <Link href="/">
-                    <Button>Back</Button>
-                </Link>
-            </Flex>
-            <Heading mt={"40px"}>Store</Heading>
-            <Text>Purchase tools with $CARROTS to increase your earnings.</Text>
-            {!nfts ? (
-                <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
-                    <Spinner />
-                </Flex>
+        <Card key={nft.metadata.id} overflow={"hidden"}>
+            <MediaRenderer
+                src={nft.metadata.image}
+                height="100%"
+                width="100%"
+            />
+            <Text fontSize={"2xl"} fontWeight={"bold"} my={5} textAlign={"center"}>
+                {nft.metadata.name}
+            </Text>
+
+            {!isLoading && data ? (
+                <>
+                    <Text textAlign={"center"} my={2}>
+                        Cost per NFT: {ethers.utils.formatEther(data?.price)}{" "}
+                        {data?.currencyMetadata.symbol}
+                    </Text>
+                    <Text textAlign={"center"} my={2} fontWeight="bold">
+                        Total Price: {totalPrice} {data?.currencyMetadata.symbol}
+                    </Text>
+                </>
             ) : (
-                <Slider {...sliderSettings}>
-                    {nfts?.map((nftItem) => (
-                        <div key={nftItem.metadata.id}>
-                            <NFT nft={nftItem} />
-                        </div>
-                    ))}
-                </Slider>
+                <Text>Loading...</Text>
             )}
-        </Container>
+
+            {/* 数量选择器 */}
+            <NFTQuantityTransaction
+                initialQuantity={1}
+                onTransaction={handleTransaction} // 动态交易逻辑
+                onTransactionConfirmed={() => alert("Transaction confirmed!")} // 成功提示
+                buttonText="Buy"
+                onTransaction={(selectedQuantity) => setQuantity(selectedQuantity)} // 动态更新数量
+            />
+        </Card>
     );
 }
