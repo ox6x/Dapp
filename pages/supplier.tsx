@@ -85,7 +85,13 @@ export default function StorePage() {
                 )}
 
                 <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
-                    <Button onClick={decrementQuantity} disabled={isProcessing || quantity <= 1}>-</Button>
+                    <Button
+                        onClick={decrementQuantity}
+                        disabled={isProcessing || quantity <= 1}
+                        width="fit-content"
+                    >
+                        -
+                    </Button>
                     <Input
                         type="number"
                         value={quantity}
@@ -94,7 +100,9 @@ export default function StorePage() {
                         width="60px"
                         textAlign="center"
                     />
-                    <Button onClick={incrementQuantity} disabled={isProcessing}>+</Button>
+                    <Button onClick={incrementQuantity} disabled={isProcessing} width="fit-content">
+                        +
+                    </Button>
                 </div>
 
                 <Button
@@ -103,7 +111,7 @@ export default function StorePage() {
                     loadingText="Processing"
                     mt={4}
                     colorScheme="blue"
-                    width="auto"
+                    width="fit-content"
                 >
                     Rent
                 </Button>
@@ -125,7 +133,7 @@ export default function StorePage() {
         <Container maxW={"1200px"}>
             <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                 <Link href="/">
-                    <Button width="auto">Back</Button>
+                    <Button width="fit-content">Back</Button>
                 </Link>
             </Flex>
             <Heading mt={"40px"}>Supplier</Heading>
