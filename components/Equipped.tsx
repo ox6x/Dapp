@@ -46,7 +46,7 @@ export const Equipped = (props: EquippedProps) => {
             {nft && (
                 <Card p={5}>
                     <Flex>
-                        {/* 图片部分 */}
+                        {/* 左側圖片部分 */}
                         <Box>
                             <MediaRenderer
                                 src={nft.metadata.image}
@@ -54,26 +54,26 @@ export const Equipped = (props: EquippedProps) => {
                                 width="150px"
                                 style={{ borderRadius: "8px" }}
                             />
-                            {/* 名称与装备数量 */}
-                            <Text fontSize={"lg"} fontWeight={"bold"} textAlign="center" mt={2}>
+                        </Box>
+
+                        {/* 右側功能部分 */}
+                        <Stack spacing={4} ml={4} align="flex-start">
+                            {/* 名稱與數量、獎勵 */}
+                            <Text fontSize={"lg"} fontWeight={"bold"} textAlign="center">
                                 {nft.metadata.name} ({equippedQuantity})
                             </Text>
-                            {/* 奖励信息 */}
                             <Text fontSize={"sm"} textAlign="center" color="gray.600">
                                 Claimable: {claimableCarrot} $CARROT
                             </Text>
-                        </Box>
 
-                        {/* 右侧功能部分 */}
-                        <Stack spacing={4} ml={4} align="flex-start">
-                            {/* 数量选择器，整合为 Off 按钮 */}
+                            {/* 數量選擇器 */}
                             <Quantity
                                 minQuantity={1}
-                                onQuantityChange={handleOffClick} // 调用智能合约的 withdraw 方法
+                                onQuantityChange={handleOffClick} // 調用智能合約的 withdraw 方法
                                 buttonText="Off"
                             />
 
-                            {/* Claim 按钮 */}
+                            {/* Claim 按鈕 */}
                             <Web3Button
                                 contractAddress={STAKING_ADDRESS}
                                 action={(contract) => contract.call("claimRewards", [props.tokenId])}
