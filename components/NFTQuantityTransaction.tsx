@@ -92,7 +92,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           style={{
             textAlign: "center",
             border: "none",
-            width: "40px",
+            width: "16px",
             outline: "none",
             fontSize: "16px",
           }}
