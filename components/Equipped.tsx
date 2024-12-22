@@ -79,7 +79,6 @@ export const Equipped = (props: EquippedProps) => {
                                 <NFTQuantityTransaction
                                     initialQuantity={1}
                                     onTransaction={(quantity) => handleUnequip(quantity)}
-                                    getPrice={() => "Free Earn"} // 无价格概念
                                     onTransactionConfirmed={() => alert("Unequip confirmed!")}
                                     buttonText="Stop" // 按钮文字改为 Stop
                                 />
