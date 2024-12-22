@@ -1,10 +1,8 @@
-import { MediaRenderer, useAddress, useContract } from '@thirdweb-dev/react';
+import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
 import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
 import Link from 'next/link';
-import { Text, Box, Button, Card, SimpleGrid, Stack, HStack } from '@chakra-ui/react';
-import NFTQuantityTransaction from './NFTQuantityTransaction'; // 引入数量选择组件
-import { useEffect, useState } from 'react';
+import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
 
 type Props = {
     nft: NFT[] | undefined;
@@ -14,29 +12,8 @@ export function Inventory({ nft }: Props) {
     const address = useAddress();
     const { contract: toolContract } = useContract(TOOLS_ADDRESS);
     const { contract: stakingContract } = useContract(STAKING_ADDRESS);
-    const [balances, setBalances] = useState<Record<string, string>>({}); // 用来存储每个 NFT 的数量
 
-    // 获取用户持有的 NFT 数量
-    useEffect(() => {
-        async function fetchBalances() {
-            if (!address || !toolContract || !nft) return;
-
-            const newBalances: Record<string, string> = {};
-            for (const nftItem of nft) {
-                const balance = await toolContract?.erc1155.balanceOf(
-                    address,
-                    nftItem.metadata.id
-                );
-                newBalances[nftItem.metadata.id] = balance?.toString() || "0";
-            }
-            setBalances(newBalances);
-        }
-
-        fetchBalances();
-    }, [address, toolContract, nft]);
-
-    // 处理装备逻辑
-    async function equipNFT(id: string, quantity: number) {
+    async function stakeNFT(id: string) {
         if (!address) {
             return;
         }
@@ -52,49 +29,40 @@ export function Inventory({ nft }: Props) {
                 true,
             );
         }
-        await stakingContract?.call("stake", [id, quantity]); // 根据数量装备
-        alert(`Successfully equipped ${quantity} NFTs!`);
-    }
+        await stakingContract?.call("stake", [id, 1]);
+    };
 
-    if (nft?.length === 0) {
+    if(nft?.length === 0) {
         return (
             <Box>
                 <Text>No tools.</Text>
-                <Link href="/supplier">
-                    <Button>Store</Button>
+                <Link
+                    href="/shop"
+                >
+                    <Button>Shop Tool</Button>
                 </Link>
             </Box>
-        );
+        )
     }
 
     return (
         <SimpleGrid columns={3} spacing={4}>
-            {nft?.map((nftItem) => (
-                <Card key={nftItem.metadata.id} p={5}>
+            {nft?.map((nft) => (
+                <Card key={nft.metadata.id} p={5}>
                     <Stack alignItems={"center"}>
-                        <MediaRenderer 
-                            src={nftItem.metadata.image} 
-                            height="100px"
-                            width="100px"
-                        />
-                        <Text>{nftItem.metadata.name}</Text>
-                        {/* 调整 Held 和数量为水平布局 */}
-                        <HStack spacing={1} fontSize="sm">
-                            <Text>Held:</Text>
-                            <Text as="span" fontWeight="bold">
-                                {balances[nftItem.metadata.id] || "0"}
-                            </Text>
-                        </HStack>
-                        {/* 使用 NFTQuantityTransaction 组件 */}
-                        <NFTQuantityTransaction
-                            initialQuantity={1}
-                            onTransaction={(quantity) => equipNFT(nftItem.metadata.id, quantity)}
-                            onTransactionConfirmed={() => alert("Equipment confirmed!")}
-                            buttonText="Turn on" // 自定义按钮文本为 "Start"
-                        />
+                    <MediaRenderer 
+                        src={nft.metadata.image} 
+                        height="100px"
+                        width="100px"
+                    />
+                    <Text>{nft.metadata.name}</Text>
+                    <Web3Button
+                        contractAddress={STAKING_ADDRESS}
+                        action={() => stakeNFT(nft.metadata.id)}
+                    >Equip</Web3Button>
                     </Stack>
                 </Card>
             ))}
         </SimpleGrid>
     );
-}
+};
