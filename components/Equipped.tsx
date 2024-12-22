@@ -23,10 +23,18 @@ export const Equipped = (props: EquippedProps) => {
         [props.tokenId, address]
     );
 
-    const [withdrawQuantity, setWithdrawQuantity] = useState<number>(1);
+    const handleOffClick = async (quantity: number) => {
+        if (!address) {
+            console.error("No wallet connected.");
+            return;
+        }
 
-    const handleQuantityChange = (quantity: number) => {
-        setWithdrawQuantity(quantity);
+        try {
+            await stakingContract?.call("withdraw", [props.tokenId, quantity]);
+            console.log(`Withdrew ${quantity} items for token ID ${props.tokenId}.`);
+        } catch (error) {
+            console.error("Error withdrawing:", error);
+        }
     };
 
     return (
@@ -52,10 +60,10 @@ export const Equipped = (props: EquippedProps) => {
 
                         {/* 右侧功能部分 */}
                         <Stack spacing={4} ml={4} align="flex-start">
-                            {/* 数量选择器 */}
+                            {/* 数量选择器，整合为 Off 按钮 */}
                             <Quantity
                                 minQuantity={1}
-                                onQuantityChange={handleQuantityChange}
+                                onQuantityChange={handleOffClick} // 调用智能合约的 withdraw 方法
                                 buttonText="Off"
                             />
 
