@@ -10,7 +10,6 @@ import NFT from "../components/NFT";
 export default function Store() {
     const { contract } = useContract(TOOLS_ADDRESS);
     const { data: nfts } = useNFTs(contract);
-    console.log(nfts);
 
     const sliderSettings = {
         dots: true,
@@ -23,11 +22,26 @@ export default function Store() {
         centerPadding: "0", // Ensure content is fully centered
     };
 
+    const renderSpinner = () => (
+        <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
+            <Spinner />
+        </Flex>
+    );
+
+    const renderNFTSlider = () => (
+        <Slider {...sliderSettings}>
+            {nfts?.map((nftItem) => (
+                <div key={nftItem.metadata.id}>
+                    <NFT nft={nftItem} />
+                </div>
+            ))}
+        </Slider>
+    );
+
     return (
         <Container maxW={"1200px"}>
             <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                 <Link href="/">
-                    {/* Button size will adjust to its content */}
                     <Button width="auto">Back</Button> 
                 </Link>
             </Flex>
@@ -35,19 +49,7 @@ export default function Store() {
             <Text>
                 Boost your earnings with exclusive tools that unlock unique advantages and free up your hands!
             </Text>
-            {!nfts ? (
-                <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
-                    <Spinner />
-                </Flex>
-            ) : (
-                <Slider {...sliderSettings}>
-                    {nfts?.map((nftItem) => (
-                        <div key={nftItem.metadata.id}>
-                            <NFT nft={nftItem} />
-                        </div>
-                    ))}
-                </Slider>
-            )}
+            {!nfts ? renderSpinner() : renderNFTSlider()}
         </Container>
     );
 }
