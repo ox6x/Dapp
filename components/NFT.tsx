@@ -3,29 +3,31 @@ import { MediaRenderer, useActiveClaimCondition, useContract } from "@thirdweb-d
 import { NFT } from "@thirdweb-dev/sdk";
 import { TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import NFTQuantityTransaction from "./NFTQuantityTransaction";
+import NFTQuantityTransaction from "./NFTQuantityTransaction"; // 引入封装组件
 
 type Props = {
     nft: NFT;
-    onTotalPriceChange?: (nftId: string, totalPrice: string) => void; // 新增回调
 };
 
-export default function NFTComponent({ nft, onTotalPriceChange }: Props) {
+export default function NFTComponent({ nft }: Props) {
     const { contract } = useContract(TOOLS_ADDRESS);
     const { data, isLoading } = useActiveClaimCondition(
         contract,
-        nft.metadata.id,
+        nft.metadata.id, // Token ID required for ERC1155 contracts here
     );
 
-    const [quantity, setQuantity] = React.useState(1); // 数量状态
+    // 购买逻辑
+    const handleTransaction = async (quantity: number) => {
+        if (!contract) return;
 
-    // 更新总价
-    React.useEffect(() => {
-        if (data && onTotalPriceChange) {
-            const totalPrice = ethers.utils.formatEther(data.price.mul(quantity)); // 计算总价
-            onTotalPriceChange(nft.metadata.id, totalPrice); // 传递总价
+        try {
+            await contract.erc1155.claim(nft.metadata.id, quantity); // 根据数量进行购买
+            alert(`Successfully purchased ${quantity} ${nft.metadata.name}!`);
+        } catch (error) {
+            console.error("Transaction failed:", error);
+            alert("Transaction failed, please try again.");
         }
-    }, [quantity, data, nft.metadata.id, onTotalPriceChange]);
+    };
 
     return (
         <Card key={nft.metadata.id} overflow={"hidden"}>
@@ -39,26 +41,18 @@ export default function NFTComponent({ nft, onTotalPriceChange }: Props) {
             </Text>
 
             {!isLoading && data ? (
-                <>
-                    <Text textAlign={"center"} my={2}>
-                        Cost per NFT: {ethers.utils.formatEther(data?.price)}{" "}
-                        {data?.currencyMetadata.symbol}
-                    </Text>
-                    <Text textAlign={"center"} my={2} fontWeight="bold">
-                        Total Price: {ethers.utils.formatEther(data.price.mul(quantity))}{" "}
-                        {data?.currencyMetadata.symbol}
-                    </Text>
-                </>
+                <Text textAlign={"center"} my={5}>
+                    Cost per NFT: {ethers.utils.formatEther(data?.price)}{" " + data?.currencyMetadata.symbol}
+                </Text>
             ) : (
                 <Text>Loading...</Text>
             )}
 
-            {/* 数量选择器 */}
+            {/* 使用封装组件实现数量选择和交易 */}
             <NFTQuantityTransaction
                 initialQuantity={1}
-                onTransaction={(selectedQuantity) => setQuantity(selectedQuantity)} // 动态更新数量
-                onTransactionConfirmed={() => alert("Transaction confirmed!")}
-                buttonText="Buy"
+                onTransaction={handleTransaction} // 动态交易逻辑
+                onTransactionConfirmed={() => alert("Transaction confirmed!")} // 成功提示
             />
         </Card>
     );
