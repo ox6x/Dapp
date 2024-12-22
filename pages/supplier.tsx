@@ -66,7 +66,7 @@ export default function StorePage() {
         };
 
         return (
-            <Card key={nft.metadata.id} overflow={"hidden"}>
+            <Card key={nft.metadata.id} overflow={"hidden"} p={5}>
                 <MediaRenderer
                     src={nft.metadata.image}
                     height="100%"
@@ -81,10 +81,10 @@ export default function StorePage() {
                         Total Cost: {totalPrice} {data.currencyMetadata.symbol}
                     </Text>
                 ) : (
-                    <Text>Loading...</Text>
+                    <Text textAlign={"center"}>Loading...</Text>
                 )}
 
-                <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
+                <Flex justifyContent="center" alignItems="center" gap="10px" mt={5}>
                     <Button
                         onClick={decrementQuantity}
                         disabled={isProcessing || quantity <= 1}
@@ -103,18 +103,19 @@ export default function StorePage() {
                     <Button onClick={incrementQuantity} disabled={isProcessing} width="fit-content">
                         +
                     </Button>
-                </div>
+                </Flex>
 
-                <Button
-                    onClick={handleTransaction}
-                    isLoading={isProcessing}
-                    loadingText="Processing"
-                    mt={4}
-                    colorScheme="blue"
-                    width="fit-content"
-                >
-                    Rent
-                </Button>
+                <Flex justifyContent="center" mt={5}>
+                    <Button
+                        onClick={handleTransaction}
+                        isLoading={isProcessing}
+                        loadingText="Processing"
+                        colorScheme="blue"
+                        width="fit-content"
+                    >
+                        Rent
+                    </Button>
+                </Flex>
             </Card>
         );
     };
@@ -133,11 +134,15 @@ export default function StorePage() {
         <Container maxW={"1200px"}>
             <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                 <Link href="/">
-                    <Button width="fit-content">Back</Button>
+                    <Flex justifyContent="center">
+                        <Button width="fit-content">Back</Button>
+                    </Flex>
                 </Link>
             </Flex>
-            <Heading mt={"40px"}>Supplier</Heading>
-            <Text>
+            <Heading mt={"40px"} textAlign="center">
+                Supplier
+            </Heading>
+            <Text textAlign="center">
                 Boost your earnings with exclusive tools that unlock unique advantages and free up your hands!
             </Text>
             {!nfts ? renderSpinner() : renderNFTSlider()}
