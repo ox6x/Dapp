@@ -9,13 +9,13 @@ interface NFTQuantityTransactionProps {
 }
 
 const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
-  initialQuantity, // 初始數量為可選，預設不設定值
+  initialQuantity,
   minQuantity = 1,
   onTransaction,
   onTransactionConfirmed,
   buttonText = "Button",
 }) => {
-  const [quantity, setQuantity] = useState<number | "">(""); // 初始值為空字串
+  const [quantity, setQuantity] = useState<number | "">("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleIncrement = useCallback(() => {
@@ -44,7 +44,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   );
 
   const handleTransaction = useCallback(async () => {
-    if (isProcessing || typeof quantity !== "number") return; // 確保數量有效
+    if (isProcessing || typeof quantity !== "number") return;
     setIsProcessing(true);
     try {
       await onTransaction(quantity);
@@ -58,7 +58,6 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
-      {/* 數量選擇器 */}
       <div
         style={{
           display: "inline-flex",
@@ -92,7 +91,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           style={{
             textAlign: "center",
             border: "none",
-            width: "16px",
+            width: "24px", // 改為 24px
             outline: "none",
             fontSize: "16px",
           }}
@@ -111,7 +110,6 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           &gt;
         </button>
       </div>
-      {/* 按鈕 */}
       <button
         onClick={handleTransaction}
         disabled={isProcessing || quantity === ""}
