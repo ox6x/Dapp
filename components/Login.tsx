@@ -20,6 +20,4 @@ const Login = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-Login.getLayout = (page: React.ReactNode) => <>{page}</>;
-
 export default Login;
