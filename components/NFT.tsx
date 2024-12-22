@@ -89,6 +89,7 @@ export default function NFTComponent({ nft }: Props) {
                 loadingText="Processing"
                 mt={4}
                 colorScheme="blue"
+                width="auto"  // Set the button width to auto, so it adjusts to the text size
             >
                 Rent
             </Button>
