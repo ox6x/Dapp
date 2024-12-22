@@ -1,35 +1,25 @@
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
-import { Flex, Heading, Container, Button, Modal, ModalOverlay, ModalContent, ModalBody, useDisclosure } from "@chakra-ui/react";
+import { Flex, Heading, Container } from "@chakra-ui/react";
 
-const Login = () => {
+const Login = ({ children }: { children: React.ReactNode }) => {
   const address = useAddress();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  return (
-    <Container maxW={"1200px"}>
-      <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-        {!address ? (
-          <>
-            <Heading my={"40px"}>Welcome to Crypto Farm</Heading>
-            <Button onClick={onOpen}>Connect Wallet</Button>
-            <Modal isOpen={isOpen} onClose={onClose} size="xl">
-              <ModalOverlay />
-              <ModalContent maxW="80vw" maxH="90vh" overflow="auto">
-                <ModalBody>
-                  <ConnectWallet theme="dark" />
-                </ModalBody>
-              </ModalContent>
-            </Modal>
-          </>
-        ) : (
-          <Heading my={"40px"}>Wallet Connected</Heading>
-        )}
-      </Flex>
-    </Container>
-  );
+  if (!address) {
+    return (
+      <Container maxW={"container.sm"} px={4}>
+        <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+          <Heading my={6} textAlign="center" fontSize="2xl">
+            Welcome to Crypto Farm
+          </Heading>
+          <ConnectWallet />
+        </Flex>
+      </Container>
+    );
+  }
+
+  return <>{children}</>;
 };
 
-// 不使用布局
 Login.getLayout = (page: React.ReactNode) => <>{page}</>;
 
 export default Login;
