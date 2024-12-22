@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 
 interface FarmerInfoProps {
   ownedFarmers: any[]; // Farmer NFT 数据
-  rewardBalance: any;  // 奖励余额
+  rewardBalance: string | undefined; // 奖励余额
 }
 
 export const FarmerInfo = ({ ownedFarmers, rewardBalance }: FarmerInfoProps) => (
@@ -15,19 +15,15 @@ export const FarmerInfo = ({ ownedFarmers, rewardBalance }: FarmerInfoProps) => 
       </Heading>
       {ownedFarmers?.map((nft) => (
         <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
-          <MediaRenderer 
-            src={nft.metadata.image} 
-            height="150px"
-            width="100%"
-          />
+          <MediaRenderer src={nft.metadata.image} height="150px" width="100%" />
         </Box>
       ))}
       <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
         $CARROT Balance:
       </Text>
-      {rewardBalance && (
-        <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
-      )}
+      <Text fontSize={"sm"}>
+        {rewardBalance ? ethers.utils.formatUnits(rewardBalance, 18) : "Loading..."}
+      </Text>
     </Card>
   </Box>
 );
