@@ -31,7 +31,9 @@ export default function Store() {
                 </Link>
             </Flex>
             <Heading mt={"40px"}>Supplier</Heading>
-            <Text>Enhance your experience by purchasing exclusive tools that unlock unique advantages and help you achieve your goals!</Text>
+            <Text>
+                Boost your earnings with exclusive tools that unlock unique advantages and free up your hands!
+            </Text>
             {!nfts ? (
                 <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
                     <Spinner />
