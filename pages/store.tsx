@@ -18,8 +18,7 @@ export default function Store() {
         speed: 500,
         slidesToShow: 1, // 一次只顯示一個
         slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
+        autoplay: false, // 關閉自動輪播
         centerMode: true, // 啟用置中
         centerPadding: "0", // 確保內容完全置中
     };
