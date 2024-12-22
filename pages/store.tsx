@@ -16,11 +16,11 @@ export default function Store() {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 1, // 一次只顯示一個
+        slidesToShow: 1, // Show one slide at a time
         slidesToScroll: 1,
-        autoplay: false, // 關閉自動輪播
-        centerMode: true, // 啟用置中
-        centerPadding: "0", // 確保內容完全置中
+        autoplay: false, // Disable autoplay
+        centerMode: true, // Enable centering
+        centerPadding: "0", // Ensure content is fully centered
     };
 
     return (
@@ -31,7 +31,7 @@ export default function Store() {
                 </Link>
             </Flex>
             <Heading mt={"40px"}>Supplier</Heading>
-            <Text>Enhance your earnings by purchasing exclusive tools with $CARROTS. Each tool unlocks unique advantages to help you reach new heights!</Text>
+            <Text>Enhance your experience by purchasing exclusive tools that unlock unique advantages and help you achieve your goals!</Text>
             {!nfts ? (
                 <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
                     <Spinner />
