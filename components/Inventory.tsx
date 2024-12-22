@@ -1,82 +1,101 @@
-import React, { useState, useCallback } from "react";
+import { MediaRenderer, useAddress, useContract } from '@thirdweb-dev/react';
+import { NFT } from '@thirdweb-dev/sdk';
+import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
+import Link from 'next/link';
+import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
+import NFTQuantityTransaction from './NFTQuantityTransaction'; // 引入数量选择组件
+import { useEffect, useState } from 'react';
 
-interface NFTQuantityTransactionProps {
-  initialQuantity?: number; 
-  minQuantity?: number; 
-  onTransaction: (quantity: number) => Promise<void>; 
-  onTransactionConfirmed?: () => void; 
-  buttonText?: string; 
-}
-
-const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
-  initialQuantity = 1,
-  minQuantity = 1,
-  onTransaction,
-  onTransactionConfirmed,
-  buttonText = "Button",
-}) => {
-  const [quantity, setQuantity] = useState(initialQuantity);
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handleIncrement = useCallback(() => {
-    setQuantity((prev) => prev + 1);
-  }, []);
-
-  const handleDecrement = useCallback(() => {
-    setQuantity((prev) => Math.max(minQuantity, prev - 1));
-  }, [minQuantity]);
-
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(e.target.value, 10);
-      setQuantity(value > 0 ? value : minQuantity);
-    },
-    [minQuantity]
-  );
-
-  const handleTransaction = useCallback(async () => {
-    if (isProcessing) return; 
-    setIsProcessing(true);
-    try {
-      await onTransaction(quantity);
-      onTransactionConfirmed?.();
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [isProcessing, onTransaction, onTransactionConfirmed, quantity]);
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      {/* 數量選擇器 */}
-      <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "8px",
-        }}
-      >
-        <button onClick={handleDecrement} disabled={isProcessing}>
-          -
-        </button>
-        <input
-          type="number"
-          value={quantity}
-          onChange={handleInputChange}
-          disabled={isProcessing}
-          style={{ width: "40px", textAlign: "center" }}
-        />
-        <button onClick={handleIncrement} disabled={isProcessing}>
-          +
-        </button>
-      </div>
-      {/* 按鈕 */}
-      <button onClick={handleTransaction} disabled={isProcessing}>
-        {buttonText}
-      </button>
-    </div>
-  );
+type Props = {
+    nft: NFT[] | undefined;
 };
 
-export default NFTQuantityTransaction;
+export function Inventory({ nft }: Props) {
+    const address = useAddress();
+    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
+    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+    const [balances, setBalances] = useState<Record<string, string>>({}); // 用来存储每个 NFT 的数量
+
+    // 获取用户持有的 NFT 数量
+    useEffect(() => {
+        async function fetchBalances() {
+            if (!address || !toolContract || !nft) return;
+
+            const newBalances: Record<string, string> = {};
+            for (const nftItem of nft) {
+                const balance = await toolContract?.erc1155.balanceOf(
+                    address,
+                    nftItem.metadata.id
+                );
+                newBalances[nftItem.metadata.id] = balance?.toString() || "0";
+            }
+            setBalances(newBalances);
+        }
+
+        fetchBalances();
+    }, [address, toolContract, nft]);
+
+    // 处理装备逻辑
+    async function equipNFT(id: string, quantity: number) {
+        if (!address) {
+            return;
+        }
+
+        const isApproved = await toolContract?.erc1155.isApproved(
+            address,
+            STAKING_ADDRESS,
+        );
+
+        if (!isApproved) {
+            await toolContract?.erc1155.setApprovalForAll(
+                STAKING_ADDRESS,
+                true,
+            );
+        }
+        await stakingContract?.call("stake", [id, quantity]); // 根据数量装备
+        alert(`Successfully equipped ${quantity} NFTs!`);
+    }
+
+    if (nft?.length === 0) {
+        return (
+            <Box>
+                <Text>No tools.</Text>
+                <Link href="/store">
+                    <Button>Shop Tool</Button>
+                </Link>
+            </Box>
+        );
+    }
+
+    return (
+        <SimpleGrid columns={3} spacing={4}>
+            {nft?.map((nftItem) => (
+                <Card key={nftItem.metadata.id} p={5}>
+                    <Stack alignItems={"center"}>
+                        <MediaRenderer 
+                            src={nftItem.metadata.image} 
+                            height="100px"
+                            width="100px"
+                        />
+                        <Text>{nftItem.metadata.name}</Text>
+                        {/* 将 Held 和数量放在同一行 */}
+                        <Text fontSize="sm">
+                            Held:{" "}
+                            <Text as="span" fontWeight="bold" display="inline">
+                                {balances[nftItem.metadata.id] || "0"}
+                            </Text>
+                        </Text>
+                        {/* 使用 NFTQuantityTransaction 组件 */}
+                        <NFTQuantityTransaction
+                            initialQuantity={1}
+                            onTransaction={(quantity) => equipNFT(nftItem.metadata.id, quantity)}
+                            getPrice={() => "Go Earn"} // 如果没有价格概念，可以写固定值
+                            onTransactionConfirmed={() => alert("Equipment confirmed!")}
+                            buttonText="Start" // 自定义按钮文本为 "Start"
+                        />
+                    </Stack>
+                </Card>
+            ))}
+        </SimpleGrid>
+    );
+}
