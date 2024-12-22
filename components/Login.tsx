@@ -10,7 +10,19 @@ const Login = () => {
         {!address ? (
           <>
             <Heading my={"40px"}>Welcome to Crypto Farm</Heading>
-            <ConnectWallet />
+            <ConnectWallet
+              theme="dark"
+              modalConfig={{
+                style: {
+                  width: "80vw", // 动态调整宽度
+                  maxWidth: "500px", // 最大宽度
+                  height: "70vh", // 动态调整高度
+                  maxHeight: "90vh", // 最大高度
+                  margin: "auto", // 居中对齐
+                  overflow: "auto", // 内容溢出时滚动
+                },
+              }}
+            />
           </>
         ) : (
           <Heading my={"40px"}>Wallet Connected</Heading>
