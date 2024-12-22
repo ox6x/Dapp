@@ -1,8 +1,7 @@
-import { MediaRenderer, Web3Button, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
+import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
-import { useState } from "react";
+import { Text, Box, Card, Stack, Flex, Button } from "@chakra-ui/react";
 import Quantity from "./Quantity"; // 确保路径正确
 
 interface EquippedProps {
@@ -34,6 +33,20 @@ export const Equipped = (props: EquippedProps) => {
             console.log(`Withdrew ${quantity} items for token ID ${props.tokenId}.`);
         } catch (error) {
             console.error("Error withdrawing:", error);
+        }
+    };
+
+    const handleClaimClick = async () => {
+        if (!address) {
+            console.error("No wallet connected.");
+            return;
+        }
+
+        try {
+            await stakingContract?.call("claimRewards", [props.tokenId]);
+            console.log(`Claimed rewards for token ID ${props.tokenId}.`);
+        } catch (error) {
+            console.error("Error claiming rewards:", error);
         }
     };
 
@@ -74,12 +87,19 @@ export const Equipped = (props: EquippedProps) => {
                             />
 
                             {/* Claim 按鈕 */}
-                            <Web3Button
-                                contractAddress={STAKING_ADDRESS}
-                                action={(contract) => contract.call("claimRewards", [props.tokenId])}
+                            <Button
+                                onClick={handleClaimClick}
+                                style={{
+                                    padding: "6px 12px",
+                                    background: "#38a169",
+                                    color: "#fff",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                }}
                             >
                                 Claim
-                            </Web3Button>
+                            </Button>
                         </Stack>
                     </Flex>
                 </Card>
