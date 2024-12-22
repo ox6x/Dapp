@@ -1,45 +1,68 @@
-import React, { useState } from "react";
-import { Text, Box, Card, SimpleGrid, Stack } from "@chakra-ui/react";
-import Quantity from "./Quantity";
+import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
+import { NFT } from '@thirdweb-dev/sdk';
+import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
+import Link from 'next/link';
+import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
 
-interface InventoryProps {
-  nft: Array<{ metadata: { name: string } }>;
-}
-
-const Inventory: React.FC<InventoryProps> = ({ nft }) => {
-  const [statusList, setStatusList] = useState<{ [key: string]: string }>({});
-
-  const handleQuantityChange = (key: string, quantity: number) => {
-    setStatusList((prev) => ({
-      ...prev,
-      [key]: quantity === 1 ? "On" : "Off",
-    }));
-  };
-
-  return (
-    <Box>
-      <SimpleGrid columns={2} spacing={4}>
-        {nft.map((item, index) => {
-          const key = item.metadata.name;
-          const status = statusList[key] || "Off";
-
-          return (
-            <Card key={index}>
-              <Stack spacing={4}>
-                <Text>NFT Name: {item.metadata.name}</Text>
-                <Text>Status: {status}</Text>
-                <Quantity
-                  onQuantityChange={(quantity) => handleQuantityChange(key, quantity)}
-                  minQuantity={0}
-                  buttonText={status === "Off" ? "Activate" : "Deactivate"}
-                />
-              </Stack>
-            </Card>
-          );
-        })}
-      </SimpleGrid>
-    </Box>
-  );
+type Props = {
+    nft: NFT[] | undefined;
 };
 
-export default Inventory;
+export function Inventory({ nft }: Props) {
+    const address = useAddress();
+    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
+    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+
+    async function stakeNFT(id: string) {
+        if (!address) {
+            return;
+        }
+
+        const isApproved = await toolContract?.erc1155.isApproved(
+            address,
+            STAKING_ADDRESS,
+        );
+
+        if (!isApproved) {
+            await toolContract?.erc1155.setApprovalForAll(
+                STAKING_ADDRESS,
+                true,
+            );
+        }
+        await stakingContract?.call("stake", [id, 1]);
+    };
+
+    if(nft?.length === 0) {
+        return (
+            <Box>
+                <Text>No tools.</Text>
+                <Link
+                    href="/shop"
+                >
+                    <Button>Shop Tool</Button>
+                </Link>
+            </Box>
+        )
+    }
+
+    return (
+        <SimpleGrid columns={3} spacing={4}>
+            {nft?.map((nft) => (
+                <Card key={nft.metadata.id} p={5}>
+                    <Stack alignItems={"center"}>
+                    <MediaRenderer 
+                        src={nft.metadata.image} 
+                        height="100px"
+                        width="100px"
+                    />
+                    <Text>{nft.metadata.name}</Text>
+                    <Web3Button
+                        contractAddress={STAKING_ADDRESS}
+                        action={() => stakeNFT(nft.metadata.id)}
+                    >Equip</Web3Button>
+                    </Stack>
+                </Card>
+            ))}
+        </SimpleGrid>
+    );
+};
