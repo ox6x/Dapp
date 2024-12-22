@@ -11,7 +11,8 @@ import {
   Container,
   Flex,
   Heading,
-  Spinner
+  Spinner,
+  Stack
 } from "@chakra-ui/react";
 import NFT from "../components/NFT";
 
@@ -37,7 +38,7 @@ export default function Store() {
       dots: true,
       infinite: true,
       speed: 500,
-      slidesToShow: 1, 
+      slidesToShow: 1,
       slidesToScroll: 1,
       autoplay: true,
       autoplaySpeed: 3000,
@@ -78,16 +79,16 @@ export default function Store() {
 
       <Heading mt={"40px"}>Store</Heading>
       <Text>Purchase tools with $CARROTS to increase your earnings.</Text>
-      
+
       {/* 如果 nfts 有資料，使用 Slider；否則給予空狀態提示 */}
       {!nfts || nfts.length === 0 ? (
         <Text mt={8}>No NFTs available in the store at the moment.</Text>
       ) : (
         <Slider {...sliderSettings}>
           {nfts.map((nftItem) => (
-            <div key={nftItem.metadata.id}>
+            <Stack key={nftItem.metadata.id} p={5}>
               <NFT nft={nftItem} />
-            </div>
+            </Stack>
           ))}
         </Slider>
       )}
