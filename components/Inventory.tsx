@@ -89,7 +89,6 @@ export function Inventory({ nft }: Props) {
                         <NFTQuantityTransaction
                             initialQuantity={1}
                             onTransaction={(quantity) => equipNFT(nftItem.metadata.id, quantity)}
-                            getPrice={() => "Go Earn"} // 如果没有价格概念，可以写固定值
                             onTransactionConfirmed={() => alert("Equipment confirmed!")}
                             buttonText="Start" // 自定义按钮文本为 "Start"
                         />
