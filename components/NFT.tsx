@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Text, Card } from "@chakra-ui/react";
 import { MediaRenderer, useActiveClaimCondition, useContract } from "@thirdweb-dev/react";
 import { NFT } from "@thirdweb-dev/sdk";
@@ -15,6 +16,15 @@ export default function NFTComponent({ nft }: Props) {
         contract,
         nft.metadata.id, // Token ID required for ERC1155 contracts here
     );
+
+    const [quantity, setQuantity] = useState(1); // 用于跟踪选择的数量
+
+    // 根据数量和单价动态计算总价
+    const getTotalPrice = () => {
+        if (!data?.price) return "0.00";
+        const pricePerNFT = ethers.utils.formatEther(data.price); // 单价
+        return (parseFloat(pricePerNFT) * quantity).toFixed(2); // 总价
+    };
 
     // 购买逻辑
     const handleTransaction = async (quantity: number) => {
@@ -41,19 +51,25 @@ export default function NFTComponent({ nft }: Props) {
             </Text>
 
             {!isLoading && data ? (
-                <Text textAlign={"center"} my={5}>
-                    Cost per NFT: {ethers.utils.formatEther(data?.price)}{" " + data?.currencyMetadata.symbol}
-                </Text>
+                <>
+                    <Text textAlign={"center"} my={5}>
+                        Cost per NFT: {ethers.utils.formatEther(data?.price)}{" " + data?.currencyMetadata.symbol}
+                    </Text>
+                    <Text textAlign={"center"} my={5}>
+                        Total Price: {getTotalPrice()}{" " + data?.currencyMetadata.symbol}
+                    </Text>
+                </>
             ) : (
                 <Text>Loading...</Text>
             )}
 
-            {/* 使用封装组件实现数量选择和交易 */}
+            {/* 数量选择器组件 */}
             <NFTQuantityTransaction
                 initialQuantity={1}
                 onTransaction={handleTransaction} // 动态交易逻辑
                 onTransactionConfirmed={() => alert("Transaction confirmed!")} // 成功提示
                 buttonText="Buy" // 自定义按钮文本
+                onQuantityChange={(newQuantity) => setQuantity(newQuantity)} // 跟踪数量变化
             />
         </Card>
     );
