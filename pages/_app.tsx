@@ -1,5 +1,5 @@
 import { ThirdwebProvider, ConnectWallet } from "@thirdweb-dev/react";
-import { ChakraProvider, Box } from "@chakra-ui/react";
+import { ChakraProvider, Box, Flex, Container } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
@@ -24,12 +24,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <ChakraProvider>
-        {/* 固定在右上角的钱包状态 */}
-        <Box position="fixed" top="10px" right="10px">
-          <ConnectWallet />
-        </Box>
-        {/* 页面内容 */}
-        <Component {...pageProps} />
+        <Container maxW="container.xl" p={4}>
+          <Flex justify="flex-end" p={4}>
+            <ConnectWallet />
+          </Flex>
+          <Component {...pageProps} />
+        </Container>
       </ChakraProvider>
     </ThirdwebProvider>
   );
