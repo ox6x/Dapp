@@ -37,6 +37,10 @@ export const Equipped = (props: EquippedProps) => {
         }
     };
 
+    // 获取装备数量
+    const equippedQuantity = ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0);
+    const claimableCarrot = ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18);
+
     return (
         <Box>
             {nft && (
@@ -50,11 +54,13 @@ export const Equipped = (props: EquippedProps) => {
                                 width="150px"
                                 style={{ borderRadius: "8px" }}
                             />
+                            {/* 名称与装备数量 */}
                             <Text fontSize={"lg"} fontWeight={"bold"} textAlign="center" mt={2}>
-                                {nft.metadata.name}
+                                {nft.metadata.name} ({equippedQuantity})
                             </Text>
-                            <Text fontSize={"sm"} textAlign="center">
-                                Equipped: {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}
+                            {/* 奖励信息 */}
+                            <Text fontSize={"sm"} textAlign="center" color="gray.600">
+                                Claimable: {claimableCarrot} $CARROT
                             </Text>
                         </Box>
 
@@ -66,14 +72,6 @@ export const Equipped = (props: EquippedProps) => {
                                 onQuantityChange={handleOffClick} // 调用智能合约的 withdraw 方法
                                 buttonText="Off"
                             />
-
-                            {/* 奖励信息 */}
-                            <Box>
-                                <Text>Claimable $CARROT:</Text>
-                                <Text fontSize={"lg"} fontWeight={"bold"}>
-                                    {ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}
-                                </Text>
-                            </Box>
 
                             {/* Claim 按钮 */}
                             <Web3Button
