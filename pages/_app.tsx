@@ -1,12 +1,20 @@
-/** @jsxImportSource @emotion/react */
 import { ThirdwebProvider, ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { ChakraProvider, Container, Flex, Heading, Link } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
+import { useEffect, useState } from "react";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const address = useAddress(); // 获取钱包地址
+  const [address, setAddress] = useState<string | null>(null);
+
+  // 确保 useAddress 只在浏览器端执行
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const walletAddress = useAddress();
+      setAddress(walletAddress || null);
+    }
+  }, []);
 
   return (
     <ThirdwebProvider
@@ -27,7 +35,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <ChakraProvider>
-        {/* 全局导航功能 */}
+        {/* 全局导航 */}
         <Container maxW={"1200px"} py={4}>
           <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
             <Heading>
@@ -36,13 +44,17 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               </Link>
             </Heading>
             <Flex alignItems={"center"} justifyContent={"flex-end"} w="auto">
-              <Link href="/supplier" style={{ marginRight: "1rem", fontSize: "1rem", textDecoration: "none" }}>
+              <Link
+                href="/supplier"
+                style={{ marginRight: "1rem", fontSize: "1rem", textDecoration: "none" }}
+              >
                 Supplier
               </Link>
               {/* 钱包连接按钮 */}
               <ConnectWallet style={{ fontSize: "1rem", padding: "0.5rem 1rem" }} />
             </Flex>
           </Flex>
+          {/* 显示已连接的钱包地址 */}
           {address && (
             <div style={{ marginTop: "10px", fontSize: "0.9rem", color: "gray" }}>
               已连接: {address}
