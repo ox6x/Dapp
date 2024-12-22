@@ -34,39 +34,48 @@ export const Equipped = (props: EquippedProps) => {
             {nft && (
                 <Card p={5}>
                     <Flex>
+                        {/* 图片部分 */}
                         <Box>
                             <MediaRenderer
                                 src={nft.metadata.image}
-                                height="80%"
-                                width="80%"
+                                height="150px"
+                                width="150px"
+                                style={{ borderRadius: "8px" }}
                             />
+                            <Text fontSize={"lg"} fontWeight={"bold"} textAlign="center" mt={2}>
+                                {nft.metadata.name}
+                            </Text>
+                            <Text fontSize={"sm"} textAlign="center">
+                                Equipped: {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}
+                            </Text>
                         </Box>
-                        <Stack spacing={1}>
-                            <Text fontSize={"2xl"} fontWeight={"bold"}>{nft.metadata.name}</Text>
-                            <Text>Equipped: {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}</Text>
+
+                        {/* 右侧功能部分 */}
+                        <Stack spacing={4} ml={4} align="flex-start">
+                            {/* 数量选择器 */}
                             <Quantity
                                 minQuantity={1}
                                 onQuantityChange={handleQuantityChange}
-                                buttonText="Off" // 修改按钮文本为 "Off"
+                                buttonText="Off"
                             />
+
+                            {/* 奖励信息 */}
+                            <Box>
+                                <Text>Claimable $CARROT:</Text>
+                                <Text fontSize={"lg"} fontWeight={"bold"}>
+                                    {ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}
+                                </Text>
+                            </Box>
+
+                            {/* Claim 按钮 */}
                             <Web3Button
                                 contractAddress={STAKING_ADDRESS}
-                                action={(contract) => contract.call("withdraw", [props.tokenId, withdrawQuantity])}
+                                action={(contract) => contract.call("claimRewards", [props.tokenId])}
                             >
-                                Unequip
+                                Claim
                             </Web3Button>
                         </Stack>
                     </Flex>
-                    <Box mt={5}>
-                        <Text>Claimable $CARROT:</Text>
-                        <Text>{ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}</Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS}
-                            action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                        >
-                            Claim $CARROT
-                        </Web3Button>
-                    </Box>
                 </Card>
             )}
         </Box>
