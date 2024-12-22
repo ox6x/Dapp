@@ -48,14 +48,13 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   }, [isProcessing, onTransaction, onTransactionConfirmed, quantity]);
 
   return (
-    <div>
-      {/* 第一行: 數量選擇 */}
+    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+      {/* 數量選擇器 */}
       <div
         style={{
           display: "inline-flex",
           alignItems: "center",
           gap: "8px",
-          marginBottom: "8px",
         }}
       >
         <button onClick={handleDecrement} disabled={isProcessing}>
@@ -66,27 +65,16 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           value={quantity}
           onChange={handleInputChange}
           disabled={isProcessing}
-          style={{
-            width: "40px", // 增加輸入框寬度以更好顯示數字
-            textAlign: "center",
-          }}
+          style={{ width: "40px", textAlign: "center" }}
         />
         <button onClick={handleIncrement} disabled={isProcessing}>
           +
         </button>
       </div>
-      {/* 第二行: 按鈕 */}
-      <div>
-        <button
-          onClick={handleTransaction}
-          disabled={isProcessing}
-          style={{
-            marginTop: "8px", // 增加按鈕與數量選擇的間距
-          }}
-        >
-          {buttonText}
-        </button>
-      </div>
+      {/* 按鈕 */}
+      <button onClick={handleTransaction} disabled={isProcessing}>
+        {buttonText}
+      </button>
     </div>
   );
 };
