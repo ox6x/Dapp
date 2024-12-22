@@ -34,45 +34,49 @@ const Quantity: React.FC<QuantityProps> = ({
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <button
-        onClick={handleDecrement}
-        style={{
-          padding: "6px 12px",
-          background: "#3182ce",
-          color: "#fff",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
-        -
-      </button>
-      <input
-        type="number"
-        value={quantity}
-        onChange={handleInputChange}
-        style={{
-          width: "50px",
-          textAlign: "center",
-          padding: "4px",
-          borderRadius: "4px",
-          border: "1px solid #ccc",
-        }}
-      />
-      <button
-        onClick={handleIncrement}
-        style={{
-          padding: "6px 12px",
-          background: "#3182ce",
-          color: "#fff",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
-        +
-      </button>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+      {/* 數量框與按鈕 */}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <button
+          onClick={handleDecrement}
+          style={{
+            padding: "6px 12px",
+            background: "#3182ce",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px 0 0 4px",
+            cursor: "pointer",
+          }}
+        >
+          {"<"}
+        </button>
+        <input
+          type="number"
+          value={quantity}
+          onChange={handleInputChange}
+          style={{
+            width: "50px",
+            textAlign: "center",
+            padding: "4px",
+            borderRadius: "0",
+            border: "1px solid #ccc",
+          }}
+        />
+        <button
+          onClick={handleIncrement}
+          style={{
+            padding: "6px 12px",
+            background: "#3182ce",
+            color: "#fff",
+            border: "none",
+            borderRadius: "0 4px 4px 0",
+            cursor: "pointer",
+          }}
+        >
+          {">"}
+        </button>
+      </div>
+      {/* 確認按鈕 */}
       <button
         onClick={() => onQuantityChange(quantity)}
         style={{
@@ -82,6 +86,7 @@ const Quantity: React.FC<QuantityProps> = ({
           border: "none",
           borderRadius: "4px",
           cursor: "pointer",
+          marginTop: "8px",
         }}
       >
         {buttonText}
