@@ -4,7 +4,7 @@ import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Inventory } from "../components/Inventory";
 import { Equipped } from "../components/Equipped";
 import { BigNumber, ethers } from "ethers";
-import { Text, Box, Card, Container, Heading, Skeleton } from "@chakra-ui/react";
+import { Text, Box, Card, Container, Flex, Heading, Skeleton } from "@chakra-ui/react";
 
 const Home = () => {
   const address = useAddress();
