@@ -11,15 +11,14 @@ import {
   Flex,
   Heading,
   Spinner,
-  Stack
+  Stack,
 } from "@chakra-ui/react";
-import NFT from "../components/NFT";
-import NFTQuantityTransaction from "../components/NFTQuantityTransaction"; // 引入數量選擇組件
-import { useState } from "react";
+import NFTQuantityTransaction from "../components/NFTQuantityTransaction";
 
 export default function Store() {
   const { contract } = useContract(TOOLS_ADDRESS);
   const { data: nfts, isLoading } = useNFTs(contract);
+
   const pricePerItem = 10; // 單個 NFT 的靜態價格，可根據需求改為動態值
 
   const sliderSettings = {
@@ -61,15 +60,19 @@ export default function Store() {
       ) : (
         <Slider {...sliderSettings}>
           {nfts.map((nftItem) => (
-            <Stack key={nftItem.metadata.id} p={5}>
-              {/* NFT 詳情卡片 */}
-              <NFT nft={nftItem} />
-              
-              {/* 使用 NFTQuantityTransaction 實現購買數量選擇和動態總價 */}
+            <Stack key={nftItem.metadata.id} p={5} spacing={4} align={"center"}>
+              <img
+                src={nftItem.metadata.image}
+                alt={nftItem.metadata.name}
+                width="150px"
+              />
+              <Text fontWeight={"bold"}>{nftItem.metadata.name}</Text>
+
+              {/* 數量選擇器與購買按鈕 */}
               <NFTQuantityTransaction
                 initialQuantity={1}
                 minQuantity={1}
-                getPrice={(quantity) => `${quantity * pricePerItem} CARROTS`}
+                getPrice={(quantity) => `${quantity * pricePerItem} CARROTS`} // 動態價格計算
                 onTransaction={(quantity) => {
                   alert(`Purchasing ${quantity} items for ${quantity * pricePerItem} CARROTS`);
                 }}
