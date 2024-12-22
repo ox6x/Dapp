@@ -1,7 +1,7 @@
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { Flex, Heading, Container } from "@chakra-ui/react";
 
-const Login = ({ children }: { children: React.ReactNode }) => {
+const Login = ({ children }: { children?: React.ReactNode }) => {
   const address = useAddress();
 
   if (!address) {
