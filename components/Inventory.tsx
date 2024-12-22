@@ -60,7 +60,7 @@ export function Inventory({ nft }: Props) {
         return (
             <Box>
                 <Text>No tools.</Text>
-                <Link href="/store">
+                <Link href="/supplier">
                     <Button>Store</Button>
                 </Link>
             </Box>
