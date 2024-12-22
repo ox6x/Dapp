@@ -92,12 +92,12 @@ export const Equipped = (props: EquippedProps) => {
 
                         {/* 右側功能部分 */}
                         <Stack spacing={4} ml={4} align="flex-start">
-                            {/* 名稱與數量、獎勵 */}
+                            {/* 名稱與數量、Token */}
                             <Text fontSize={"lg"} fontWeight={"bold"} textAlign="center">
                                 {nft.metadata.name} ({equippedQuantity})
                             </Text>
                             <Text fontSize={"sm"} textAlign="center" color="gray.600">
-                                Claimable: {claimableCarrot} $CARROT
+                                Token: {claimableCarrot}
                             </Text>
                         </Stack>
                     </Flex>
