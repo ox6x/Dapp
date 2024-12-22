@@ -62,9 +62,6 @@ export default function NFTComponent({ nft }: Props) {
             {!isLoading && data ? (
                 <>
                     <Text textAlign={"center"} my={5}>
-                        Cost per NFT: {ethers.utils.formatEther(data.price)} {data.currencyMetadata.symbol}
-                    </Text>
-                    <Text textAlign={"center"} my={5}>
                         Total Cost: {totalPrice} {data.currencyMetadata.symbol}
                     </Text>
                 </>
