@@ -3,6 +3,8 @@ import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
 import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
+import { useState } from 'react';
+import Quantity from './Quantity'; // 引入动态数量选择器组件
 
 type Props = {
     nft: NFT[] | undefined;
@@ -13,7 +15,18 @@ export function Inventory({ nft }: Props) {
     const { contract: toolContract } = useContract(TOOLS_ADDRESS);
     const { contract: stakingContract } = useContract(STAKING_ADDRESS);
 
-    async function stakeNFT(id: string) {
+    const [stakeQuantities, setStakeQuantities] = useState<{ [id: string]: number }>({});
+
+    // 动态数量变化处理函数
+    const handleQuantityChange = (id: string, quantity: number) => {
+        setStakeQuantities((prev) => ({
+            ...prev,
+            [id]: quantity,
+        }));
+    };
+
+    // 修改为接受动态数量
+    async function stakeNFT(id: string, quantity: number) {
         if (!address) {
             return;
         }
@@ -29,10 +42,10 @@ export function Inventory({ nft }: Props) {
                 true,
             );
         }
-        await stakingContract?.call("stake", [id, 1]);
+        await stakingContract?.call("stake", [id, quantity]);
     };
 
-    if(nft?.length === 0) {
+    if (nft?.length === 0) {
         return (
             <Box>
                 <Text>No tools.</Text>
@@ -42,7 +55,7 @@ export function Inventory({ nft }: Props) {
                     <Button>Shop Tool</Button>
                 </Link>
             </Box>
-        )
+        );
     }
 
     return (
@@ -50,16 +63,23 @@ export function Inventory({ nft }: Props) {
             {nft?.map((nft) => (
                 <Card key={nft.metadata.id} p={5}>
                     <Stack alignItems={"center"}>
-                    <MediaRenderer 
-                        src={nft.metadata.image} 
-                        height="100px"
-                        width="100px"
-                    />
-                    <Text>{nft.metadata.name}</Text>
-                    <Web3Button
-                        contractAddress={STAKING_ADDRESS}
-                        action={() => stakeNFT(nft.metadata.id)}
-                    >Equip</Web3Button>
+                        <MediaRenderer 
+                            src={nft.metadata.image} 
+                            height="100px"
+                            width="100px"
+                        />
+                        <Text>{nft.metadata.name}</Text>
+                        <Quantity
+                            minQuantity={1}
+                            onQuantityChange={(quantity) => handleQuantityChange(nft.metadata.id, quantity)}
+                            buttonText="Set Quantity"
+                        />
+                        <Web3Button
+                            contractAddress={STAKING_ADDRESS}
+                            action={() => stakeNFT(nft.metadata.id, stakeQuantities[nft.metadata.id] || 1)}
+                        >
+                            Equip
+                        </Web3Button>
                     </Stack>
                 </Card>
             ))}
