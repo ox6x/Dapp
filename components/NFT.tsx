@@ -16,12 +16,6 @@ export default function NFTComponent({ nft }: Props) {
         nft.metadata.id, // Token ID required for ERC1155 contracts here
     );
 
-    // 动态价格计算函数
-    const getNFTPrice = (quantity: number) => {
-        const pricePerNFT = parseFloat(ethers.utils.formatEther(data?.price || "0")); // 每个 NFT 的单价
-        return (pricePerNFT * quantity).toFixed(2); // 返回总价
-    };
-
     // 购买逻辑
     const handleTransaction = async (quantity: number) => {
         if (!contract) return;
@@ -58,7 +52,6 @@ export default function NFTComponent({ nft }: Props) {
             <NFTQuantityTransaction
                 initialQuantity={1}
                 onTransaction={handleTransaction} // 动态交易逻辑
-                getPrice={getNFTPrice} // 动态价格计算
                 onTransactionConfirmed={() => alert("Transaction confirmed!")} // 成功提示
             />
         </Card>
