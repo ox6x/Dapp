@@ -53,6 +53,7 @@ export default function NFTComponent({ nft }: Props) {
                 initialQuantity={1}
                 onTransaction={handleTransaction} // 动态交易逻辑
                 onTransactionConfirmed={() => alert("Transaction confirmed!")} // 成功提示
+                buttonText="Buy" // 自定义按钮文本
             />
         </Card>
     );
