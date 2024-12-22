@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useMemo } from "react";
 
 interface NFTQuantityTransactionProps {
-  initialQuantity?: number; // 初始数量
-  minQuantity?: number; // 最小数量
-  onTransaction: (quantity: number) => Promise<void>; // 交易回调函数
-  onTransactionConfirmed?: () => void; // 交易成功后的回调
-  getPrice: (quantity: number) => string; // 价格计算函数
-  buttonText?: string; // 按钮文本
+  initialQuantity?: number; 
+  minQuantity?: number; 
+  onTransaction: (quantity: number) => Promise<void>; 
+  onTransactionConfirmed?: () => void; 
+  getPrice: (quantity: number) => string; 
+  buttonText?: string; 
 }
 
 const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
@@ -15,12 +15,11 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   onTransaction,
   onTransactionConfirmed,
   getPrice,
-  buttonText = "Button", // 默认按钮文本
+  buttonText = "Button",
 }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
-  const [isProcessing, setIsProcessing] = useState(false); // 防止重复提交
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  // 使用 useCallback 优化函数定义
   const handleIncrement = useCallback(() => {
     setQuantity((prev) => prev + 1);
   }, []);
@@ -38,7 +37,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   );
 
   const handleTransaction = useCallback(async () => {
-    if (isProcessing) return; // 避免重复提交
+    if (isProcessing) return; 
     setIsProcessing(true);
     try {
       await onTransaction(quantity);
@@ -50,12 +49,19 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
     }
   }, [isProcessing, onTransaction, onTransactionConfirmed, quantity]);
 
-  // 使用 useMemo 优化价格计算
   const price = useMemo(() => getPrice(quantity), [getPrice, quantity]);
 
   return (
     <div>
-      <div>
+      {/* 這裡用 inline-flex or flex + gap 讓 -、數量、+ 在同一行 */}
+      <div
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "8px",
+          marginBottom: "8px",
+        }}
+      >
         <button onClick={handleDecrement} disabled={isProcessing}>
           -
         </button>
@@ -64,12 +70,13 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           value={quantity}
           onChange={handleInputChange}
           disabled={isProcessing}
+          style={{ width: "60px", textAlign: "center" }} // 視需求調整
         />
         <button onClick={handleIncrement} disabled={isProcessing}>
           +
         </button>
       </div>
-      <div>Price: {price}</div>
+      <div style={{ marginBottom: "8px" }}>Price: {price}</div>
       <button onClick={handleTransaction} disabled={isProcessing}>
         {buttonText}
       </button>
