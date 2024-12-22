@@ -83,7 +83,7 @@ export const Equipped = (props: EquippedProps) => {
                                     buttonText="Turn off" // 按钮文字改为 Stop
                                 />
 
-                                {/* 直接 Claim Rewards 按钮 */}
+                                {/* 直接 Claim Rewards 按钮，奖励金额与按钮文本合并 */}
                                 <Box textAlign="center">
                                     <button
                                         onClick={handleClaimRewards}
@@ -96,11 +96,9 @@ export const Equipped = (props: EquippedProps) => {
                                             cursor: "pointer",
                                         }}
                                     >
-                                        Claim
-                                    </button>
-                                    <Text fontSize="md" fontWeight="bold" mt={2}>
+                                        Claim{" "}
                                         {ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}
-                                    </Text>
+                                    </button>
                                 </Box>
                             </Stack>
                         </Flex>
