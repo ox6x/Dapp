@@ -4,7 +4,7 @@ import { Container, Flex, Heading } from "@chakra-ui/react";
 const Login: React.FC = () => {
   const address = useAddress();
 
-  if (address) return null;
+  if (address) return null; // 如果已連結，則不渲染此組件
 
   return (
     <Container maxW={"container.sm"} px={4}>
