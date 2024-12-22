@@ -80,7 +80,7 @@ export const Equipped = (props: EquippedProps) => {
                                     initialQuantity={1}
                                     onTransaction={(quantity) => handleUnequip(quantity)}
                                     onTransactionConfirmed={() => alert("Unequip confirmed!")}
-                                    buttonText="Stop" // 按钮文字改为 Stop
+                                    buttonText="Turn off" // 按钮文字改为 Stop
                                 />
 
                                 {/* 直接 Claim Rewards 按钮 */}
