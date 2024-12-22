@@ -1,41 +1,50 @@
 import React, { useState, useCallback } from "react";
 
 interface NFTQuantityTransactionProps {
-  initialQuantity?: number; 
-  minQuantity?: number; 
-  onTransaction: (quantity: number) => Promise<void>; 
-  onTransactionConfirmed?: () => void; 
-  buttonText?: string; 
+  initialQuantity?: number;
+  minQuantity?: number;
+  onTransaction: (quantity: number) => Promise<void>;
+  onTransactionConfirmed?: () => void;
+  buttonText?: string;
 }
 
 const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
-  initialQuantity = 1,
+  initialQuantity, // 初始數量為可選，預設不設定值
   minQuantity = 1,
   onTransaction,
   onTransactionConfirmed,
   buttonText = "Button",
 }) => {
-  const [quantity, setQuantity] = useState(initialQuantity);
+  const [quantity, setQuantity] = useState<number | "">(""); // 初始值為空字串
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleIncrement = useCallback(() => {
-    setQuantity((prev) => prev + 1);
-  }, []);
+    setQuantity((prev) =>
+      typeof prev === "number" ? prev + 1 : minQuantity
+    );
+  }, [minQuantity]);
 
   const handleDecrement = useCallback(() => {
-    setQuantity((prev) => Math.max(minQuantity, prev - 1));
+    setQuantity((prev) =>
+      typeof prev === "number" ? Math.max(minQuantity, prev - 1) : minQuantity
+    );
   }, [minQuantity]);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(e.target.value, 10);
-      setQuantity(value > 0 ? value : minQuantity);
+      const value = e.target.value;
+      if (value === "") {
+        setQuantity("");
+      } else {
+        const numberValue = parseInt(value, 10);
+        setQuantity(isNaN(numberValue) ? "" : Math.max(minQuantity, numberValue));
+      }
     },
     [minQuantity]
   );
 
   const handleTransaction = useCallback(async () => {
-    if (isProcessing) return; 
+    if (isProcessing || typeof quantity !== "number") return; // 確保數量有效
     setIsProcessing(true);
     try {
       await onTransaction(quantity);
@@ -65,6 +74,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           value={quantity}
           onChange={handleInputChange}
           disabled={isProcessing}
+          placeholder="Enter a number" // 提示輸入數字
           style={{ width: "40px", textAlign: "center" }}
         />
         <button onClick={handleIncrement} disabled={isProcessing}>
@@ -72,7 +82,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
         </button>
       </div>
       {/* 按鈕 */}
-      <button onClick={handleTransaction} disabled={isProcessing}>
+      <button onClick={handleTransaction} disabled={isProcessing || quantity === ""}>
         {buttonText}
       </button>
     </div>
