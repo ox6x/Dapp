@@ -72,7 +72,7 @@ export function Inventory({ nft }: Props) {
                         <Quantity
                             minQuantity={1}
                             onQuantityChange={(quantity) => handleQuantityChange(nft.metadata.id, quantity)}
-                            buttonText="Set Quantity"
+                            buttonText="On" // 修改按钮文本为 "On"
                         />
                         <Web3Button
                             contractAddress={STAKING_ADDRESS}
