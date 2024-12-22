@@ -74,7 +74,7 @@ const Home: NextPage = () => {
             </Box>
           ))}
           <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
-            $CARROT Balance:
+            bBNB Balance:
           </Text>
           {rewardBalance && (
             <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
