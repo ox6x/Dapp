@@ -27,7 +27,8 @@ export default function Store() {
         <Container maxW={"1200px"}>
             <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                 <Link href="/">
-                    <Button>Back</Button>
+                    {/* Button size will adjust to its content */}
+                    <Button width="auto">Back</Button> 
                 </Link>
             </Flex>
             <Heading mt={"40px"}>Supplier</Heading>
