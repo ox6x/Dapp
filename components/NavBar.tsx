@@ -12,7 +12,7 @@ export default function NavBar() {
                 </Heading>
                 <Flex alignItems={"center"} justifyContent={"flex-end"} w="auto">
                     <Link href="/store" style={{ marginRight: "1rem", fontSize: "1rem", textDecoration: "none" }}>
-                        Store
+                        Supplier
                     </Link>
                     <ConnectWallet style={{ fontSize: "1rem", padding: "0.5rem 1rem" }} />
                 </Flex>
