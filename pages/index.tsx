@@ -1,13 +1,13 @@
-import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Inventory } from "../components/Inventory";
-import { Equipped } from "../components/Equipped";
-import { Farmer } from "../components/Farmer";
-import { Login } from "../components/Login";
-import { Container, Box, Card, Heading, Skeleton, Spinner, Flex } from "@chakra-ui/react";
-import { BigNumber } from "ethers";
+import { Container, Flex, Heading } from "@chakra-ui/react";
+
+import LoadingScreen from "../components/LoadingScreen";
+import FarmerSection from "../components/FarmerSection";
+import InventorySection from "../components/InventorySection";
+import EquippedSection from "../components/EquippedSection";
 
 const Home: NextPage = () => {
   const address = useAddress();
@@ -20,26 +20,24 @@ const Home: NextPage = () => {
   const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmercontract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
-  const { data: equippedTools } = useContractRead(
-    stakingContract,
-    "getStakeInfo",
-    [address]
-  );
-
+  const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
 
   if (!address) {
-    return <Login />;
-  }
-
-  if (loadingOwnedFarmers) {
     return (
       <Container maxW={"container.sm"} px={4}>
-        <Flex h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Spinner size="lg" />
+        <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+          <Heading my={6} textAlign="center" fontSize="2xl">
+            Welcome to Crypto Farm
+          </Heading>
+          <ConnectWallet />
         </Flex>
       </Container>
     );
+  }
+
+  if (loadingOwnedFarmers) {
+    return <LoadingScreen />;
   }
 
   if (ownedFarmers?.length === 0) {
@@ -52,33 +50,9 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <Farmer ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
-      <Box mb={6}>
-        <Card p={4}>
-          <Heading fontSize="lg" mb={4}>
-            Inventory
-          </Heading>
-          <Skeleton isLoaded={!loadingOwnedTools}>
-            <Inventory
-              nft={ownedTools}
-            />
-          </Skeleton>
-        </Card>
-      </Box>
-      <Box>
-        <Card p={4}>
-          <Heading fontSize="lg" mb={4}>
-            Equipped
-          </Heading>
-          {equippedTools &&
-            equippedTools[0].map((nft: BigNumber) => (
-              <Equipped
-                key={nft.toNumber()}
-                tokenId={nft.toNumber()}
-              />
-            ))}
-        </Card>
-      </Box>
+      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
+      <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
+      <EquippedSection equippedTools={equippedTools} />
     </Container>
   );
 };
