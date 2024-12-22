@@ -2,6 +2,8 @@ import { MediaRenderer, Web3Button, useAddress, useContract, useContractRead, us
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
+import { useState } from "react";
+import Quantity from "./Quantity"; // 确保路径正确
 
 interface EquippedProps {
     tokenId: number;
@@ -21,6 +23,12 @@ export const Equipped = (props: EquippedProps) => {
         [props.tokenId, address]
     );
 
+    const [withdrawQuantity, setWithdrawQuantity] = useState<number>(1);
+
+    const handleQuantityChange = (quantity: number) => {
+        setWithdrawQuantity(quantity);
+    };
+
     return (
         <Box>
             {nft && (
@@ -35,23 +43,32 @@ export const Equipped = (props: EquippedProps) => {
                         </Box>
                         <Stack spacing={1}>
                             <Text fontSize={"2xl"} fontWeight={"bold"}>{nft.metadata.name}</Text>
-                            <Text>Equipped: {ethers.utils.formatUnits(claimableRewards[0], 0)}</Text>
+                            <Text>Equipped: {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}</Text>
+                            <Quantity
+                                minQuantity={1}
+                                onQuantityChange={handleQuantityChange}
+                                buttonText="Set Quantity"
+                            />
                             <Web3Button
                                 contractAddress={STAKING_ADDRESS}
-                                action={(contract) => contract.call("withdraw", [props.tokenId, 1])}
-                            >Unequip</Web3Button>
+                                action={(contract) => contract.call("withdraw", [props.tokenId, withdrawQuantity])}
+                            >
+                                Unequip
+                            </Web3Button>
                         </Stack>
                     </Flex>
                     <Box mt={5}>
                         <Text>Claimable $CARROT:</Text>
-                        <Text>{ethers.utils.formatUnits(claimableRewards[1], 18)}</Text>
+                        <Text>{ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18)}</Text>
                         <Web3Button
                             contractAddress={STAKING_ADDRESS}
                             action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                        >Claim $CARROT</Web3Button>
+                        >
+                            Claim $CARROT
+                        </Web3Button>
                     </Box>
                 </Card>
             )}
         </Box>
-    )
+    );
 };
