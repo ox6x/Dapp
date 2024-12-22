@@ -1,8 +1,9 @@
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
-import { Flex, Heading, Container } from "@chakra-ui/react";
+import { Flex, Heading, Container, Button, Modal, ModalOverlay, ModalContent, ModalBody, useDisclosure } from "@chakra-ui/react";
 
 const Login = () => {
   const address = useAddress();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Container maxW={"1200px"}>
@@ -10,19 +11,15 @@ const Login = () => {
         {!address ? (
           <>
             <Heading my={"40px"}>Welcome to Crypto Farm</Heading>
-            <ConnectWallet
-              theme="dark"
-              modalConfig={{
-                style: {
-                  width: "80vw", // 动态调整宽度
-                  maxWidth: "500px", // 最大宽度
-                  height: "70vh", // 动态调整高度
-                  maxHeight: "90vh", // 最大高度
-                  margin: "auto", // 居中对齐
-                  overflow: "auto", // 内容溢出时滚动
-                },
-              }}
-            />
+            <Button onClick={onOpen}>Connect Wallet</Button>
+            <Modal isOpen={isOpen} onClose={onClose} size="xl">
+              <ModalOverlay />
+              <ModalContent maxW="80vw" maxH="90vh" overflow="auto">
+                <ModalBody>
+                  <ConnectWallet theme="dark" />
+                </ModalBody>
+              </ModalContent>
+            </Modal>
           </>
         ) : (
           <Heading my={"40px"}>Wallet Connected</Heading>
@@ -32,7 +29,7 @@ const Login = () => {
   );
 };
 
-// 不使用佈局
+// 不使用布局
 Login.getLayout = (page: React.ReactNode) => <>{page}</>;
 
 export default Login;
