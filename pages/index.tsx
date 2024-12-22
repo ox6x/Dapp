@@ -1,5 +1,11 @@
-import EquippedCard from "../components/EquippedCard";
+import { ConnectWallet, MediaRenderer, useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
+import type { NextPage } from "next"; // 确保引入了 NextPage 类型
+import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
+import { ClaimFarmer } from "../components/ClaimFarmer";
 import InventoryCard from "../components/InventoryCard";
+import EquippedCard from "../components/EquippedCard";
+import { BigNumber, ethers } from "ethers";
+import { Text, Box, Card, Container, Flex, Heading, Spinner, Skeleton } from "@chakra-ui/react";
 
 const Home: NextPage = () => {
   const address = useAddress();
