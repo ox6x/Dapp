@@ -1,75 +1,70 @@
-import { Text, Card } from "@chakra-ui/react";
-import { MediaRenderer, useActiveClaimCondition, useContract } from "@thirdweb-dev/react";
-import { NFT } from "@thirdweb-dev/sdk";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useContract, useNFTs } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS } from "../const/addresses";
-import { ethers } from "ethers";
-import NFTQuantityTransaction from "./NFTQuantityTransaction"; // 使用数量选择器
+import Link from "next/link";
+import { Text, Button, Container, Flex, Heading, Spinner } from "@chakra-ui/react";
+import NFTComponent from "../components/NFT"; // 引入 NFT 组件
+import { useState } from "react";
 
-type Props = {
-    nft: NFT;
-};
-
-export default function NFTComponent({ nft }: Props) {
+export default function Store() {
     const { contract } = useContract(TOOLS_ADDRESS);
-    const { data, isLoading } = useActiveClaimCondition(
-        contract,
-        nft.metadata.id // Token ID required for ERC1155 contracts
-    );
+    const { data: nfts } = useNFTs(contract);
 
-    const [quantity, setQuantity] = React.useState(1); // 状态存储当前选择的数量
+    const [totalPrices, setTotalPrices] = useState<{ [key: string]: string }>({}); // 存储每个 NFT 的总价
 
-    // 购买逻辑
-    const handleTransaction = async (selectedQuantity: number) => {
-        if (!contract) return;
-
-        try {
-            await contract.erc1155.claim(nft.metadata.id, selectedQuantity); // 根据数量进行购买
-            alert(`Successfully purchased ${selectedQuantity} ${nft.metadata.name}!`);
-        } catch (error) {
-            console.error("Transaction failed:", error);
-            alert("Transaction failed, please try again.");
-        }
+    const handleTotalPriceChange = (nftId: string, totalPrice: string) => {
+        setTotalPrices((prev) => ({
+            ...prev,
+            [nftId]: totalPrice,
+        }));
     };
 
-    // 动态计算总价
-    const totalPrice =
-        data && quantity > 0
-            ? ethers.utils.formatEther(data.price.mul(quantity)) // 单价 × 数量
-            : "0";
+    // 汇总所有 NFT 的总价
+    const grandTotal = Object.values(totalPrices).reduce((sum, price) => sum + parseFloat(price), 0);
+
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        centerMode: true,
+        centerPadding: "0",
+    };
 
     return (
-        <Card key={nft.metadata.id} overflow={"hidden"}>
-            <MediaRenderer
-                src={nft.metadata.image}
-                height="100%"
-                width="100%"
-            />
-            <Text fontSize={"2xl"} fontWeight={"bold"} my={5} textAlign={"center"}>
-                {nft.metadata.name}
-            </Text>
-
-            {!isLoading && data ? (
-                <>
-                    <Text textAlign={"center"} my={2}>
-                        Cost per NFT: {ethers.utils.formatEther(data?.price)}{" "}
-                        {data?.currencyMetadata.symbol}
-                    </Text>
-                    <Text textAlign={"center"} my={2} fontWeight="bold">
-                        Total Price: {totalPrice} {data?.currencyMetadata.symbol}
-                    </Text>
-                </>
+        <Container maxW={"1200px"}>
+            <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+                <Link href="/">
+                    <Button>Back</Button>
+                </Link>
+            </Flex>
+            <Heading mt={"40px"}>Store</Heading>
+            <Text>Purchase tools with $CARROTS to increase your earnings.</Text>
+            {!nfts ? (
+                <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
+                    <Spinner />
+                </Flex>
             ) : (
-                <Text>Loading...</Text>
+                <Slider {...sliderSettings}>
+                    {nfts?.map((nftItem) => (
+                        <div key={nftItem.metadata.id}>
+                            <NFTComponent
+                                nft={nftItem}
+                                onTotalPriceChange={handleTotalPriceChange} // 传递回调函数
+                            />
+                        </div>
+                    ))}
+                </Slider>
             )}
-
-            {/* 数量选择器 */}
-            <NFTQuantityTransaction
-                initialQuantity={1}
-                onTransaction={handleTransaction} // 动态交易逻辑
-                onTransactionConfirmed={() => alert("Transaction confirmed!")} // 成功提示
-                buttonText="Buy"
-                onTransaction={(selectedQuantity) => setQuantity(selectedQuantity)} // 动态更新数量
-            />
-        </Card>
+            {/* 显示总价 */}
+            <Text fontSize={"2xl"} fontWeight={"bold"} textAlign={"center"} mt={5}>
+                Grand Total: {grandTotal.toFixed(2)} CARROTS
+            </Text>
+        </Container>
     );
 }
