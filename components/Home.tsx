@@ -1,9 +1,9 @@
 import { ConnectWallet, MediaRenderer, useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
-import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Inventory } from "../components/Inventory";
-import { Equipped } from "../components/Equipped";
+import { ClaimFarmer } from "./ClaimFarmer";
+import { Inventory } from "./Inventory";
+import { Equipped } from "./Equipped";
 import { BigNumber, ethers } from "ethers";
 import { Text, Box, Card, Container, Flex, Heading, Spinner, Skeleton } from "@chakra-ui/react";
 
