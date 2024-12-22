@@ -13,7 +13,7 @@ export const ToolsInventory = ({ ownedTools, loadingOwnedTools }: ToolsInventory
         Inventory
       </Heading>
       <Skeleton isLoaded={!loadingOwnedTools}>
-        <Inventory nft={ownedTools} />
+        {ownedTools.length > 0 ? <Inventory nft={ownedTools} /> : "No tools available"}
       </Skeleton>
     </Card>
   </Box>
