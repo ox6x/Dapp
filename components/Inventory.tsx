@@ -1,3 +1,4 @@
+
 import { MediaRenderer, Web3Button, useAddress, useContract } from '@thirdweb-dev/react';
 import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
@@ -65,4 +66,34 @@ export function Inventory({ nft }: Props) {
             ))}
         </SimpleGrid>
     );
+};
+
+import { useState } from "react";
+import { Quantity } from "./Quantity"; // Importing the Quantity component
+
+export const Inventory = ({ nft }) => {
+  const [status, setStatus] = useState("Off"); // Default status as Off
+
+  const handleStatusChange = (quantity) => {
+    setStatus(quantity === 1 ? "On" : "Off");
+    console.log(`Status changed to: ${quantity === 1 ? "On" : "Off"}`);
+  };
+
+  return (
+    <div>
+      <h1>Inventory Component</h1>
+      {nft?.map((item, index) => (
+        <div key={index}>
+          <h2>NFT: {item.metadata.name}</h2>
+          <p>Current Status: {status}</p>
+
+          <Quantity
+            onQuantityChange={handleStatusChange}
+            minQuantity={0}
+            buttonText={status === "Off" ? "Activate" : "Deactivate"}
+          />
+        </div>
+      ))}
+    </div>
+  );
 };

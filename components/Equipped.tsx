@@ -1,3 +1,4 @@
+
 import { MediaRenderer, Web3Button, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
@@ -54,4 +55,29 @@ export const Equipped = (props: EquippedProps) => {
             )}
         </Box>
     )
+};
+
+import { useState } from "react";
+import { Quantity } from "./Quantity"; // Importing the Quantity component
+
+export const Equipped = (props) => {
+  const [status, setStatus] = useState("Off"); // Default status as Off
+
+  const handleStatusChange = (quantity) => {
+    setStatus(quantity === 1 ? "On" : "Off");
+    console.log(`Status changed to: ${quantity === 1 ? "On" : "Off"}`);
+  };
+
+  return (
+    <div>
+      <h1>Equipped Component</h1>
+      <p>Current Status: {status}</p>
+
+      <Quantity
+        onQuantityChange={handleStatusChange}
+        minQuantity={0}
+        buttonText={status === "Off" ? "Turn On" : "Turn Off"}
+      />
+    </div>
+  );
 };
