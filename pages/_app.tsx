@@ -25,7 +25,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <ChakraProvider>
-<ConnectWallet />
         <Component {...pageProps} />
       </ChakraProvider>
     </ThirdwebProvider>
