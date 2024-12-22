@@ -3,7 +3,6 @@ import { NFT } from '@thirdweb-dev/sdk';
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
 import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack } from '@chakra-ui/react';
-import { useState } from 'react';
 import Quantity from './Quantity'; // 引入动态数量选择器组件
 
 type Props = {
@@ -46,36 +45,47 @@ export function Inventory({ nft }: Props) {
 
     if (nft?.length === 0) {
         return (
-            <Box>
-                <Text>No tools.</Text>
+            <Box textAlign="center" mt={10}>
+                <Text fontSize="lg" color="gray.600">No tools available.</Text>
                 <Link href="/shop">
-                    <Button>Shop Tool</Button>
+                    <Button mt={4} colorScheme="blue">Shop Tools</Button>
                 </Link>
             </Box>
         );
     }
 
     return (
-        <SimpleGrid columns={3} spacing={4}>
+        <SimpleGrid columns={[1, 2, 3]} spacing={6} mt={6}>
             {nft?.map((nft) => (
-                <Card key={nft.metadata.id} p={5}>
-                    <Stack alignItems={"center"}>
+                <Card 
+                    key={nft.metadata.id} 
+                    p={5} 
+                    borderRadius="md" 
+                    boxShadow="md"
+                    _hover={{ boxShadow: "lg" }}
+                >
+                    <Stack align="center" spacing={4}>
                         {/* 显示 NFT 图片 */}
                         <MediaRenderer 
                             src={nft.metadata.image} 
-                            height="100px"
-                            width="100px"
+                            height="120px"
+                            width="120px"
+                            style={{ borderRadius: "8px" }}
                         />
+                        
                         {/* 显示 NFT 名称和持有数量 */}
-                        <Text>
-                            {nft.metadata.name} ({nft.supply?.toString() || "0"})
+                        <Text fontSize="md" fontWeight="bold">
+                            {nft.metadata.name}
+                        </Text>
+                        <Text fontSize="sm" color="gray.600">
+                            Owned: {nft.supply?.toString() || "0"}
                         </Text>
 
                         {/* 动态选择器，整合 Equip 功能 */}
                         <Quantity
                             minQuantity={1}
                             onQuantityChange={(quantity) => handleOnClick(nft.metadata.id, quantity)}
-                            buttonText="On" // 修改按钮文本为 "On"
+                            buttonText="On"
                         />
                     </Stack>
                 </Card>
