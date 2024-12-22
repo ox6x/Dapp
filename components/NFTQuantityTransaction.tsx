@@ -57,7 +57,16 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   }, [isProcessing, onTransaction, onTransactionConfirmed, quantity]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center", // 水平置中
+        justifyContent: "center", // 垂直置中
+        height: "100vh", // 全屏高度以便垂直居中
+        gap: "16px",
+      }}
+    >
       {/* 數量選擇器 */}
       <div
         style={{
