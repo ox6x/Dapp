@@ -63,53 +63,52 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
         style={{
           display: "inline-flex",
           alignItems: "center",
-          gap: "8px",
+          justifyContent: "space-between",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          padding: "4px 8px",
+          width: "120px",
         }}
       >
         <button
           onClick={handleDecrement}
           disabled={isProcessing}
           style={{
-            padding: "8px 12px",
-            borderRadius: "4px",
-            background: "#e53e3e",
-            color: "#fff",
+            background: "none",
             border: "none",
-            cursor: "pointer",
-            fontSize: "16px",
+            cursor: isProcessing ? "not-allowed" : "pointer",
+            fontSize: "18px",
+            color: isProcessing ? "#a0aec0" : "#3182ce",
           }}
         >
-          -
+          &lt;
         </button>
         <input
           type="number"
           value={quantity}
           onChange={handleInputChange}
           disabled={isProcessing}
-          placeholder="Enter a number" // 提示輸入數字
+          placeholder="0"
           style={{
-            width: "60px",
             textAlign: "center",
-            padding: "8px",
+            border: "none",
+            width: "40px",
+            outline: "none",
             fontSize: "16px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
           }}
         />
         <button
           onClick={handleIncrement}
           disabled={isProcessing}
           style={{
-            padding: "8px 12px",
-            borderRadius: "4px",
-            background: "#38a169",
-            color: "#fff",
+            background: "none",
             border: "none",
-            cursor: "pointer",
-            fontSize: "16px",
+            cursor: isProcessing ? "not-allowed" : "pointer",
+            fontSize: "18px",
+            color: isProcessing ? "#a0aec0" : "#3182ce",
           }}
         >
-          +
+          &gt;
         </button>
       </div>
       {/* 按鈕 */}
