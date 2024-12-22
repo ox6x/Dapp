@@ -1,12 +1,7 @@
-import Login from "../components/Login";
 import Home from "./Home";
 
 const Index = () => {
-  return (
-    <Login>
-      <Home />
-    </Login>
-  );
+  return <Home />;
 };
 
 export default Index;
