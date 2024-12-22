@@ -5,7 +5,7 @@ interface NFTQuantityTransactionProps {
   minQuantity?: number;
   onTransaction: (quantity: number) => Promise<void>;
   onTransactionConfirmed?: () => void;
-  buttonText?: string;
+  buttonText?: string | JSX.Element;
 }
 
 const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
@@ -66,7 +66,19 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           gap: "8px",
         }}
       >
-        <button onClick={handleDecrement} disabled={isProcessing}>
+        <button
+          onClick={handleDecrement}
+          disabled={isProcessing}
+          style={{
+            padding: "8px 12px",
+            borderRadius: "4px",
+            background: "#e53e3e",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
           -
         </button>
         <input
@@ -75,14 +87,45 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           onChange={handleInputChange}
           disabled={isProcessing}
           placeholder="Enter a number" // 提示輸入數字
-          style={{ width: "40px", textAlign: "center" }}
+          style={{
+            width: "60px",
+            textAlign: "center",
+            padding: "8px",
+            fontSize: "16px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+          }}
         />
-        <button onClick={handleIncrement} disabled={isProcessing}>
+        <button
+          onClick={handleIncrement}
+          disabled={isProcessing}
+          style={{
+            padding: "8px 12px",
+            borderRadius: "4px",
+            background: "#38a169",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
           +
         </button>
       </div>
       {/* 按鈕 */}
-      <button onClick={handleTransaction} disabled={isProcessing || quantity === ""}>
+      <button
+        onClick={handleTransaction}
+        disabled={isProcessing || quantity === ""}
+        style={{
+          padding: "10px 20px",
+          borderRadius: "5px",
+          background: isProcessing ? "#a0aec0" : "#3182ce",
+          color: "#fff",
+          border: "none",
+          cursor: isProcessing ? "not-allowed" : "pointer",
+          fontSize: "16px",
+        }}
+      >
         {buttonText}
       </button>
     </div>
