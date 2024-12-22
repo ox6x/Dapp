@@ -66,8 +66,10 @@ export function Inventory({ nft }: Props) {
                             height="100px"
                             width="100px"
                         />
-                        {/* 显示 NFT 名称 */}
-                        <Text>{nft.metadata.name}</Text>
+                        {/* 显示 NFT 名称和持有数量 */}
+                        <Text>
+                            {nft.metadata.name} ({nft.supply?.toString() || "0"})
+                        </Text>
 
                         {/* 动态选择器，整合 Equip 功能 */}
                         <Quantity
