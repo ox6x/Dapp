@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import NavBar from "../components/NavBar";
+import type { AppProps } from "next/app";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
-export default function Home() {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider
       clientId={CLIENT_ID}
@@ -24,6 +25,8 @@ export default function Home() {
       }}
     >
       <NavBar />
+      {/* 渲染當前頁面的內容 */}
+      <Component {...pageProps} />
     </ThirdwebProvider>
   );
 }
