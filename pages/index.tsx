@@ -98,7 +98,7 @@ const Home: NextPage = () => {
       <Box>
         <Card p={4}>
           <Heading fontSize="lg" mb={4}>
-            Equipped Tools
+            Equipped
           </Heading>
           {equippedTools &&
             equippedTools[0].map((nft: BigNumber) => (
