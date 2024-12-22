@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 
 interface NFTQuantityTransactionProps {
   initialQuantity?: number; 
@@ -14,7 +14,6 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
   minQuantity = 1,
   onTransaction,
   onTransactionConfirmed,
-  getPrice,
   buttonText = "Button",
 }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
@@ -49,11 +48,8 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
     }
   }, [isProcessing, onTransaction, onTransactionConfirmed, quantity]);
 
-  const price = useMemo(() => getPrice(quantity), [getPrice, quantity]);
-
   return (
     <div>
-      {/* 這裡用 inline-flex or flex + gap 讓 -、數量、+ 在同一行 */}
       <div
         style={{
           display: "inline-flex",
@@ -70,13 +66,12 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           value={quantity}
           onChange={handleInputChange}
           disabled={isProcessing}
-          style={{ width: "16px", textAlign: "center" }} // 視需求調整
+          style={{ width: "16px", textAlign: "center" }}
         />
         <button onClick={handleIncrement} disabled={isProcessing}>
           +
         </button>
       </div>
-      <div style={{ marginBottom: "8px" }}>Price: {price}</div>
       <button onClick={handleTransaction} disabled={isProcessing}>
         {buttonText}
       </button>
