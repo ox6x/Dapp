@@ -7,7 +7,7 @@ export default function NavBar() {
             <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                 <Heading>
                     <Link href="/" style={{ textDecoration: "none" }}>
-                        Crypto Farm
+                        BaseBot
                     </Link>
                 </Heading>
                 <Flex alignItems={"center"} justifyContent={"flex-end"} w="auto">
