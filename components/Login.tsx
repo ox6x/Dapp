@@ -1,22 +1,22 @@
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
-import { Flex, Heading, Container } from "@chakra-ui/react";
+import styles from "./Login.module.scss"; // 引入 SCSS 文件
 
 const Login = () => {
   const address = useAddress();
 
   return (
-    <Container maxW={"1200px"}>
-      <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
+    <div className={styles.container}>
+      <div className={styles.flex}>
         {!address ? (
           <>
-            <Heading my={"40px"}>Welcome to Crypto Farm</Heading>
+            <h1 className={styles.heading}>Welcome to Crypto Farm</h1>
             <ConnectWallet />
           </>
         ) : (
-          <Heading my={"40px"}>Wallet Connected</Heading>
+          <h1 className={styles.heading}>Wallet Connected</h1>
         )}
-      </Flex>
-    </Container>
+      </div>
+    </div>
   );
 };
 
