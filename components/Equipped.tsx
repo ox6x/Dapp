@@ -71,7 +71,7 @@ export const Equipped = (props: EquippedProps) => {
                             <Stack spacing={3} justifyContent="center">
                                 {/* 显示持有数量 */}
                                 <Text fontSize="md" fontWeight="bold" textAlign="center">
-                                    Equipped:{" "}
+                                    Run:{" "}
                                     {ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0)}
                                 </Text>
 
