@@ -1,14 +1,20 @@
-import { ConnectWallet, MediaRenderer, useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
+import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Inventory } from "../components/Inventory";
 import { Equipped } from "../components/Equipped";
+import Login from "../components/Login";
 import { BigNumber, ethers } from "ethers";
-import { Text, Box, Card, Container, Flex, Heading, Spinner, Skeleton } from "@chakra-ui/react";
+import { Text, Box, Card, Container, Heading, Spinner, Skeleton } from "@chakra-ui/react";
 
 const Home: NextPage = () => {
   const address = useAddress();
+
+  // 如果未連結錢包，渲染 Login 組件
+  if (!address) {
+    return <Login />;
+  }
 
   const { contract: farmercontract } = useContract(FARMER_ADDRESS);
   const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
@@ -26,25 +32,10 @@ const Home: NextPage = () => {
 
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
 
-  if (!address) {
-    return (
-      <Container maxW={"container.sm"} px={4}>
-        <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Heading my={6} textAlign="center" fontSize="2xl">
-            Welcome to Crypto Farm
-          </Heading>
-          <ConnectWallet />
-        </Flex>
-      </Container>
-    );
-  }
-
   if (loadingOwnedFarmers) {
     return (
       <Container maxW={"container.sm"} px={4}>
-        <Flex h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Spinner size="lg" />
-        </Flex>
+        <Spinner size="lg" />
       </Container>
     );
   }
