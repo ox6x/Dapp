@@ -3,7 +3,8 @@ import { MediaRenderer, useActiveClaimCondition, useContract } from "@thirdweb-d
 import { NFT } from "@thirdweb-dev/sdk";
 import { TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import NFTQuantityTransaction from "./NFTQuantityTransaction"; // 引入封装组件
+import { useState } from "react";
+import NFTQuantityTransaction from "./NFTQuantityTransaction";
 
 type Props = {
     nft: NFT;
@@ -13,8 +14,10 @@ export default function NFTComponent({ nft }: Props) {
     const { contract } = useContract(TOOLS_ADDRESS);
     const { data, isLoading } = useActiveClaimCondition(
         contract,
-        nft.metadata.id, // Token ID required for ERC1155 contracts here
+        nft.metadata.id // Token ID required for ERC1155 contracts here
     );
+
+    const [quantity, setQuantity] = useState(1); // 保存数量的状态
 
     // 购买逻辑
     const handleTransaction = async (quantity: number) => {
@@ -41,17 +44,24 @@ export default function NFTComponent({ nft }: Props) {
             </Text>
 
             {!isLoading && data ? (
-                <Text textAlign={"center"} my={5}>
-                    Cost per NFT: {ethers.utils.formatEther(data?.price)}{" " + data?.currencyMetadata.symbol}
-                </Text>
+                <>
+                    <Text textAlign={"center"} my={5}>
+                        Cost per NFT: {ethers.utils.formatEther(data.price)} {data.currencyMetadata.symbol}
+                    </Text>
+                    <Text textAlign={"center"} my={5}>
+                        Total Cost: {ethers.utils.formatEther(
+                            ethers.BigNumber.from(data.price).mul(quantity)
+                        )} {data.currencyMetadata.symbol}
+                    </Text>
+                </>
             ) : (
                 <Text>Loading...</Text>
             )}
 
-            {/* 使用封装组件实现数量选择和交易 */}
             <NFTQuantityTransaction
                 initialQuantity={1}
-                onTransaction={handleTransaction} // 动态交易逻辑
+                onTransaction={handleTransaction} // 传递交易逻辑
+                onQuantityChange={(newQuantity: number) => setQuantity(newQuantity)} // 更新数量
                 onTransactionConfirmed={() => alert("Transaction confirmed!")} // 成功提示
             />
         </Card>
