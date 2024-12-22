@@ -8,6 +8,7 @@ import Login from "../components/Login";
 import { ClaimFarmer } from "../components/ClaimFarmer";
 import { FARMER_ADDRESS } from "../const/addresses";
 import { useEffect } from "react";
+import Home from "../components/Home"; // 引入 Home 组件
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
@@ -36,6 +37,15 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // 如果已登录且持有通行证，直接渲染 Home
+  if (ownedFarmers && ownedFarmers.length > 0) {
+    return (
+      <Box minH="100vh" display="flex" justifyContent="center" alignItems="center">
+        <Home />
+      </Box>
+    );
+  }
+
   // 如果已登录但没有通行证，显示 ClaimFarmer
   if (ownedFarmers?.length === 0) {
     return (
@@ -45,7 +55,7 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // 如果已登录且有通行证，渲染实际页面内容
+  // 默认渲染页面内容
   return <>{children}</>;
 }
 
