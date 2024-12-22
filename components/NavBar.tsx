@@ -11,7 +11,7 @@ export default function NavBar() {
                     </Link>
                 </Heading>
                 <Flex alignItems={"center"} justifyContent={"flex-end"} w="auto">
-                    <Link href="/store" style={{ marginRight: "1rem", fontSize: "1rem", textDecoration: "none" }}>
+                    <Link href="/supplier" style={{ marginRight: "1rem", fontSize: "1rem", textDecoration: "none" }}>
                         Supplier
                     </Link>
                     <ConnectWallet style={{ fontSize: "1rem", padding: "0.5rem 1rem" }} />
