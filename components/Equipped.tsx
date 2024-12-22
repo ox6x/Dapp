@@ -47,7 +47,7 @@ export const Equipped = (props: EquippedProps) => {
                             <Quantity
                                 minQuantity={1}
                                 onQuantityChange={handleQuantityChange}
-                                buttonText="Off" {/* 修改按钮文本为 "Off" */}
+                                buttonText="Off" // 修改按钮文本为 "Off"
                             />
                             <Web3Button
                                 contractAddress={STAKING_ADDRESS}
