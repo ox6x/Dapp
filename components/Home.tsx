@@ -5,6 +5,7 @@ import { Inventory } from "../components/Inventory";
 import { Equipped } from "../components/Equipped";
 import { BigNumber, ethers } from "ethers";
 import { Text, Box, Card, Container, Flex, Heading, Skeleton } from "@chakra-ui/react";
+import NavBar from "../components/NavBar"; // 引入 NavBar 组件
 
 const Home = () => {
   const address = useAddress();
@@ -44,49 +45,52 @@ const Home = () => {
   }
 
   return (
-    <Container maxW={"container.sm"} px={4} py={6}>
-      <Box mb={6}>
-        <Card p={4}>
-          <Heading fontSize="lg" mb={4}>
-            Farmer
-          </Heading>
-          {ownedFarmers?.map((nft) => (
-            <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
-              <MediaRenderer src={nft.metadata.image} height="150px" width="100%" />
-            </Box>
-          ))}
-          <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
-            bBNB Balance:
-          </Text>
-          {rewardBalance && (
-            <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
-          )}
-        </Card>
-      </Box>
-
-      <Box mb={6}>
-        <Card p={4}>
-          <Heading fontSize="lg" mb={4}>
-            Inventory
-          </Heading>
-          <Skeleton isLoaded={!loadingOwnedTools}>
-            <Inventory nft={ownedTools} />
-          </Skeleton>
-        </Card>
-      </Box>
-
-      <Box>
-        <Card p={4}>
-          <Heading fontSize="lg" mb={4}>
-            Equipped
-          </Heading>
-          {equippedTools &&
-            equippedTools[0].map((nft: BigNumber) => (
-              <Equipped key={nft.toNumber()} tokenId={nft.toNumber()} />
+    <Box>
+      <NavBar /> {/* 添加导航栏 */}
+      <Container maxW={"container.sm"} px={4} py={6}>
+        <Box mb={6}>
+          <Card p={4}>
+            <Heading fontSize="lg" mb={4}>
+              Farmer
+            </Heading>
+            {ownedFarmers?.map((nft) => (
+              <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
+                <MediaRenderer src={nft.metadata.image} height="150px" width="100%" />
+              </Box>
             ))}
-        </Card>
-      </Box>
-    </Container>
+            <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
+              bBNB Balance:
+            </Text>
+            {rewardBalance && (
+              <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
+            )}
+          </Card>
+        </Box>
+
+        <Box mb={6}>
+          <Card p={4}>
+            <Heading fontSize="lg" mb={4}>
+              Inventory
+            </Heading>
+            <Skeleton isLoaded={!loadingOwnedTools}>
+              <Inventory nft={ownedTools} />
+            </Skeleton>
+          </Card>
+        </Box>
+
+        <Box>
+          <Card p={4}>
+            <Heading fontSize="lg" mb={4}>
+              Equipped
+            </Heading>
+            {equippedTools &&
+              equippedTools[0].map((nft: BigNumber) => (
+                <Equipped key={nft.toNumber()} tokenId={nft.toNumber()} />
+              ))}
+          </Card>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
