@@ -67,6 +67,27 @@ export const Equipped = (props: EquippedProps) => {
                                 width="150px"
                                 style={{ borderRadius: "8px" }}
                             />
+                            {/* 數量選擇器與按鈕 */}
+                            <Stack spacing={4} mt={4} align="center">
+                                <Quantity
+                                    minQuantity={1}
+                                    onQuantityChange={handleOffClick}
+                                    buttonText="Off"
+                                />
+                                <Button
+                                    onClick={handleClaimClick}
+                                    style={{
+                                        padding: "6px 12px",
+                                        background: "#38a169",
+                                        color: "#fff",
+                                        border: "none",
+                                        borderRadius: "4px",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    Claim
+                                </Button>
+                            </Stack>
                         </Box>
 
                         {/* 右側功能部分 */}
@@ -78,28 +99,6 @@ export const Equipped = (props: EquippedProps) => {
                             <Text fontSize={"sm"} textAlign="center" color="gray.600">
                                 Claimable: {claimableCarrot} $CARROT
                             </Text>
-
-                            {/* 數量選擇器 */}
-                            <Quantity
-                                minQuantity={1}
-                                onQuantityChange={handleOffClick} // 調用智能合約的 withdraw 方法
-                                buttonText="Off"
-                            />
-
-                            {/* Claim 按鈕 */}
-                            <Button
-                                onClick={handleClaimClick}
-                                style={{
-                                    padding: "6px 12px",
-                                    background: "#38a169",
-                                    color: "#fff",
-                                    border: "none",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                }}
-                            >
-                                Claim
-                            </Button>
                         </Stack>
                     </Flex>
                 </Card>
