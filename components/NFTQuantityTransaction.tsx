@@ -65,8 +65,8 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           justifyContent: "space-between",
           border: "1px solid #ccc",
           borderRadius: "4px",
-          padding: "4px 8px",
-          width: "120px",
+          padding: "2px 4px", // 減少內邊距
+          width: "auto", // 自適應寬度
         }}
       >
         <button
@@ -78,6 +78,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
             cursor: isProcessing ? "not-allowed" : "pointer",
             fontSize: "18px",
             color: isProcessing ? "#a0aec0" : "#3182ce",
+            marginRight: "4px", // 靠近輸入框
           }}
         >
           &lt;
@@ -91,7 +92,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
           style={{
             textAlign: "center",
             border: "none",
-            width: "24px", // 改為 24px
+            width: "24px",
             outline: "none",
             fontSize: "16px",
           }}
@@ -105,6 +106,7 @@ const NFTQuantityTransaction: React.FC<NFTQuantityTransactionProps> = ({
             cursor: isProcessing ? "not-allowed" : "pointer",
             fontSize: "18px",
             color: isProcessing ? "#a0aec0" : "#3182ce",
+            marginLeft: "4px", // 靠近輸入框
           }}
         >
           &gt;
