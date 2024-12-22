@@ -61,7 +61,7 @@ export function Inventory({ nft }: Props) {
             <Box>
                 <Text>No tools.</Text>
                 <Link href="/store">
-                    <Button>Shop Tool</Button>
+                    <Button>Store</Button>
                 </Link>
             </Box>
         );
@@ -90,7 +90,7 @@ export function Inventory({ nft }: Props) {
                             initialQuantity={1}
                             onTransaction={(quantity) => equipNFT(nftItem.metadata.id, quantity)}
                             onTransactionConfirmed={() => alert("Equipment confirmed!")}
-                            buttonText="Start" // 自定义按钮文本为 "Start"
+                            buttonText="Turn on" // 自定义按钮文本为 "Start"
                         />
                     </Stack>
                 </Card>
