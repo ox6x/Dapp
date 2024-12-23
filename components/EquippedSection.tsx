@@ -1,4 +1,4 @@
-import { Box, Card, Heading, Text, Stack, Flex, Button, Divider } from "@chakra-ui/react";
+import { Box, Card, Heading, Text, Stack, Flex, Button, Divider, FormControl, FormLabel, Switch } from "@chakra-ui/react";
 import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS, STAKING_BB_ADDRESS, TOOLS_BB_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
