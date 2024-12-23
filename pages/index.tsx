@@ -1,37 +1,26 @@
-import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
+import { useState } from 'react';
+import { useAddress, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, TOOLS_BB_ADDRESS, REWARDS_BB_ADDRESS, STAKING_BB_ADDRESS } from "../const/addresses";
+import { FARMER_ADDRESS } from "../const/addresses";
+import { Container, Select } from "@chakra-ui/react";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container } from "@chakra-ui/react";
-
-import LoginSection from "../components/LoginSection"; // 新增導入
+import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
+import { Contracts0 } from "../components/contracts/Contracts0";
+import { Contracts1 } from "../components/contracts/Contracts1";
 
 const Home: NextPage = () => {
+  const [currentContract, setCurrentContract] = useState(0);
   const address = useAddress();
 
-  const { contract: farmercontract } = useContract(FARMER_ADDRESS);
-  const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
-  const { contract: toolsBBContract } = useContract(TOOLS_BB_ADDRESS);
-  const { contract: stakingContract } = useContract(STAKING_ADDRESS);
-  const { contract: stakingBBContract } = useContract(STAKING_BB_ADDRESS);
-  const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
-  const { contract: rewardsBBContract } = useContract(REWARDS_BB_ADDRESS);
-
-  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmercontract, address);
-  const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
-  const { data: ownedToolsBB } = useOwnedNFTs(toolsBBContract, address);
-
-  const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
-  const { data: equippedToolsBB } = useContractRead(stakingBBContract, "getStakeInfo", [address]);
-  const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
-  const { data: rewardBalanceBB } = useContractRead(rewardsBBContract, "balanceOf", [address]);
+  const contracts = currentContract === 0 ? Contracts0() : Contracts1();
+  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(FARMER_ADDRESS, address);
 
   if (!address) {
-    return <LoginSection />; // 使用新的 LoginSection 組件
+    return <LoginSection />;
   }
 
   if (loadingOwnedFarmers) {
@@ -48,11 +37,14 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} rewardBalanceBB={rewardBalanceBB} />
-      <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
-      <InventorySection ownedTools={ownedToolsBB} loadingOwnedTools={loadingOwnedTools} />
-      <EquippedSection equippedTools={equippedTools} />
-      <EquippedSection equippedTools={equippedToolsBB} />
+      <Select onChange={(e) => setCurrentContract(parseInt(e.target.value, 10))} value={currentContract}>
+        <option value={0}>Contracts 0</option>
+        <option value={1}>Contracts 1</option>
+        {/* You can add more options as you add more contract groups */}
+      </Select>
+      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={contracts.rewardBalance} rewardBalanceBB={contracts.rewardBalance} />
+      <InventorySection ownedTools={contracts.ownedTools} loadingOwnedTools={contracts.loadingOwnedTools} />
+      <EquippedSection equippedTools={contracts.equippedTools} />
     </Container>
   );
 };
