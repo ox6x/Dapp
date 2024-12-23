@@ -1,5 +1,4 @@
-// const/addresses.ts
-export const ADDRESSES = {
+export const ADDRESSES: { [key: string]: string } = {
   FARMER: '0xf773A055Ec0Ab4D1404dBf61178f7dA7D769C44f',
   TOOLS_0: '0x605f710b66Cc10A0bc0DE7BD8fe786D5C9719179',
   REWARDS_0: '0x0Ad1149eec66A20cB69D114Aec704626C22b7852',
