@@ -13,11 +13,26 @@ const ClaimFarmer = dynamic(() => import("../components/ClaimFarmer"), { ssr: fa
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const address = typeof window !== 'undefined' ? useAddress() : null;
+  const [address, setAddress] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
-  const { data: ownedFarmersData, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
-
+  const [ownedFarmersData, setOwnedFarmersData] = useState(null);
+  const [loadingOwnedFarmers, setLoadingOwnedFarmers] = useState(true);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const addr = useAddress();
+      setAddress(addr);
+      
+      const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
+      if (farmerContract && addr) {
+        useOwnedNFTs(farmerContract, addr).then(data => {
+          setOwnedFarmersData(data);
+          setLoadingOwnedFarmers(false);
+        });
+      }
+    }
+  }, []);
+  
   useEffect(() => {
     if (!loadingOwnedFarmers) {
       setLoading(false);
