@@ -1,6 +1,6 @@
 import { MediaRenderer, Web3Button, useContract, useContractMetadata } from "@thirdweb-dev/react";
 import { FARMER_ADDRESS } from "../const/addresses";
-import styles from "./ClaimFarmer.module.scss"; // 引入 SCSS 文件
+import styles from "./ClaimFarmer.module.scss";
 
 export function ClaimFarmer() {
     const { contract } = useContract(FARMER_ADDRESS);
