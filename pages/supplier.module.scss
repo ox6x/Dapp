@@ -1,34 +1,37 @@
 // supplier.module.scss
 
 // -------------------------
-// 0. 變數設定 (可依品牌色系調整)
+// 0. 變數設定 (Coinbase 風格配色)
 // -------------------------
-$supplier-primary: #2b6cb0;   // 主色
-$supplier-secondary: #2c5282; // 次色
-$supplier-text-color: #333;
-$supplier-bg-color: #fff;
-$supplier-shadow-color: rgba(0, 0, 0, 0.1);
+$supplier-primary: #0052ff; // Coinbase 主色
+$supplier-secondary: #001a2c; // 深藍-黑 (作為文字或背景)
+$supplier-bg: #f5f7fa; // 淺色背景
+$supplier-text-dark: #2e3a59; // 深色文字
+$supplier-text-light: #999; // 較淡文字
+$supplier-card-shadow: rgba(0, 0, 0, 0.08);
 
 // -------------------------
-// 1. Block: supplier
-//    BEM 架構：.supplier__element--modifier
+// 1. BEM 架構: Block = supplier-page
 // -------------------------
-.supplier {
-  // 整體頁面容器，可在這裡設定全局排版(若需要)
+.supplier-page {
+  // 頁面主容器
+  background-color: $supplier-bg;
+  min-height: 100vh; // 讓頁面高度延伸
+  padding: 2rem 1rem;
 
   // -------------------------
-  // 1-1. 頂部 Header
+  // 1-1. Header 區塊
   // -------------------------
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 1.5rem;
+    padding-bottom: 1rem;
 
     &-title {
+      color: $supplier-primary;
       font-weight: 700;
       font-size: 1.5rem;
-      color: $supplier-primary;
     }
 
     &-button {
@@ -41,11 +44,11 @@ $supplier-shadow-color: rgba(0, 0, 0, 0.1);
   }
 
   // -------------------------
-  // 1-2. 簡介區域 (Intro)
+  // 1-2. Intro 區塊
   // -------------------------
   &__intro {
     text-align: center;
-    margin-bottom: 2rem;
+    margin: 2rem 0;
 
     &-title {
       font-size: 1.25rem;
@@ -56,7 +59,7 @@ $supplier-shadow-color: rgba(0, 0, 0, 0.1);
     &-desc {
       margin-top: 0.5rem;
       font-size: 1rem;
-      color: $supplier-text-color;
+      color: $supplier-text-dark;
     }
   }
 
@@ -64,9 +67,9 @@ $supplier-shadow-color: rgba(0, 0, 0, 0.1);
   // 1-3. Slider 區塊
   // -------------------------
   &__slider {
-    margin-bottom: 2rem;
+    margin: 2rem 0;
 
-    // 整合 Slick Carousel 的箭頭、圓點樣式
+    // 調整 Slick 圖示 & 圓點樣式
     .slick-dots {
       bottom: -2rem;
       li button:before {
@@ -78,6 +81,12 @@ $supplier-shadow-color: rgba(0, 0, 0, 0.1);
       }
     }
     .slick-arrow {
+      &.slick-prev {
+        left: 0;
+      }
+      &.slick-next {
+        right: 0;
+      }
       &:before {
         color: $supplier-primary;
         font-size: 1.5rem;
@@ -86,15 +95,15 @@ $supplier-shadow-color: rgba(0, 0, 0, 0.1);
   }
 
   // -------------------------
-  // 1-4. NFT 卡片
+  // 1-4. NFT Card
   // -------------------------
   &__card {
-    background-color: $supplier-bg-color;
-    box-shadow: 0 2px 6px $supplier-shadow-color;
+    background-color: #fff;
+    box-shadow: 0 2px 6px $supplier-card-shadow;
     border-radius: 8px;
     padding: 1.5rem;
-    margin: 0 auto;   // 置中
-    max-width: 400px; // 卡片寬度
+    margin: 1rem auto;
+    max-width: 400px;
 
     &-image {
       border-radius: 8px;
@@ -108,20 +117,22 @@ $supplier-shadow-color: rgba(0, 0, 0, 0.1);
       font-size: 1.5rem;
       font-weight: 700;
       margin: 1rem 0;
+      color: $supplier-secondary;
     }
 
     &-price {
       text-align: center;
       margin-bottom: 1rem;
       font-size: 1.1rem;
-      color: $supplier-text-color;
+      font-weight: 500;
+      color: $supplier-text-dark;
     }
 
     &-controls {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 0.5rem;
       margin-bottom: 1rem;
 
       button {
@@ -131,14 +142,15 @@ $supplier-shadow-color: rgba(0, 0, 0, 0.1);
           background-color: darken($supplier-primary, 10%);
         }
         &:disabled {
-          opacity: 0.6;
+          opacity: 0.5;
           cursor: not-allowed;
         }
       }
+
       input {
-        width: 60px;
+        width: 3rem;
         text-align: center;
-        border: 1px solid #ccc;
+        border: 1px solid #d1d5db;
         border-radius: 4px;
       }
     }
@@ -146,28 +158,27 @@ $supplier-shadow-color: rgba(0, 0, 0, 0.1);
     &-rentBtn {
       display: block;
       margin: 0 auto;
-      background-color: $supplier-secondary;
+      background-color: $supplier-primary;
       color: #fff;
       &:hover {
-        background-color: darken($supplier-secondary, 10%);
+        background-color: darken($supplier-primary, 10%);
       }
     }
   }
 
   // -------------------------
-  // 1-5. 底部 Footer
+  // 1-5. Footer 區塊
   // -------------------------
   &__footer {
     text-align: center;
     margin-top: 2rem;
-    font-size: 0.9rem;
-    color: #666;
+    color: $supplier-text-light;
 
     .faq-link {
       color: $supplier-primary;
       text-decoration: underline;
       &:hover {
-        color: darken($supplier-primary, 10%);
+        color: darken($supplier-primary, 5%);
       }
     }
   }
