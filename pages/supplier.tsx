@@ -23,16 +23,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 
-// 匯入 Coinbase 風格的 SCSS
+// --- 引入 CoinBase Style 的 SCSS ---
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
   // 連接合約
   const { contract } = useContract(TOOLS_ADDRESS);
-  // 取得合約內所有 NFT
+  // 取得 NFT 資料
   const { data: nfts } = useNFTs(contract);
 
-  // slick slider 設定
+  // Slick Slider 設定
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -46,12 +46,12 @@ export default function StorePage() {
 
   // 載入中顯示
   const renderSpinner = () => (
-    <Flex h="50vh" justifyContent="center" alignItems="center">
+    <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
       <Spinner />
     </Flex>
   );
 
-  // NFT 卡片子元件
+  // 單個 NFT 卡片
   const NFTComponent = ({ nft }: { nft: NFTType }) => {
     const { data, isLoading } = useActiveClaimCondition(contract, nft.metadata.id);
 
@@ -65,12 +65,13 @@ export default function StorePage() {
         )
       : "Loading...";
 
-    // 處理交易
+    // 執行交易
     const handleTransaction = async () => {
       if (!contract || isProcessing) return;
 
       setIsProcessing(true);
       try {
+        // 執行領取（claim）
         await contract.erc1155.claim(nft.metadata.id, quantity);
         alert(`Successfully purchased ${quantity} x ${nft.metadata.name}!`);
       } catch (error) {
@@ -85,7 +86,7 @@ export default function StorePage() {
     const incrementQuantity = () => setQuantity((prev) => prev + 1);
     const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
 
-    // 文字框變更
+    // 輸入框
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(e.target.value, 10);
       setQuantity(isNaN(value) || value < 1 ? 1 : value);
@@ -98,15 +99,12 @@ export default function StorePage() {
         p={5}
         className={styles.nftCard}
       >
-        {/* NFT 圖片 */}
         <MediaRenderer
           src={nft.metadata.image}
           height="100%"
           width="100%"
           className={styles.nftImage}
         />
-
-        {/* NFT 標題 */}
         <Text
           fontSize="2xl"
           fontWeight="bold"
@@ -118,14 +116,17 @@ export default function StorePage() {
         </Text>
 
         {!isLoading && data ? (
-          <Text textAlign="center" my={5} className={styles.nftPrice}>
+          <Text
+            textAlign="center"
+            my={5}
+            className={styles.nftPrice}
+          >
             Total Cost: {totalPrice} {data.currencyMetadata.symbol}
           </Text>
         ) : (
           <Text textAlign="center">Loading...</Text>
         )}
 
-        {/* 數量控制 */}
         <Flex
           justifyContent="center"
           alignItems="center"
@@ -157,7 +158,6 @@ export default function StorePage() {
           </Button>
         </Flex>
 
-        {/* 交易按鈕 */}
         <Flex justifyContent="center" mt={5}>
           <Button
             onClick={handleTransaction}
@@ -167,14 +167,14 @@ export default function StorePage() {
             width="fit-content"
             className={styles.rentButton}
           >
-            Rent
+            Acquire
           </Button>
         </Flex>
       </Card>
     );
   };
 
-  // NFT Slider
+  // 產生 NFT Slider
   const renderNFTSlider = () => (
     <div className={styles.sliderWrapper}>
       <Slider {...sliderSettings}>
@@ -189,7 +189,13 @@ export default function StorePage() {
 
   return (
     <Container maxW="1200px" className={styles.storePage}>
-      <Flex direction="row" justifyContent="space-between" alignItems="center">
+      {/* Header 區塊 */}
+      <Flex
+        className={styles.headerSection}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Link href="/">
           <Flex justifyContent="center">
             <Button width="fit-content">Back</Button>
@@ -197,14 +203,15 @@ export default function StorePage() {
         </Link>
       </Flex>
 
+      {/* 主標題、文字敘述 */}
       <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
-        Coinbase Supplier
+        Coinbase NFT Hub
       </Heading>
       <Text textAlign="center" className={styles.pageSubtitle}>
-        Gain access to high-performance NFT tools and enhance your earnings on Coinbase!
+        Experience a new era of digital assets with seamless NFT accessibility and advanced DeFi utility.
       </Text>
 
-      {/* NFT 資料載入 */}
+      {/* NFT 列表或載入中 Spinner */}
       {!nfts ? renderSpinner() : renderNFTSlider()}
     </Container>
   );
