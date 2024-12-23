@@ -28,7 +28,7 @@ const Home: NextPage = () => {
       <Container maxW={"container.sm"} px={4}>
         <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
           <Heading my={6} textAlign="center" fontSize="2xl">
-            Welcome to Crypto Farm
+            Join Crypto Farm and easily start your Web3 mining journey!
           </Heading>
           <ConnectWallet />
         </Flex>
