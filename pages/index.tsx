@@ -48,7 +48,7 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
+      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} rewardBalanceBB={rewardBalanceBB} />
       <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
       <InventorySection ownedTools={ownedToolsBB} loadingOwnedTools={loadingOwnedTools} />
       <EquippedSection equippedTools={equippedTools} />
