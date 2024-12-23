@@ -6,6 +6,7 @@ import { Container, Select } from "@chakra-ui/react";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
+import LoadingScreen from "../components/LoadingScreen"; // 確保引入 LoadingScreen 組件
 
 const Home: NextPage = () => {
   const address = useAddress();
