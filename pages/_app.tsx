@@ -25,10 +25,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       
       const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
       if (farmerContract && addr) {
-        useOwnedNFTs(farmerContract, addr).then(data => {
-          setOwnedFarmersData(data);
-          setLoadingOwnedFarmers(false);
-        });
+        const { data, isLoading } = useOwnedNFTs(farmerContract, addr);
+        setOwnedFarmersData(data);
+        setLoadingOwnedFarmers(isLoading);
       }
     }
   }, []);
