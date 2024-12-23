@@ -6,7 +6,7 @@ const EquippedSection = ({ equippedTools }: any) => (
   <Box>
     <Card p={4}>
       <Heading fontSize="lg" mb={4}>
-        Equipped
+        Activated
       </Heading>
       {equippedTools &&
         equippedTools[0].map((nft: BigNumber) => (
