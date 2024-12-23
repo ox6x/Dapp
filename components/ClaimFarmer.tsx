@@ -1,7 +1,6 @@
 import { MediaRenderer, Web3Button, useContract, useContractMetadata } from "@thirdweb-dev/react";
 import { FARMER_ADDRESS } from "../const/addresses";
-import { Box, Container, Flex, Heading } from "@chakra-ui/react";
-import styles from "./ClaimFarmer.module.scss"; // 引入 SCSS
+import styles from "./ClaimFarmer.module.scss"; // 引入 SCSS 文件
 
 export function ClaimFarmer() {
     const { contract } = useContract(FARMER_ADDRESS);
@@ -9,25 +8,31 @@ export function ClaimFarmer() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.flex}>
-                <h1 className={styles.heading}>
-                    Claim your exclusive NFT Passport to start mining, earning rewards, and exploring the Crypto Farm ecosystem.
-                </h1>
-                <div className={styles.box}>
+            <div className={styles.header}>
+                <h1>Claim Your NFT Passport</h1>
+                <p>
+                    Unlock access to exclusive rewards, start mining, and explore the crypto ecosystem in a seamless way.
+                </p>
+            </div>
+            <div className={styles.content}>
+                <div className={styles.mediaContainer}>
                     <MediaRenderer
                         src={metadata?.image}
                         height="300px"
                         width="300px"
+                        className={styles.media}
                     />
                 </div>
                 <Web3Button
-                    className={styles.web3Button}
                     contractAddress={FARMER_ADDRESS}
-                    action={(contract) => contract.erc1155.claim(0, 1)}
+                    action={(contract) => contract.call("claim")}
+                    className={styles.claimButton}
                 >
-                    Claim Your NFT Passport
+                    Claim Now
                 </Web3Button>
             </div>
         </div>
     );
 }
+
+export default ClaimFarmer;
