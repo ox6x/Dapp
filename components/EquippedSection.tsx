@@ -1,13 +1,19 @@
 import { Box, Card, Heading, Text, Stack, Flex, Button, Divider } from "@chakra-ui/react";
 import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
-import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
+import { STAKING_ADDRESS, TOOLS_ADDRESS, STAKING_BB_ADDRESS, TOOLS_BB_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import Quantity from "./Quantity"; // 確保路徑正確
+import { useState } from 'react';
 
 const EquippedSection = ({ equippedTools }: any) => {
     const address = useAddress();
-    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
-    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+    const [useBBAddress, setUseBBAddress] = useState(false);
+
+    const selectedToolAddress = useBBAddress ? TOOLS_BB_ADDRESS : TOOLS_ADDRESS;
+    const selectedStakingAddress = useBBAddress ? STAKING_BB_ADDRESS : STAKING_ADDRESS;
+
+    const { contract: toolContract } = useContract(selectedToolAddress);
+    const { contract: stakingContract } = useContract(selectedStakingAddress);
 
     const handleOffClick = async (tokenId: number, quantity: number) => {
         if (!address) {
@@ -43,6 +49,16 @@ const EquippedSection = ({ equippedTools }: any) => {
                 <Heading fontSize="lg" mb={4}>
                     Activated
                 </Heading>
+                <FormControl display="flex" alignItems="center" mb={4}>
+                    <FormLabel htmlFor="contract-switch" mb="0">
+                        Use BB Address
+                    </FormLabel>
+                    <Switch
+                        id="contract-switch"
+                        isChecked={useBBAddress}
+                        onChange={() => setUseBBAddress(!useBBAddress)}
+                    />
+                </FormControl>
                 {equippedTools &&
                     equippedTools[0].map((nft: ethers.BigNumber) => {
                         const tokenId = nft.toNumber();
