@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { ADDRESSES } from "../const/addresses";
