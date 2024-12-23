@@ -54,8 +54,8 @@ const Home: NextPage = () => {
         {/* 根據需要添加更多選項 */}
       </Select>
       <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
-      <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
-      <EquippedSection equippedTools={equippedTools} />
+      <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} contractIndex={contractIndex} />
+      <EquippedSection equippedTools={equippedTools} contractIndex={contractIndex} />
     </Container>
   );
 };
