@@ -1,16 +1,17 @@
 import { ConnectWallet } from "@thirdweb-dev/react";
-import { Container, Flex, Heading } from "@chakra-ui/react";
+import styles from "./LoginSection.module.scss";
 
 const LoginSection = () => {
   return (
-    <Container maxW={"container.sm"} px={4}>
-      <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-        <Heading my={6} textAlign="center" fontSize="2xl">
-          Join Crypto Farm and easily start your Web3 mining journey!
-        </Heading>
-        <ConnectWallet />
-      </Flex>
-    </Container>
+    <div className={styles.container}>
+      <div className={styles.content}>
+        <h1 className={styles.heading}>Welcome to Crypto Hub</h1>
+        <p className={styles.description}>
+          Join us to unlock exclusive rewards and start your Web3 journey effortlessly.
+        </p>
+        <ConnectWallet className={styles.connectButton} />
+      </div>
+    </div>
   );
 };
 
