@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Text,
   Card,
@@ -8,9 +8,9 @@ import {
   Flex,
   Heading,
   Spinner,
+  Switch,
   FormControl,
   FormLabel,
-  Select
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -31,11 +31,10 @@ import styles from "./supplier.module.scss";
 
 export default function StorePage() {
   // 狀態變數來選擇合約地址
-  const [contractIndex, setContractIndex] = useState(0);
-  const [isSwitching, setIsSwitching] = useState(false);
+  const [useBBAddress, setUseBBAddress] = useState(false);
 
   // 根據狀態變數選擇合約地址
-  const selectedAddress = ADDRESSES[`TOOLS_${contractIndex}`];
+  const selectedAddress = useBBAddress ? ADDRESSES.TOOLS_BB : ADDRESSES.TOOLS_0;
 
   // 連接合約
   const { contract } = useContract(selectedAddress);
@@ -207,27 +206,21 @@ export default function StorePage() {
         alignItems="center"
       >
         <Link href="/">
-          <Button width="fit-content" isDisabled={isSwitching} isLoading={isSwitching}>Back</Button>
+          <Flex justifyContent="center">
+            <Button width="fit-content">Back</Button>
+          </Flex>
         </Link>
 
         {/* 合約地址切換 */}
         <FormControl display="flex" alignItems="center">
           <FormLabel htmlFor="contract-switch" mb="0">
-            Use Contract
+            Use TOOLS_BB_ADDRESS
           </FormLabel>
-          <Select
-            onChange={(e) => {
-              setIsSwitching(true);
-              setContractIndex(Number(e.target.value));
-              setTimeout(() => setIsSwitching(false), 500); // 假設500ms足夠完成狀態更新
-            }}
-            value={contractIndex}
-            isDisabled={isSwitching}
-          >
-            <option value={0}>Contract 0</option>
-            <option value={1}>Contract 1</option>
-            {/* 根據需要添加更多選項 */}
-          </Select>
+          <Switch
+            id="contract-switch"
+            isChecked={useBBAddress}
+            onChange={() => setUseBBAddress(!useBBAddress)}
+          />
         </FormControl>
       </Flex>
 

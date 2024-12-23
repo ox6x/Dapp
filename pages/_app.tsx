@@ -1,30 +1,10 @@
-import { useEffect, useState } from "react";
-import { ThirdwebProvider, useAddress, useOwnedNFTs, useContract, NFT as ThirdwebNFT } from "@thirdweb-dev/react";
-import { ChakraProvider, Container } from "@chakra-ui/react";
+import { ThirdwebProvider, ConnectWallet } from "@thirdweb-dev/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
-import dynamic from "next/dynamic";
-import NavBar from "../components/NavBar";
-import { ADDRESSES } from "../const/addresses";
-
-const LoginSection = dynamic(() => import("../components/LoginSection"), { ssr: false });
-const LoadingScreen = dynamic(() => import("../components/LoadingScreen"), { ssr: false });
-const ClaimFarmer = dynamic(() => import("../components/ClaimFarmer"), { ssr: false });
-
+import NavBar from "../components/NavBar"; // 確保路徑正確
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
-type NFT = ThirdwebNFT & {
-  id: string;
-  name: string;
-  image: string;
-  // 根据需要添加其他属性
-};
-
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [address, setAddress] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [ownedFarmersData, setOwnedFarmersData] = useState<NFT[] | null>(null);
-  const [loadingOwnedFarmers, setLoadingOwnedFarmers] = useState(true);
-  
   return (
     <ThirdwebProvider
       clientId={CLIENT_ID}
@@ -45,56 +25,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     >
       <ChakraProvider>
         <NavBar />
-        <InnerComponent Component={Component} pageProps={pageProps} />
+        <Component {...pageProps} />
       </ChakraProvider>
     </ThirdwebProvider>
   );
-}
-
-function InnerComponent({ Component, pageProps }: AppProps) {
-  const [address, setAddress] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [ownedFarmersData, setOwnedFarmersData] = useState<NFT[] | null>(null);
-  const [loadingOwnedFarmers, setLoadingOwnedFarmers] = useState(true);
-
-  const addr = useAddress() || null; // 確保 addr 是 string 或 null
-  const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
-
-  useEffect(() => {
-    if (addr) {
-      setAddress(addr);
-    }
-  }, [addr]);
-
-  useEffect(() => {
-    if (farmerContract && addr) {
-      const { data, isLoading } = useOwnedNFTs(farmerContract, addr);
-      setOwnedFarmersData(data as NFT[] || null); // 確保 data 是 NFT[] 或 null
-      setLoadingOwnedFarmers(isLoading);
-    }
-  }, [farmerContract, addr]);
-
-  useEffect(() => {
-    if (!loadingOwnedFarmers) {
-      setLoading(false);
-    }
-  }, [loadingOwnedFarmers]);
-
-  if (!address) {
-    return <LoginSection />;
-  }
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
-  if (ownedFarmersData?.length === 0) {
-    return (
-      <Container maxW={"container.sm"} px={4}>
-        <ClaimFarmer />
-      </Container>
-    );
-  }
-
-  return <Component {...pageProps} />;
 }
