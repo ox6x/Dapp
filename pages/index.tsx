@@ -1,10 +1,10 @@
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
+import { ADDRESSES } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Container } from "@chakra-ui/react";
 
-import LoginSection from "../components/LoginSection"; // 新增導入
+import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
@@ -13,19 +13,19 @@ import EquippedSection from "../components/EquippedSection";
 const Home: NextPage = () => {
   const address = useAddress();
 
-  const { contract: farmercontract } = useContract(FARMER_ADDRESS);
-  const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
-  const { contract: stakingContract } = useContract(STAKING_ADDRESS);
-  const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
+  const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
+  const { contract: toolsContract } = useContract(ADDRESSES.TOOLS_0); // 根據需求更改索引
+  const { contract: stakingContract } = useContract(ADDRESSES.STAKING_0);
+  const { contract: rewardContract } = useContract(ADDRESSES.REWARDS_0);
 
-  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmercontract, address);
+  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
   const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
 
   if (!address) {
-    return <LoginSection />; // 使用新的 LoginSection 組件
+    return <LoginSection />;
   }
 
   if (loadingOwnedFarmers) {
