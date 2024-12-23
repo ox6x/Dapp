@@ -14,44 +14,13 @@ const Home: NextPage = () => {
   const address = useAddress();
   const [contractIndex, setContractIndex] = useState(0);
   const [rewardBalance, setRewardBalance] = useState(null);
-  const [ownedFarmers, setOwnedFarmers] = useState([]);
-  const [loadingOwnedFarmers, setLoadingOwnedFarmers] = useState(true);
-  const [ownedTools, setOwnedTools] = useState([]);
-  const [loadingOwnedTools, setLoadingOwnedTools] = useState(true);
-  const [equippedTools, setEquippedTools] = useState([]);
-  const [rewardBalanceData, setRewardBalanceData] = useState(null);
-
-  const fetchContractsData = useCallback(async (index: number) => {
-    const { contract: toolsContract } = useContract(ADDRESSES[`TOOLS_${index}`]);
-    const { contract: stakingContract } = useContract(ADDRESSES[`STAKING_${index}`]);
-    const { contract: rewardContract } = useContract(ADDRESSES[`REWARDS_${index}`]);
-    
-    const ownedFarmersData = await useOwnedNFTs(toolsContract, address);
-    const ownedToolsData = await useOwnedNFTs(toolsContract, address);
-    const equippedToolsData = await useContractRead(stakingContract, "getStakeInfo", [address]);
-    const rewardBalanceData = await useContractRead(rewardContract, "balanceOf", [address]);
-
-    setOwnedFarmers(ownedFarmersData);
-    setLoadingOwnedFarmers(false);
-
-    setOwnedTools(ownedToolsData);
-    setLoadingOwnedTools(false);
-
-    setEquippedTools(equippedToolsData);
-
-    setRewardBalanceData(rewardBalanceData);
-  }, [address]);
-
-  const handleSwitchContract = (index: number) => {
-    setContractIndex(index);
-    setLoadingOwnedFarmers(true);
-    setLoadingOwnedTools(true);
-    fetchContractsData(index);
-  };
-
-  useEffect(() => {
-    fetchContractsData(contractIndex);
-  }, [contractIndex, fetchContractsData]);
+  const { contract: toolsContract } = useContract(ADDRESSES[`TOOLS_${contractIndex}`]);
+  const { contract: stakingContract } = useContract(ADDRESSES[`STAKING_${contractIndex}`]);
+  const { contract: rewardContract } = useContract(ADDRESSES[`REWARDS_${contractIndex}`]);
+  const { data: ownedFarmersData, isLoading: loadingOwnedFarmers } = useOwnedNFTs(toolsContract, address);
+  const { data: ownedToolsData, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
+  const { data: equippedToolsData } = useContractRead(stakingContract, "getStakeInfo", [address]);
+  const { data: rewardBalanceData } = useContractRead(rewardContract, "balanceOf", [address]);
 
   useEffect(() => {
     if (rewardBalanceData) {
@@ -67,7 +36,7 @@ const Home: NextPage = () => {
     return <LoadingScreen />;
   }
 
-  if (ownedFarmers?.length === 0) {
+  if (ownedFarmersData?.length === 0) {
     return (
       <Container maxW={"container.sm"} px={4}>
         <ClaimFarmer />
@@ -77,14 +46,14 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <Select onChange={(e) => handleSwitchContract(Number(e.target.value))} value={contractIndex}>
+      <Select onChange={(e) => setContractIndex(Number(e.target.value))} value={contractIndex}>
         <option value={0}>Contract 0</option>
         <option value={1}>Contract 1</option>
         {/* 根據需要添加更多選項 */}
       </Select>
-      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
-      <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} contractIndex={contractIndex} />
-      <EquippedSection equippedTools={equippedTools} contractIndex={contractIndex} />
+      <FarmerSection ownedFarmers={ownedFarmersData || []} rewardBalance={rewardBalance} />
+      <InventorySection ownedTools={ownedToolsData || []} loadingOwnedTools={loadingOwnedTools} contractIndex={contractIndex} />
+      <EquippedSection equippedTools={equippedToolsData || []} contractIndex={contractIndex} />
     </Container>
   );
 };
