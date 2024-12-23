@@ -1,8 +1,8 @@
 import { MediaRenderer, useAddress, useContract } from '@thirdweb-dev/react';
-import { ADDRESSES } from '../const/addresses'; // 更新地址導入
+import { ADDRESSES } from '../const/addresses';
 import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack, Flex, Heading, Skeleton } from '@chakra-ui/react';
-import Quantity from './Quantity'; // 引入動態數量選擇器組件
+import Quantity from './Quantity';
 
 const InventorySection = ({ ownedTools, loadingOwnedTools, contractIndex }: any) => {
     const address = useAddress();
@@ -16,13 +16,11 @@ const InventorySection = ({ ownedTools, loadingOwnedTools, contractIndex }: any)
         }
 
         try {
-            // 檢查是否已經授權
             const isApproved = await toolContract?.erc1155.isApproved(
                 address,
                 ADDRESSES[`STAKING_${contractIndex}`],
             );
 
-            // 如果未授權，先設置授權
             if (!isApproved) {
                 await toolContract?.erc1155.setApprovalForAll(
                     ADDRESSES[`STAKING_${contractIndex}`],
@@ -30,7 +28,6 @@ const InventorySection = ({ ownedTools, loadingOwnedTools, contractIndex }: any)
                 );
             }
 
-            // 調用 stake 方法
             await stakingContract?.call("stake", [id, quantity]);
             console.log(`Staked ${quantity} of token ID ${id}.`);
         } catch (error) {
@@ -63,7 +60,6 @@ const InventorySection = ({ ownedTools, loadingOwnedTools, contractIndex }: any)
                                     _hover={{ boxShadow: "lg" }}
                                 >
                                     <Stack align="center" spacing={4}>
-                                        {/* 顯示 NFT 圖片 */}
                                         <MediaRenderer 
                                             src={nft.metadata.image} 
                                             height="120px"
@@ -71,7 +67,6 @@ const InventorySection = ({ ownedTools, loadingOwnedTools, contractIndex }: any)
                                             style={{ borderRadius: "8px" }}
                                         />
                                         
-                                        {/* 名稱和數量 */}
                                         <Flex align="center" gap={2}>
                                             <Text fontSize="md" fontWeight="bold">
                                                 {nft.metadata.name}
@@ -81,7 +76,6 @@ const InventorySection = ({ ownedTools, loadingOwnedTools, contractIndex }: any)
                                             </Text>
                                         </Flex>
 
-                                        {/* 動態選擇器，整合 Equip 功能 */}
                                         <Quantity
                                             minQuantity={1}
                                             onQuantityChange={(quantity) => handleOnClick(nft.metadata.id, quantity)}
