@@ -12,6 +12,13 @@ const ClaimFarmer = dynamic(() => import("../components/ClaimFarmer"), { ssr: fa
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
+type NFT = {
+  id: string;
+  name: string;
+  image: string;
+  // 根据需要添加其他属性
+};
+
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [address, setAddress] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
