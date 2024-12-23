@@ -21,7 +21,7 @@ export function ClaimFarmer() {
                 <Web3Button
                     contractAddress={FARMER_ADDRESS}
                     action={(contract) => contract.erc1155.claim(0, 1)}
-                >Claim Farmer</Web3Button>
+                >Claim Passport</Web3Button>
             </Flex>
         </Container>
     );
