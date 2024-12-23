@@ -25,26 +25,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [ownedFarmersData, setOwnedFarmersData] = useState<NFT[] | null>(null);
   const [loadingOwnedFarmers, setLoadingOwnedFarmers] = useState(true);
   
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const addr = useAddress() || null; // 確保 addr 是 string 或 null
-      setAddress(addr);
-      
-      const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
-      if (farmerContract && addr) {
-        const { data, isLoading } = useOwnedNFTs(farmerContract, addr);
-        setOwnedFarmersData(data as NFT[] || null); // 確保 data 是 NFT[] 或 null
-        setLoadingOwnedFarmers(isLoading);
-      }
-    }
-  }, []);
-  
-  useEffect(() => {
-    if (!loadingOwnedFarmers) {
-      setLoading(false);
-    }
-  }, [loadingOwnedFarmers]);
-
   return (
     <ThirdwebProvider
       clientId={CLIENT_ID}
@@ -65,20 +45,56 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     >
       <ChakraProvider>
         <NavBar />
-        {
-          !address ? (
-            <LoginSection />
-          ) : loading ? (
-            <LoadingScreen />
-          ) : ownedFarmersData?.length === 0 ? (
-            <Container maxW={"container.sm"} px={4}>
-              <ClaimFarmer />
-            </Container>
-          ) : (
-            <Component {...pageProps} />
-          )
-        }
+        <InnerComponent Component={Component} pageProps={pageProps} />
       </ChakraProvider>
     </ThirdwebProvider>
   );
+}
+
+function InnerComponent({ Component, pageProps }: AppProps) {
+  const [address, setAddress] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [ownedFarmersData, setOwnedFarmersData] = useState<NFT[] | null>(null);
+  const [loadingOwnedFarmers, setLoadingOwnedFarmers] = useState(true);
+
+  const addr = useAddress() || null; // 確保 addr 是 string 或 null
+  const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
+
+  useEffect(() => {
+    if (addr) {
+      setAddress(addr);
+    }
+  }, [addr]);
+
+  useEffect(() => {
+    if (farmerContract && addr) {
+      const { data, isLoading } = useOwnedNFTs(farmerContract, addr);
+      setOwnedFarmersData(data as NFT[] || null); // 確保 data 是 NFT[] 或 null
+      setLoadingOwnedFarmers(isLoading);
+    }
+  }, [farmerContract, addr]);
+
+  useEffect(() => {
+    if (!loadingOwnedFarmers) {
+      setLoading(false);
+    }
+  }, [loadingOwnedFarmers]);
+
+  if (!address) {
+    return <LoginSection />;
+  }
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (ownedFarmersData?.length === 0) {
+    return (
+      <Container maxW={"container.sm"} px={4}>
+        <ClaimFarmer />
+      </Container>
+    );
+  }
+
+  return <Component {...pageProps} />;
 }
