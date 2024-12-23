@@ -1,4 +1,5 @@
- import { Box, Card, Heading, Text } from "@chakra-ui/react";
+// components/RewardBalances.tsx
+import { Box, Card, Heading, Text } from "@chakra-ui/react";
 import { ethers } from "ethers";
 
 const RewardBalances = ({ rewardBalances }: { rewardBalances: { label: string, balance: any }[] }) => (
