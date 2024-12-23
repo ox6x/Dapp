@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { ADDRESSES } from "../const/addresses";
-import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Container, Select } from "@chakra-ui/react";
-import LoginSection from "../components/LoginSection";
-import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
@@ -28,20 +25,8 @@ const Home: NextPage = () => {
     }
   }, [rewardBalanceData, contractIndex]);
 
-  if (!address) {
-    return <LoginSection />;
-  }
-
   if (loadingOwnedFarmers) {
     return <LoadingScreen />;
-  }
-
-  if (ownedFarmersData?.length === 0) {
-    return (
-      <Container maxW={"container.sm"} px={4}>
-        <ClaimFarmer />
-      </Container>
-    );
   }
 
   // 合約切換不影響其他邏輯
