@@ -1,1 +1,40 @@
+.navbar {
+  background: linear-gradient(90deg, #1a202c, #2d3748); /* 深蓝渐变背景 */
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 添加轻微阴影 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
 
+.nav-item {
+  color: #ffffff;
+  font-size: 1rem;
+  margin-right: 1.5rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-item:hover {
+  color: #63b3ed; /* 蓝色高亮 */
+}
+
+.connect-button {
+  background: linear-gradient(90deg, #63b3ed, #3182ce); /* 按钮渐变 */
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.connect-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(99, 179, 237, 0.5);
+}
