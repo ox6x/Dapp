@@ -207,7 +207,7 @@ export default function StorePage() {
         alignItems="center"
       >
         <Link href="/">
-          <Button width="fit-content" isDisabled={isSwitching}>Back</Button>
+          <Button width="fit-content" isDisabled={isSwitching} isLoading={isSwitching}>Back</Button>
         </Link>
 
         {/* 合約地址切換 */}
