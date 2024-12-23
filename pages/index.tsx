@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { ADDRESSES } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container, Button, Select } from "@chakra-ui/react";
-
+import { Container, Select } from "@chakra-ui/react";
 import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
@@ -14,6 +13,7 @@ import EquippedSection from "../components/EquippedSection";
 const Home: NextPage = () => {
   const address = useAddress();
   const [contractIndex, setContractIndex] = useState(0);
+  const [rewardBalance, setRewardBalance] = useState(null);
 
   const handleSwitchContract = (index: number) => {
     setContractIndex(index);
@@ -28,7 +28,14 @@ const Home: NextPage = () => {
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
   const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
-  const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
+
+  const { data: rewardBalanceData } = useContractRead(rewardContract, "balanceOf", [address]);
+
+  useEffect(() => {
+    if (rewardBalanceData) {
+      setRewardBalance(rewardBalanceData);
+    }
+  }, [rewardBalanceData]);
 
   if (!address) {
     return <LoginSection />;
