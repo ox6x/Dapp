@@ -3,7 +3,7 @@ import { MediaRenderer } from "@thirdweb-dev/react";
 import { ethers } from "ethers";
 import './FarmerSection.module.scss';
 
-const FarmerSection = ({ ownedFarmers, rewardBalance }: any) => (
+const FarmerSection = ({ ownedFarmers, rewardBalance, rewardBalanceBB }: any) => (
   <Box mb={6} className="container">
     <Card p={4} className="card">
       <Heading fontSize="lg" mb={4} className="title">
@@ -19,6 +19,9 @@ const FarmerSection = ({ ownedFarmers, rewardBalance }: any) => (
       </Text>
       {rewardBalance && (
         <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
+      )}
+      {rewardBalanceBB && (
+        <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalanceBB, 18)}</Text>
       )}
     </Card>
   </Box>
