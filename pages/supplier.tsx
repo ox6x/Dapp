@@ -11,6 +11,7 @@ import {
   Switch,
   FormControl,
   FormLabel,
+  Select
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -31,10 +32,10 @@ import styles from "./supplier.module.scss";
 
 export default function StorePage() {
   // 狀態變數來選擇合約地址
-  const [useBBAddress, setUseBBAddress] = useState(false);
+  const [contractIndex, setContractIndex] = useState(0);
 
   // 根據狀態變數選擇合約地址
-  const selectedAddress = useBBAddress ? ADDRESSES.TOOLS_BB : ADDRESSES.TOOLS_0;
+  const selectedAddress = ADDRESSES[`TOOLS_${contractIndex}`];
 
   // 連接合約
   const { contract } = useContract(selectedAddress);
@@ -214,13 +215,13 @@ export default function StorePage() {
         {/* 合約地址切換 */}
         <FormControl display="flex" alignItems="center">
           <FormLabel htmlFor="contract-switch" mb="0">
-            Use TOOLS_BB_ADDRESS
+            Use Contract
           </FormLabel>
-          <Switch
-            id="contract-switch"
-            isChecked={useBBAddress}
-            onChange={() => setUseBBAddress(!useBBAddress)}
-          />
+          <Select onChange={(e) => setContractIndex(Number(e.target.value))} value={contractIndex}>
+            <option value={0}>Contract 0</option>
+            <option value={1}>Contract 1</option>
+            {/* 根據需要添加更多選項 */}
+          </Select>
         </FormControl>
       </Flex>
 
