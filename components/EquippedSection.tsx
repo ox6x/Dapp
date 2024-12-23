@@ -1,8 +1,8 @@
 import { Box, Card, Heading, Text, Stack, Flex, Button, Divider } from "@chakra-ui/react";
 import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
-import { ADDRESSES } from "../const/addresses"; // 更新地址導入
+import { ADDRESSES } from "../const/addresses";
 import { ethers } from "ethers";
-import Quantity from "./Quantity"; // 確保路徑正確
+import Quantity from "./Quantity";
 
 const EquippedSection = ({ equippedTools, contractIndex }: any) => {
     const address = useAddress();
@@ -52,29 +52,24 @@ const EquippedSection = ({ equippedTools, contractIndex }: any) => {
                         [tokenId, address]
                     );
 
-                    // 获取装备数量和奖励
                     const equippedQuantity = ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0);
                     const claimableCarrot = ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18);
 
                     return (
                         <Card key={tokenId} p={5} borderRadius="lg" boxShadow="xl">
                             <Flex align="flex-start" justify="space-between" gap={6}>
-                                {/* 左侧图片与操作 */}
                                 <Stack spacing={4} align="center" w="50%">
-                                    {/* 图片 */}
                                     <MediaRenderer
                                         src={nftData?.metadata?.image || ""}
                                         height="200px"
                                         width="200px"
                                         style={{ borderRadius: "12px" }}
                                     />
-                                    {/* 数量选择器 */}
                                     <Quantity
                                         minQuantity={1}
                                         onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
                                         buttonText="Off"
                                     />
-                                    {/* Claim 按钮 */}
                                     <Button
                                         onClick={() => handleClaimClick(tokenId)}
                                         bg="green.400"
@@ -87,7 +82,6 @@ const EquippedSection = ({ equippedTools, contractIndex }: any) => {
                                     </Button>
                                 </Stack>
 
-                                {/* 右侧 NFT 信息 */}
                                 <Stack spacing={4} w="50%">
                                     <Text fontSize="2xl" fontWeight="bold" textAlign="left">
                                         {nftData?.metadata?.name}
