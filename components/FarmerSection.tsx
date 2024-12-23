@@ -14,14 +14,21 @@ const FarmerSection = ({ ownedFarmers, rewardBalance, rewardBalanceBB }: any) =>
           <MediaRenderer src={nft.metadata.image} height="150px" width="100%" />
         </Box>
       ))}
-      <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
-        bBNB Balance:
-      </Text>
       {rewardBalance && (
-        <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
+        <>
+          <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
+            bBNB Balance:
+          </Text>
+          <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
+        </>
       )}
       {rewardBalanceBB && (
-        <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalanceBB, 18)}</Text>
+        <>
+          <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
+            BB Balance:
+          </Text>
+          <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalanceBB, 18)}</Text>
+        </>
       )}
     </Card>
   </Box>
