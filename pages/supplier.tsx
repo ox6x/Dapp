@@ -16,7 +16,7 @@ import {
   useNFTs,
 } from "@thirdweb-dev/react";
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
-import { TOOLS_ADDRESS } from "../const/addresses";
+import { TOOLS_ADDRESS, BB_TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -27,8 +27,9 @@ import Link from "next/link";
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
+  const [contractAddress, setContractAddress] = useState(TOOLS_ADDRESS);
   // 連接合約
-  const { contract } = useContract(TOOLS_ADDRESS);
+  const { contract } = useContract(contractAddress);
   // 取得 NFT 資料
   const { data: nfts } = useNFTs(contract);
 
@@ -201,6 +202,8 @@ export default function StorePage() {
             <Button width="fit-content">Back</Button>
           </Flex>
         </Link>
+        <Button onClick={() => setContractAddress(TOOLS_ADDRESS)}>ETH</Button>
+        <Button onClick={() => setContractAddress(BB_TOOLS_ADDRESS)}>bETH</Button>
       </Flex>
 
       {/* 主標題、文字敘述 */}
