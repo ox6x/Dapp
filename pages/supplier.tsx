@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   Card,
@@ -32,6 +32,7 @@ import styles from "./supplier.module.scss";
 export default function StorePage() {
   // 狀態變數來選擇合約地址
   const [contractIndex, setContractIndex] = useState(0);
+  const [isSwitching, setIsSwitching] = useState(false);
 
   // 根據狀態變數選擇合約地址
   const selectedAddress = ADDRESSES[`TOOLS_${contractIndex}`];
@@ -206,7 +207,7 @@ export default function StorePage() {
         alignItems="center"
       >
         <Link href="/">
-          <Button width="fit-content">Back</Button>
+          <Button width="fit-content" isDisabled={isSwitching}>Back</Button>
         </Link>
 
         {/* 合約地址切換 */}
@@ -214,7 +215,15 @@ export default function StorePage() {
           <FormLabel htmlFor="contract-switch" mb="0">
             Use Contract
           </FormLabel>
-          <Select onChange={(e) => setContractIndex(Number(e.target.value))} value={contractIndex}>
+          <Select
+            onChange={(e) => {
+              setIsSwitching(true);
+              setContractIndex(Number(e.target.value));
+              setTimeout(() => setIsSwitching(false), 500); // 假設500ms足夠完成狀態更新
+            }}
+            value={contractIndex}
+            isDisabled={isSwitching}
+          >
             <option value={0}>Contract 0</option>
             <option value={1}>Contract 1</option>
             {/* 根據需要添加更多選項 */}
