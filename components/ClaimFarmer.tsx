@@ -1,9 +1,9 @@
 import { MediaRenderer, Web3Button, useContract, useContractMetadata } from "@thirdweb-dev/react";
-import { ADDRESSES } from "../const/addresses";
+import { ADDRESSES } from "../const/addresses"; // 更新地址導入
 import styles from "./ClaimFarmer.module.scss";
 
 export function ClaimFarmer() {
-    const { contract } = useContract(ADDRESSES.FARMER);
+    const { contract } = useContract(ADDRESSES.FARMER); // 使用新的地址管理邏輯
     const { data: metadata } = useContractMetadata(contract);
 
     return (
@@ -24,7 +24,7 @@ export function ClaimFarmer() {
                     />
                 </div>
                 <Web3Button
-                    contractAddress={ADDRESSES.FARMER}
+                    contractAddress={ADDRESSES.FARMER} // 使用新的地址管理邏輯
                     action={(contract) => contract.call("claim")}
                     className={styles.claimButton}
                 >
