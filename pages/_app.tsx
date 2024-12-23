@@ -20,7 +20,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const addr = useAddress();
+      const addr = useAddress() || null; // 確保 addr 是 string 或 null
       setAddress(addr);
       
       const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
