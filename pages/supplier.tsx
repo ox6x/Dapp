@@ -8,9 +8,6 @@ import {
   Flex,
   Heading,
   Spinner,
-  Switch,
-  FormControl,
-  FormLabel,
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -19,7 +16,7 @@ import {
   useNFTs,
 } from "@thirdweb-dev/react";
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
-import { ADDRESSES } from "../const/addresses"; // 更新地址導入
+import { TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -30,14 +27,8 @@ import Link from "next/link";
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
-  // 狀態變數來選擇合約地址
-  const [useBBAddress, setUseBBAddress] = useState(false);
-
-  // 根據狀態變數選擇合約地址
-  const selectedAddress = useBBAddress ? ADDRESSES.TOOLS_BB : ADDRESSES.TOOLS_0;
-
   // 連接合約
-  const { contract } = useContract(selectedAddress);
+  const { contract } = useContract(TOOLS_ADDRESS);
   // 取得 NFT 資料
   const { data: nfts } = useNFTs(contract);
 
@@ -210,18 +201,6 @@ export default function StorePage() {
             <Button width="fit-content">Back</Button>
           </Flex>
         </Link>
-
-        {/* 合約地址切換 */}
-        <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="contract-switch" mb="0">
-            Use TOOLS_BB_ADDRESS
-          </FormLabel>
-          <Switch
-            id="contract-switch"
-            isChecked={useBBAddress}
-            onChange={() => setUseBBAddress(!useBBAddress)}
-          />
-        </FormControl>
       </Flex>
 
       {/* 主標題、文字敘述 */}
