@@ -45,32 +45,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [loadingOwnedFarmers]);
 
-  if (!address) {
-    return (
-      <ChakraProvider>
-        <LoginSection />
-      </ChakraProvider>
-    );
-  }
-
-  if (loading) {
-    return (
-      <ChakraProvider>
-        <LoadingScreen />
-      </ChakraProvider>
-    );
-  }
-
-  if (ownedFarmersData?.length === 0) {
-    return (
-      <ChakraProvider>
-        <Container maxW={"container.sm"} px={4}>
-          <ClaimFarmer />
-        </Container>
-      </ChakraProvider>
-    );
-  }
-
   return (
     <ThirdwebProvider
       clientId={CLIENT_ID}
@@ -91,7 +65,19 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     >
       <ChakraProvider>
         <NavBar />
-        <Component {...pageProps} />
+        {
+          !address ? (
+            <LoginSection />
+          ) : loading ? (
+            <LoadingScreen />
+          ) : ownedFarmersData?.length === 0 ? (
+            <Container maxW={"container.sm"} px={4}>
+              <ClaimFarmer />
+            </Container>
+          ) : (
+            <Component {...pageProps} />
+          )
+        }
       </ChakraProvider>
     </ThirdwebProvider>
   );
