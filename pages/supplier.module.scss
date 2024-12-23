@@ -1,46 +1,76 @@
-/* storePage.module.scss */
+/* supplier.module.scss - Binance Style */
 /* 
-   只針對 StorePage 做最基礎的布局/色彩/結構調整
-   不更動任何 react-slick / centerMode 的設定
+   Binance風格常用黑、黃、高對比配色
+   這裡採用以下色票：
+   - $binance-yellow: #F3BA2F
+   - $binance-dark: #1B1B1D (或 #000)
+   - 白底、黑字、黃點綴
 */
 
-/* 可自訂變數 (如想與 Chakra UI 配合, 依情況使用) */
-$primary-color: #2b6cb0;
-$text-color: #333333;
+/* -------------------------
+   0. 變數設置
+------------------------- */
+$binance-yellow: #F3BA2F;
+$binance-dark: #1B1B1D;
+$text-color: #fafafa; /* 文字可偏白做對比 */
+$white: #ffffff;
 
+/* -------------------------
+   1. 頁面容器 (Block = storePage)
+------------------------- */
 .storePage {
+  background-color: $binance-dark; /* 整體背景黑 */
+  min-height: 100vh;
   padding: 2rem 1rem;
+  color: $text-color; /* 頁面文字以淺色為主 */
 
-  /* 若想客製 Container 內部的標題、段落、按鈕等，可在此設定 */
   .pageTitle {
     text-align: center;
     margin: 40px 0 10px;
     font-size: 2rem;
-    color: $primary-color;
+    color: $binance-yellow; /* 標題改為 Binance 黃 */
   }
 
   .pageSubtitle {
     text-align: center;
     margin-bottom: 20px;
     font-size: 1rem;
-    color: $text-color;
+    color: $white; /* 副標題改為白色 */
+    max-width: 600px;
+    margin: 0 auto 20px auto;
   }
 
-  /* 自訂 Slider 容器區塊 (可調整輪播區塊之 margin/padding) */
+  /* -------------------------
+     1-1. Slider 區塊
+  ------------------------- */
   .sliderWrapper {
     margin: 2rem auto;
     max-width: 800px; /* 控制輪播寬度 */
+
+    /* slick-dots 調整可在此進行 */
+    .slick-dots {
+      bottom: -2rem;
+      li button:before {
+        font-size: 0.8rem;
+        color: $binance-yellow;
+      }
+      li.slick-active button:before {
+        color: lighten($binance-yellow, 10%);
+      }
+    }
   }
 
-  /* NFT Card 區域，可以客製化卡片排版、陰影、padding 等 */
+  /* -------------------------
+     1-2. NFT Card 區域
+  ------------------------- */
   .nftCard {
-    border: 1px solid #eee;
+    background-color: $white;
+    border: 2px solid $binance-yellow;
     border-radius: 8px;
     padding: 1.5rem;
     margin: 1rem auto;
     max-width: 500px;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 
     .nftImage {
       border-radius: 8px;
@@ -52,14 +82,15 @@ $text-color: #333333;
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
-      color: $text-color;
+      color: $binance-dark; /* 文字改深色 */
       margin: 1rem 0;
     }
 
     .nftPrice {
       text-align: center;
       margin-bottom: 1rem;
-      color: $text-color;
+      color: $binance-dark; /* 價格改深色 */
+      font-weight: 600;
     }
 
     .quantityControl {
@@ -70,26 +101,32 @@ $text-color: #333333;
       margin: 1rem 0;
 
       button {
-        background-color: $primary-color;
-        color: #fff;
+        background-color: $binance-yellow;
+        color: $binance-dark;
+        border: none;
         &:hover {
-          background-color: darken($primary-color, 5%);
+          background-color: darken($binance-yellow, 5%);
+          color: $white;
         }
       }
 
       input {
         width: 60px;
         text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
       }
     }
 
     .rentButton {
       display: block;
       margin: 0 auto;
-      background-color: $primary-color;
-      color: #fff;
+      background-color: $binance-yellow;
+      color: $binance-dark;
+      border: none;
       &:hover {
-        background-color: darken($primary-color, 5%);
+        background-color: darken($binance-yellow, 5%);
+        color: $white;
       }
     }
   }
