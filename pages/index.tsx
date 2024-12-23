@@ -1,9 +1,10 @@
-import { ConnectWallet, useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
+import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container, Flex, Heading } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 
+import LoginSection from "../components/LoginSection"; // 新增導入
 import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
@@ -24,16 +25,7 @@ const Home: NextPage = () => {
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
 
   if (!address) {
-    return (
-      <Container maxW={"container.sm"} px={4}>
-        <Flex direction={"column"} h={"100vh"} justifyContent={"center"} alignItems={"center"}>
-          <Heading my={6} textAlign="center" fontSize="2xl">
-            Join Crypto Farm and easily start your Web3 mining journey!
-          </Heading>
-          <ConnectWallet />
-        </Flex>
-      </Container>
-    );
+    return <LoginSection />; // 使用新的 LoginSection 組件
   }
 
   if (loadingOwnedFarmers) {
