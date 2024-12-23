@@ -37,8 +37,9 @@ const Home: NextPage = () => {
   }
 
   const rewardBalances = [
-    { label: "bBNB", balance: contracts.rewardBalance },
-    { label: "BB", balance: contracts.rewardBalanceBB }
+    { label: "bBNB", balance: contracts.rewardBalance0 },
+    { label: "BB", balance: contracts.rewardBalance1 },
+    // Add more reward balances as needed
   ];
 
   return (
