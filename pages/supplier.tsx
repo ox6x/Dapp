@@ -1,5 +1,21 @@
-import { Text, Card, Button, Input, Container, Flex, Heading, Spinner } from "@chakra-ui/react";
-import { MediaRenderer, useActiveClaimCondition, useContract, useNFTs } from "@thirdweb-dev/react";
+import {
+    Text,
+    Card,
+    Button,
+    Input,
+    Container,
+    Flex,
+    Heading,
+    Spinner,
+    Box,
+    Divider,
+} from "@chakra-ui/react";
+import {
+    MediaRenderer,
+    useActiveClaimCondition,
+    useContract,
+    useNFTs,
+} from "@thirdweb-dev/react";
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
 import { TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
@@ -26,14 +42,14 @@ export default function StorePage() {
 
     const renderSpinner = () => (
         <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
-            <Spinner />
+            <Spinner size="xl" />
         </Flex>
     );
 
     const NFTComponent = ({ nft }: { nft: NFTType }) => {
         const { data, isLoading } = useActiveClaimCondition(
             contract,
-            nft.metadata.id // Token ID required for ERC1155 contracts
+            nft.metadata.id
         );
 
         const [quantity, setQuantity] = useState(1);
@@ -49,7 +65,7 @@ export default function StorePage() {
             setIsProcessing(true);
             try {
                 await contract.erc1155.claim(nft.metadata.id, quantity);
-                alert(`Successfully purchased ${quantity} ${nft.metadata.name}!`);
+                alert(`Successfully rented ${quantity} ${nft.metadata.name}!`);
             } catch (error) {
                 console.error("Transaction failed:", error);
                 alert("Transaction failed, please try again.");
@@ -66,11 +82,12 @@ export default function StorePage() {
         };
 
         return (
-            <Card key={nft.metadata.id} overflow={"hidden"} p={5}>
+            <Card key={nft.metadata.id} overflow={"hidden"} p={5} shadow="lg" borderRadius="md">
                 <MediaRenderer
                     src={nft.metadata.image}
-                    height="100%"
+                    height="300px"
                     width="100%"
+                    style={{ borderRadius: "8px" }}
                 />
                 <Text fontSize={"2xl"} fontWeight={"bold"} my={5} textAlign={"center"}>
                     {nft.metadata.name}
@@ -113,7 +130,7 @@ export default function StorePage() {
                         colorScheme="blue"
                         width="fit-content"
                     >
-                        Rent
+                        Rent Tool
                     </Button>
                 </Flex>
             </Card>
@@ -131,21 +148,36 @@ export default function StorePage() {
     );
 
     return (
-        <Container maxW={"1200px"}>
-            <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+        <Container maxW={"1200px"} py={5}>
+            {/* Header Section */}
+            <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"} py={4}>
                 <Link href="/">
-                    <Flex justifyContent="center">
-                        <Button width="fit-content">Back</Button>
-                    </Flex>
+                    <Button width="fit-content" colorScheme="blue" size="sm">Back</Button>
                 </Link>
+                <Heading size="lg">Resource Hub</Heading>
             </Flex>
-            <Heading mt={"40px"} textAlign="center">
-                Supplier
-            </Heading>
-            <Text textAlign="center">
-                Boost your earnings with exclusive tools that unlock unique advantages and free up your hands!
-            </Text>
+
+            <Divider my={4} />
+
+            {/* Intro Section */}
+            <Box textAlign="center" my={6}>
+                <Heading size="md">Discover Powerful NFT Tools</Heading>
+                <Text mt={2} fontSize="lg">
+                    Boost your earnings and unlock exclusive features with high-performance tools and assets.
+                </Text>
+            </Box>
+
+            {/* NFT Slider Section */}
             {!nfts ? renderSpinner() : renderNFTSlider()}
+
+            <Divider my={8} />
+
+            {/* Footer Section */}
+            <Box textAlign="center" mt={5}>
+                <Text fontSize="sm" color="gray.500">
+                    Need help? Check out our <Link href="/faq"><Text as="span" color="blue.500">FAQ</Text></Link>.
+                </Text>
+            </Box>
         </Container>
     );
 }
