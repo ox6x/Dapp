@@ -1,74 +1,71 @@
-/* Binance 黑金風 SCSS */
-$primary-color: #f0b90b; // Binance Gold
-$background-color: #121212; // Binance Black
-$text-color: #ffffff; // White text
+// CoinBase 风格 SCSS 配置
+$primary-color: #0052ff; // CoinBase Blue
+$background-color: #f9fbfd; // Light Background
+$text-color: #333333; // Text Color
 $button-hover-color: darken($primary-color, 10%);
-$border-radius: 8px;
+$border-radius: 12px;
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: $background-color;
-  color: $text-color;
-  padding: 20px;
-  border-radius: $border-radius;
-}
-
-.flex {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 50vh;
-}
-
-.heading {
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-  color: $primary-color;
-  margin-bottom: 20px;
-}
-
-.box {
-  border-radius: $border-radius;
-  overflow: hidden;
-  margin: 2rem 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-  img {
-    border-radius: $border-radius;
-    object-fit: cover;
-  }
-}
-
-.web3Button {
-  background-color: $primary-color;
+  min-height: 100vh;
+  background-color: $background-color;
   color: $text-color;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: $border-radius;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  padding: 20px;
+  text-align: center;
 
-  &:hover {
-    background-color: $button-hover-color;
+  .header {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+      color: darken($text-color, 20%);
+      line-height: 1.5;
+      max-width: 600px;
+      margin: 0 auto;
+    }
   }
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba($primary-color, 0.5);
-  }
-}
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
 
-@media (max-width: 768px) {
-  .heading {
-    font-size: 1.5rem;
-  }
+    .mediaContainer {
+      border-radius: $border-radius;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-  .box {
-    margin: 1.5rem 0;
+    .claimButton {
+      background: $primary-color;
+      color: #ffffff;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+
+      &:hover {
+        background: $button-hover-color;
+        transform: scale(1.05);
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px lighten($primary-color, 40%);
+      }
+    }
   }
 }
