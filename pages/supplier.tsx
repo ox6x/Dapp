@@ -1,20 +1,13 @@
-/* 
-  supplier.tsx 
-  - 主體程式碼: 使用 Chakra UI, slick, thirdweb-dev
-  - 文字改為英文, 提供繁體中文註解 
-*/
-
-import {
-  Text,
-  Card,
-  Button,
-  Input,
-  Container,
-  Flex,
-  Heading,
-  Spinner,
-  Box,
-  Divider,
+import React, { useState } from "react";
+import { 
+  Text, 
+  Card, 
+  Button, 
+  Input, 
+  Container, 
+  Flex, 
+  Heading, 
+  Spinner 
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -25,21 +18,19 @@ import {
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
 import { TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import { useState } from "react";
-import Slider from "react-slick";
+import Slider, { Settings } from "react-slick"; // <-- 注意：從 react-slick 匯入 Settings 型別
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
-import styles from "./supplier.module.scss"; // <-- 匯入 SCSS
 
-export default function SupplierPage() {
-  // 連接指定的合約
+export default function StorePage() {
+  // 連接到合約
   const { contract } = useContract(TOOLS_ADDRESS);
   // 取得 NFT 清單
   const { data: nfts } = useNFTs(contract);
 
-  // Slick Slider 設定
-  const sliderSettings = {
+  // 宣告 Slider 設定，使用 Settings 型別
+  const sliderSettings: Settings = {
     dots: true,
     infinite: true,
     speed: 500,
@@ -50,16 +41,20 @@ export default function SupplierPage() {
     centerPadding: "0",
   };
 
-  // 載入中顯示用
+  // 載入中顯示
   const renderSpinner = () => (
-    <Flex h="50vh" justifyContent="center" alignItems="center">
-      <Spinner size="xl" />
+    <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
+      <Spinner />
     </Flex>
   );
 
-  // NFT 卡片組件
+  // NFT 卡片子組件
   const NFTComponent = ({ nft }: { nft: NFTType }) => {
-    const { data, isLoading } = useActiveClaimCondition(contract, nft.metadata.id);
+    // 讀取可領取條件
+    const { data, isLoading } = useActiveClaimCondition(
+      contract,
+      nft.metadata.id // Token ID for ERC1155
+    );
 
     const [quantity, setQuantity] = useState(1);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -78,10 +73,10 @@ export default function SupplierPage() {
       setIsProcessing(true);
       try {
         await contract.erc1155.claim(nft.metadata.id, quantity);
-        alert(`Successfully rented ${quantity} x "${nft.metadata.name}"!`);
+        alert(`Successfully purchased ${quantity} ${nft.metadata.name}!`);
       } catch (error) {
         console.error("Transaction failed:", error);
-        alert("Transaction failed. Please try again later.");
+        alert("Transaction failed, please try again.");
       } finally {
         setIsProcessing(false);
       }
@@ -91,65 +86,38 @@ export default function SupplierPage() {
     const incrementQuantity = () => setQuantity((prev) => prev + 1);
     const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
 
-    // 輸入框變更
+    // 文字框輸入事件
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(e.target.value, 10);
       setQuantity(isNaN(value) || value < 1 ? 1 : value);
     };
 
     return (
-      <Card
-        key={nft.metadata.id}
-        overflow="hidden"
-        p={5}
-        shadow="lg"
-        borderRadius="md"
-        className={styles["supplier-page__card"]} // BEM
-      >
-        {/* NFT 圖片 */}
-        <MediaRenderer
-          src={nft.metadata.image}
-          height="300px"
-          width="100%"
-          style={{ borderRadius: "8px" }}
-          className={styles["supplier-page__card-img"]}
-        />
-
-        {/* NFT 名稱 */}
+      <Card key={nft.metadata.id} overflow={"hidden"} p={5}>
+        <MediaRenderer src={nft.metadata.image} height="100%" width="100%" />
         <Text
-          fontSize="2xl"
-          fontWeight="bold"
+          fontSize={"2xl"}
+          fontWeight={"bold"}
           my={5}
-          textAlign="center"
-          className={styles["supplier-page__card-title"]}
+          textAlign={"center"}
         >
           {nft.metadata.name}
         </Text>
 
-        {/* 顯示價格 */}
         {!isLoading && data ? (
-          <Text
-            textAlign="center"
-            my={5}
-            className={styles["supplier-page__card-price"]}
-          >
-            Total Price: {totalPrice} {data.currencyMetadata.symbol}
+          <Text textAlign={"center"} my={5}>
+            Total Cost: {totalPrice} {data.currencyMetadata.symbol}
           </Text>
         ) : (
-          <Text textAlign="center">Loading...</Text>
+          <Text textAlign={"center"}>Loading...</Text>
         )}
 
         {/* 數量控制區域 */}
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          gap="10px"
-          mt={5}
-          className={styles["supplier-page__card-controls"]}
-        >
+        <Flex justifyContent="center" alignItems="center" gap="10px" mt={5}>
           <Button
             onClick={decrementQuantity}
             disabled={isProcessing || quantity <= 1}
+            width="fit-content"
           >
             -
           </Button>
@@ -158,8 +126,14 @@ export default function SupplierPage() {
             value={quantity}
             onChange={handleInputChange}
             disabled={isProcessing}
+            width="60px"
+            textAlign="center"
           />
-          <Button onClick={incrementQuantity} disabled={isProcessing}>
+          <Button
+            onClick={incrementQuantity}
+            disabled={isProcessing}
+            width="fit-content"
+          >
             +
           </Button>
         </Flex>
@@ -169,11 +143,11 @@ export default function SupplierPage() {
           <Button
             onClick={handleTransaction}
             isLoading={isProcessing}
-            loadingText="Processing..."
+            loadingText="Processing"
+            colorScheme="blue"
             width="fit-content"
-            className={styles["supplier-page__card-rentBtn"]}
           >
-            Rent This Tool
+            Rent
           </Button>
         </Flex>
       </Card>
@@ -182,7 +156,7 @@ export default function SupplierPage() {
 
   // NFT Slider
   const renderNFTSlider = () => (
-    <Slider {...sliderSettings} className={styles["supplier-page__slider"]}>
+    <Slider {...sliderSettings}>
       {nfts?.map((nftItem) => (
         <div key={nftItem.metadata.id}>
           <NFTComponent nft={nftItem} />
@@ -192,59 +166,25 @@ export default function SupplierPage() {
   );
 
   return (
-    <Container maxW="1200px" py={5} className={styles["supplier-page"]}>
-      {/* 頂部 Header 區塊 */}
-      <Flex
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        py={4}
-        className={styles["supplier-page__header"]}
-      >
-        {/* 返回按鈕 */}
+    <Container maxW={"1200px"}>
+      {/* Header */}
+      <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
         <Link href="/">
-          <Button
-            width="fit-content"
-            size="sm"
-            className={styles["supplier-page__header-btn"]}
-          >
-            Back
-          </Button>
+          <Flex justifyContent="center">
+            <Button width="fit-content">Back</Button>
+          </Flex>
         </Link>
-
-        {/* 標題 */}
-        <Heading size="lg" className={styles["supplier-page__header-title"]}>
-          Resource Center
-        </Heading>
       </Flex>
+      {/* 標題 */}
+      <Heading mt={"40px"} textAlign="center">
+        Supplier
+      </Heading>
+      <Text textAlign="center" mt={2} mb={5}>
+        Boost your earnings with exclusive tools that unlock unique advantages and free up your hands!
+      </Text>
 
-      <Divider my={4} />
-
-      {/* 簡介區塊 */}
-      <Box textAlign="center" my={6} className={styles["supplier-page__intro"]}>
-        <Heading size="md" className={styles["supplier-page__intro-title"]}>
-          Explore Powerful NFT Tools
-        </Heading>
-        <Text mt={2} fontSize="lg" className={styles["supplier-page__intro-desc"]}>
-          Utilize high-performance tools to enhance your rewards and unlock exclusive platform features.
-        </Text>
-      </Box>
-
-      {/* NFT Slider 區塊 */}
+      {/* NFT 資料載入 */}
       {!nfts ? renderSpinner() : renderNFTSlider()}
-
-      <Divider my={8} />
-
-      {/* 底部 Footer 區塊 */}
-      <Box textAlign="center" mt={5} className={styles["supplier-page__footer"]}>
-        <Text fontSize="sm">
-          Having trouble? Check our{" "}
-          <Link href="/faq">
-            <span className="faq-link">FAQ</span>
-          </Link>
-          .
-        </Text>
-      </Box>
     </Container>
   );
 }
