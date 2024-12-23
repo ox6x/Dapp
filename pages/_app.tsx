@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { ThirdwebProvider, ConnectWallet, useAddress, useOwnedNFTs, useContract } from "@thirdweb-dev/react";
+import { ThirdwebProvider, useAddress, useOwnedNFTs, useContract } from "@thirdweb-dev/react";
 import { ChakraProvider, Container } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
+import dynamic from "next/dynamic";
 import NavBar from "../components/NavBar";
-import LoginSection from "../components/LoginSection";
-import LoadingScreen from "../components/LoadingScreen";
 import { ADDRESSES } from "../const/addresses";
-import { ClaimFarmer } from "../components/ClaimFarmer";
+
+const LoginSection = dynamic(() => import("../components/LoginSection"), { ssr: false });
+const LoadingScreen = dynamic(() => import("../components/LoadingScreen"), { ssr: false });
+const ClaimFarmer = dynamic(() => import("../components/ClaimFarmer"), { ssr: false });
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
