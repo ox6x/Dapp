@@ -8,7 +8,6 @@ import {
   Flex,
   Heading,
   Spinner,
-  Switch,
   FormControl,
   FormLabel,
   Select
@@ -207,9 +206,7 @@ export default function StorePage() {
         alignItems="center"
       >
         <Link href="/">
-          <Flex justifyContent="center">
-            <Button width="fit-content">Back</Button>
-          </Flex>
+          <Button width="fit-content">Back</Button>
         </Link>
 
         {/* 合約地址切換 */}
