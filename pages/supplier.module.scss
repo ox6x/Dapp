@@ -1,188 +1,95 @@
+/* storePage.module.scss */
 /* 
-  supplier.module.scss 
-  Coinbase 風格 SCSS 樣式 
-  - 採用藍白主色調, 文字顏色以深灰或黑為主
-  - 註解為繁體中文
+   只針對 StorePage 做最基礎的布局/色彩/結構調整
+   不更動任何 react-slick / centerMode 的設定
 */
 
-/* -------------------------
-   0. 基本變數設定
-------------------------- */
-$coinbase-blue: #0052ff;        /* Coinbase 主色 */
-$coinbase-blue-hover: #0040cc;  /* Hover 狀態的主色 */
-$bg-white: #ffffff;
-$text-dark: #333333;
-$text-light: #555555;
-$shadow-color: rgba(0, 0, 0, 0.1);
+/* 可自訂變數 (如想與 Chakra UI 配合, 依情況使用) */
+$primary-color: #2b6cb0;
+$text-color: #333333;
 
-/* -------------------------
-   1. 頁面容器 (Block)
-   BEM: .supplier-page
-------------------------- */
-.supplier-page {
-  margin: 0 auto;
+.storePage {
   padding: 2rem 1rem;
-  font-family: "Arial", sans-serif;
-  background-color: $bg-white; /* 背景白 */
 
-  /* -------------------------
-     1.1 Header 區塊
-     BEM: &__header
-  ------------------------- */
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 1rem;
-
-    &-title {
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: $coinbase-blue;
-    }
-
-    &-btn {
-      background-color: $coinbase-blue;
-      color: $bg-white;
-      &:hover {
-        background-color: $coinbase-blue-hover;
-      }
-    }
-  }
-
-  /* -------------------------
-     1.2 Introduction 區塊
-     BEM: &__intro
-  ------------------------- */
-  &__intro {
+  /* 若想客製 Container 內部的標題、段落、按鈕等，可在此設定 */
+  .pageTitle {
     text-align: center;
-    margin-bottom: 2rem;
-
-    &-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: $coinbase-blue;
-    }
-
-    &-desc {
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      color: $text-dark;
-    }
+    margin: 40px 0 10px;
+    font-size: 2rem;
+    color: $primary-color;
   }
 
-  /* -------------------------
-     1.3 Slider 區塊
-     BEM: &__slider
-  ------------------------- */
-  &__slider {
-    margin-bottom: 2rem;
-
-    /* Slick Dot 樣式 */
-    .slick-dots {
-      bottom: -2rem;
-
-      li button:before {
-        font-size: 0.8rem;
-        color: $coinbase-blue;
-      }
-
-      li.slick-active button:before {
-        color: $coinbase-blue-hover;
-      }
-    }
-
-    /* Slick Arrow 樣式 */
-    .slick-arrow {
-      &:before {
-        color: $coinbase-blue;
-        font-size: 1.5rem;
-      }
-    }
+  .pageSubtitle {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: $text-color;
   }
 
-  /* -------------------------
-     1.4 NFT Card
-     BEM: &__card
-  ------------------------- */
-  &__card {
-    background-color: $bg-white;
-    box-shadow: 0 2px 6px $shadow-color;
+  /* 自訂 Slider 容器區塊 (可調整輪播區塊之 margin/padding) */
+  .sliderWrapper {
+    margin: 2rem auto;
+    max-width: 800px; /* 控制輪播寬度 */
+  }
+
+  /* NFT Card 區域，可以客製化卡片排版、陰影、padding 等 */
+  .nftCard {
+    border: 1px solid #eee;
     border-radius: 8px;
     padding: 1.5rem;
-    margin: 0 auto;
-    max-width: 400px;
+    margin: 1rem auto;
+    max-width: 500px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
-    &-img {
+    .nftImage {
       border-radius: 8px;
-      margin-bottom: 1rem;
       width: 100%;
       height: auto;
     }
 
-    &-title {
+    .nftTitle {
       text-align: center;
       font-size: 1.5rem;
       font-weight: bold;
+      color: $text-color;
       margin: 1rem 0;
-      color: $text-dark;
     }
 
-    &-price {
+    .nftPrice {
       text-align: center;
       margin-bottom: 1rem;
-      font-size: 1rem;
-      color: $text-dark;
+      color: $text-color;
     }
 
-    &-controls {
+    .quantityControl {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 10px;
-      margin-bottom: 1rem;
+      margin: 1rem 0;
 
       button {
-        background-color: $coinbase-blue;
-        color: $bg-white;
+        background-color: $primary-color;
+        color: #fff;
         &:hover {
-          background-color: $coinbase-blue-hover;
+          background-color: darken($primary-color, 5%);
         }
       }
 
       input {
         width: 60px;
         text-align: center;
-        border: 1px solid #ccc;
-        border-radius: 4px;
       }
     }
 
-    &-rentBtn {
+    .rentButton {
       display: block;
       margin: 0 auto;
-      background-color: $coinbase-blue;
-      color: $bg-white;
+      background-color: $primary-color;
+      color: #fff;
       &:hover {
-        background-color: $coinbase-blue-hover;
-      }
-    }
-  }
-
-  /* -------------------------
-     1.5 Footer 區塊
-     BEM: &__footer
-  ------------------------- */
-  &__footer {
-    text-align: center;
-    margin-top: 2rem;
-    font-size: 0.9rem;
-    color: $text-light;
-
-    .faq-link {
-      color: $coinbase-blue;
-      &:hover {
-        text-decoration: underline;
+        background-color: darken($primary-color, 5%);
       }
     }
   }
