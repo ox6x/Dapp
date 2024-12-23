@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { ADDRESSES } from "../const/addresses";
@@ -26,17 +26,17 @@ const Home: NextPage = () => {
     if (rewardBalanceData) {
       setRewardBalance(rewardBalanceData);
     }
-  }, [rewardBalanceData, contractIndex]);
+  }, [rewardBalanceData, contractIndex]); // 添加 contractIndex 作为依赖项
 
   if (!address) {
     return <LoginSection />;
   }
 
-  if (loadingOwnedFarmers || loadingOwnedTools) {
+  if (loadingOwnedFarmers) {
     return <LoadingScreen />;
   }
 
-  if (!ownedFarmersData || ownedFarmersData.length === 0) {
+  if (ownedFarmersData?.length === 0) {
     return (
       <Container maxW={"container.sm"} px={4}>
         <ClaimFarmer />
