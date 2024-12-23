@@ -1,10 +1,53 @@
-import { ThirdwebProvider, ConnectWallet } from "@thirdweb-dev/react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { ThirdwebProvider, ConnectWallet, useAddress, useOwnedNFTs, useContract } from "@thirdweb-dev/react";
+import { ChakraProvider, Container } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
-import NavBar from "../components/NavBar"; // 確保路徑正確
+import NavBar from "../components/NavBar";
+import LoginSection from "../components/LoginSection";
+import LoadingScreen from "../components/LoadingScreen";
+import { ADDRESSES } from "../const/addresses";
+import { ClaimFarmer } from "../components/ClaimFarmer";
+
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const address = useAddress();
+  const [loading, setLoading] = useState(true);
+  const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
+  const { data: ownedFarmersData, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
+
+  useEffect(() => {
+    if (!loadingOwnedFarmers) {
+      setLoading(false);
+    }
+  }, [loadingOwnedFarmers]);
+
+  if (!address) {
+    return (
+      <ChakraProvider>
+        <LoginSection />
+      </ChakraProvider>
+    );
+  }
+
+  if (loading) {
+    return (
+      <ChakraProvider>
+        <LoadingScreen />
+      </ChakraProvider>
+    );
+  }
+
+  if (ownedFarmersData?.length === 0) {
+    return (
+      <ChakraProvider>
+        <Container maxW={"container.sm"} px={4}>
+          <ClaimFarmer />
+        </Container>
+      </ChakraProvider>
+    );
+  }
+
   return (
     <ThirdwebProvider
       clientId={CLIENT_ID}
