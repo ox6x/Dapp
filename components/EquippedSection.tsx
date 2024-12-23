@@ -1,20 +1,13 @@
-import { Box, Card, Heading, Text, Stack, Flex, Button, Divider, FormControl, FormLabel, Switch } from "@chakra-ui/react";
+import { Box, Card, Heading, Text, Stack, Flex, Button, Divider } from "@chakra-ui/react";
 import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
-import { STAKING_ADDRESS, TOOLS_ADDRESS, STAKING_BB_ADDRESS, TOOLS_BB_ADDRESS } from "../const/addresses";
+import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import Quantity from "./Quantity"; // 確保路徑正確
-import { useState } from 'react';
-import RewardBalances from "./RewardBalances"; // Import the new component
 
-const EquippedSection = ({ equippedTools, rewardBalances }: any) => {
+const EquippedSection = ({ equippedTools }: any) => {
     const address = useAddress();
-    const [useBBAddress, setUseBBAddress] = useState(false);
-
-    const selectedToolAddress = useBBAddress ? TOOLS_BB_ADDRESS : TOOLS_ADDRESS;
-    const selectedStakingAddress = useBBAddress ? STAKING_BB_ADDRESS : STAKING_ADDRESS;
-
-    const { contract: toolContract } = useContract(selectedToolAddress);
-    const { contract: stakingContract } = useContract(selectedStakingAddress);
+    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
+    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
 
     const handleOffClick = async (tokenId: number, quantity: number) => {
         if (!address) {
@@ -50,16 +43,6 @@ const EquippedSection = ({ equippedTools, rewardBalances }: any) => {
                 <Heading fontSize="lg" mb={4}>
                     Activated
                 </Heading>
-                <FormControl display="flex" alignItems="center" mb={4}>
-                    <FormLabel htmlFor="contract-switch" mb="0">
-                        Use BB Address
-                    </FormLabel>
-                    <Switch
-                        id="contract-switch"
-                        isChecked={useBBAddress}
-                        onChange={() => setUseBBAddress(!useBBAddress)}
-                    />
-                </FormControl>
                 {equippedTools &&
                     equippedTools[0].map((nft: ethers.BigNumber) => {
                         const tokenId = nft.toNumber();
@@ -77,22 +60,22 @@ const EquippedSection = ({ equippedTools, rewardBalances }: any) => {
                         return (
                             <Card key={tokenId} p={5} borderRadius="lg" boxShadow="xl">
                                 <Flex align="flex-start" justify="space-between" gap={6}>
-                                    {/* 左侧图片与操作 */}
+                                    {/* 左側圖片與操作 */}
                                     <Stack spacing={4} align="center" w="50%">
-                                        {/* 图片 */}
+                                        {/* 圖片 */}
                                         <MediaRenderer
                                             src={nftData?.metadata?.image || ""}
                                             height="200px"
                                             width="200px"
                                             style={{ borderRadius: "12px" }}
                                         />
-                                        {/* 数量选择器 */}
+                                        {/* 數量選擇器 */}
                                         <Quantity
                                             minQuantity={1}
                                             onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
                                             buttonText="Off"
                                         />
-                                        {/* Claim 按钮 */}
+                                        {/* Claim 按鈕 */}
                                         <Button
                                             onClick={() => handleClaimClick(tokenId)}
                                             bg="green.400"
@@ -105,7 +88,7 @@ const EquippedSection = ({ equippedTools, rewardBalances }: any) => {
                                         </Button>
                                     </Stack>
 
-                                    {/* 右侧 NFT 信息 */}
+                                    {/* 右側 NFT 信息 */}
                                     <Stack spacing={4} w="50%">
                                         <Text fontSize="2xl" fontWeight="bold" textAlign="left">
                                             {nftData?.metadata?.name}
@@ -122,7 +105,6 @@ const EquippedSection = ({ equippedTools, rewardBalances }: any) => {
                             </Card>
                         );
                     })}
-                <RewardBalances rewardBalances={rewardBalances} /> {/* Use the new component */}
             </Card>
         </Box>
     );

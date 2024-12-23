@@ -1,9 +1,9 @@
-import { Box, Card, Heading } from "@chakra-ui/react";
+import { Box, Card, Heading, Text } from "@chakra-ui/react";
 import { MediaRenderer } from "@thirdweb-dev/react";
-import RewardBalances from "./RewardBalances"; // Import the new component
+import { ethers } from "ethers";
 import './FarmerSection.module.scss';
 
-const FarmerSection = ({ ownedFarmers, rewardBalances }: any) => (
+const FarmerSection = ({ ownedFarmers, rewardBalance }: any) => (
   <Box mb={6} className="container">
     <Card p={4} className="card">
       <Heading fontSize="lg" mb={4} className="title">
@@ -14,7 +14,12 @@ const FarmerSection = ({ ownedFarmers, rewardBalances }: any) => (
           <MediaRenderer src={nft.metadata.image} height="150px" width="100%" />
         </Box>
       ))}
-      <RewardBalances rewardBalances={rewardBalances} /> {/* Use the new component */}
+      <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
+        bBNB Balance:
+      </Text>
+      {rewardBalance && (
+        <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
+      )}
     </Card>
   </Box>
 );
