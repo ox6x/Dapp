@@ -1,13 +1,13 @@
 import { Box, Card, Heading, Text, Stack, Flex, Button, Divider } from "@chakra-ui/react";
 import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
-import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
+import { ADDRESSES } from "../const/addresses"; // 更新地址導入
 import { ethers } from "ethers";
 import Quantity from "./Quantity"; // 確保路徑正確
 
 const EquippedSection = ({ equippedTools }: any) => {
     const address = useAddress();
-    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
-    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+    const { contract: toolContract } = useContract(ADDRESSES.TOOLS_0); // 根據需求更改索引
+    const { contract: stakingContract } = useContract(ADDRESSES.STAKING_0);
 
     const handleOffClick = async (tokenId: number, quantity: number) => {
         if (!address) {
