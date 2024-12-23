@@ -1,9 +1,10 @@
-import { MediaRenderer, Web3Button, useContractMetadata } from "@thirdweb-dev/react";
+import { MediaRenderer, Web3Button, useContract, useContractMetadata } from "@thirdweb-dev/react";
 import { ADDRESSES } from "../const/addresses";
 import styles from "./ClaimFarmer.module.scss";
 
 export function ClaimFarmer() {
-    const { data: metadata } = useContractMetadata(ADDRESSES.FARMER);
+    const { contract } = useContract(ADDRESSES.FARMER);
+    const { data: metadata } = useContractMetadata(contract);
 
     return (
         <div className={styles.container}>
