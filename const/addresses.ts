@@ -8,8 +8,9 @@ export const ADDRESSES: { [key: string]: string } = {
   STAKING_1: '0x0925c9585398193d1c3327dcd66a69354273DeBF',
 };
 
-export function addAddresses(index: number, addresses: { tools: string, rewards: string, staking: string }) {
+export function addAddresses(index: number, addresses: { tools: string, rewards: string, staking: string, farmer: string }) {
   ADDRESSES[`TOOLS_${index}`] = addresses.tools;
   ADDRESSES[`REWARDS_${index}`] = addresses.rewards;
   ADDRESSES[`STAKING_${index}`] = addresses.staking;
+  ADDRESSES['FARMER'] = addresses.farmer;
 }
