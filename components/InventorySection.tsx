@@ -5,7 +5,7 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => (
   <Box mb={6}>
     <Card p={4}>
       <Heading fontSize="lg" mb={4}>
-        Inventory
+        Locker
       </Heading>
       <Skeleton isLoaded={!loadingOwnedTools}>
         <Inventory nft={ownedTools} />
