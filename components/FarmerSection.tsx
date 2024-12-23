@@ -15,20 +15,14 @@ const FarmerSection = ({ ownedFarmers, rewardBalance, rewardBalanceBB }: any) =>
         </Box>
       ))}
       {rewardBalance && (
-        <>
-          <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
-            bBNB Balance:
-          </Text>
-          <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
-        </>
+        <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
+          bBNB Balance: <span className="balance">{ethers.utils.formatUnits(rewardBalance, 18)}</span>
+        </Text>
       )}
       {rewardBalanceBB && (
-        <>
-          <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
-            BB Balance:
-          </Text>
-          <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalanceBB, 18)}</Text>
-        </>
+        <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
+          BB Balance: <span className="balance">{ethers.utils.formatUnits(rewardBalanceBB, 18)}</span>
+        </Text>
       )}
     </Card>
   </Box>
