@@ -23,16 +23,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 
-// 引入 Binance Style 的 SCSS
+// 匯入 Coinbase 風格的 SCSS
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
   // 連接合約
   const { contract } = useContract(TOOLS_ADDRESS);
-  // 取得 NFT 資料
+  // 取得合約內所有 NFT
   const { data: nfts } = useNFTs(contract);
 
-  // Slick Slider 設定
+  // slick slider 設定
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -46,12 +46,12 @@ export default function StorePage() {
 
   // 載入中顯示
   const renderSpinner = () => (
-    <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
+    <Flex h="50vh" justifyContent="center" alignItems="center">
       <Spinner />
     </Flex>
   );
 
-  // 單個 NFT 卡片
+  // NFT 卡片子元件
   const NFTComponent = ({ nft }: { nft: NFTType }) => {
     const { data, isLoading } = useActiveClaimCondition(contract, nft.metadata.id);
 
@@ -59,20 +59,20 @@ export default function StorePage() {
     const [isProcessing, setIsProcessing] = useState(false);
 
     // 計算總價格
-    const totalPrice =
-      !isLoading && data
-        ? ethers.utils.formatEther(ethers.BigNumber.from(data.price).mul(quantity))
-        : "Loading...";
+    const totalPrice = !isLoading && data
+      ? ethers.utils.formatEther(
+          ethers.BigNumber.from(data.price).mul(quantity)
+        )
+      : "Loading...";
 
-    // 交易按鈕行為
+    // 處理交易
     const handleTransaction = async () => {
       if (!contract || isProcessing) return;
 
       setIsProcessing(true);
       try {
-        // 執行領取
         await contract.erc1155.claim(nft.metadata.id, quantity);
-        alert(`Successfully bought ${quantity} x ${nft.metadata.name}!`);
+        alert(`Successfully purchased ${quantity} x ${nft.metadata.name}!`);
       } catch (error) {
         console.error("Transaction failed:", error);
         alert("Transaction failed, please try again.");
@@ -81,11 +81,11 @@ export default function StorePage() {
       }
     };
 
-    // 數量增減
+    // 數量調整
     const incrementQuantity = () => setQuantity((prev) => prev + 1);
     const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
 
-    // 輸入框
+    // 文字框變更
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(e.target.value, 10);
       setQuantity(isNaN(value) || value < 1 ? 1 : value);
@@ -94,16 +94,19 @@ export default function StorePage() {
     return (
       <Card
         key={nft.metadata.id}
-        overflow={"hidden"}
+        overflow="hidden"
         p={5}
-        className={styles.nftCard} // Binance 風格卡片
+        className={styles.nftCard}
       >
+        {/* NFT 圖片 */}
         <MediaRenderer
           src={nft.metadata.image}
           height="100%"
           width="100%"
           className={styles.nftImage}
         />
+
+        {/* NFT 標題 */}
         <Text
           fontSize="2xl"
           fontWeight="bold"
@@ -114,7 +117,6 @@ export default function StorePage() {
           {nft.metadata.name}
         </Text>
 
-        {/* 顯示總成本 */}
         {!isLoading && data ? (
           <Text textAlign="center" my={5} className={styles.nftPrice}>
             Total Cost: {totalPrice} {data.currencyMetadata.symbol}
@@ -146,27 +148,33 @@ export default function StorePage() {
             width="60px"
             textAlign="center"
           />
-          <Button onClick={incrementQuantity} disabled={isProcessing} width="fit-content">
+          <Button
+            onClick={incrementQuantity}
+            disabled={isProcessing}
+            width="fit-content"
+          >
             +
           </Button>
         </Flex>
 
+        {/* 交易按鈕 */}
         <Flex justifyContent="center" mt={5}>
           <Button
             onClick={handleTransaction}
             isLoading={isProcessing}
-            loadingText="Processing..."
+            loadingText="Processing"
+            colorScheme="blue"
             width="fit-content"
             className={styles.rentButton}
           >
-            Buy Now
+            Rent
           </Button>
         </Flex>
       </Card>
     );
   };
 
-  // 產生 NFT Slider
+  // NFT Slider
   const renderNFTSlider = () => (
     <div className={styles.sliderWrapper}>
       <Slider {...sliderSettings}>
@@ -181,7 +189,6 @@ export default function StorePage() {
 
   return (
     <Container maxW="1200px" className={styles.storePage}>
-      {/* 頂部 Header 區塊 */}
       <Flex direction="row" justifyContent="space-between" alignItems="center">
         <Link href="/">
           <Flex justifyContent="center">
@@ -190,15 +197,14 @@ export default function StorePage() {
         </Link>
       </Flex>
 
-      {/* 頁面標題、說明 */}
       <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
-        Binance Resource Center
+        Coinbase Supplier
       </Heading>
       <Text textAlign="center" className={styles.pageSubtitle}>
-        Power up your workflow with premium NFT tools, exclusively in Binance style!
+        Gain access to high-performance NFT tools and enhance your earnings on Coinbase!
       </Text>
 
-      {/* NFT 載入 */}
+      {/* NFT 資料載入 */}
       {!nfts ? renderSpinner() : renderNFTSlider()}
     </Container>
   );
