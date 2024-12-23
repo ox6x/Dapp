@@ -19,7 +19,7 @@ import {
   useNFTs,
 } from "@thirdweb-dev/react";
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
-import { TOOLS_ADDRESS, TOOLS_BB_ADDRESS } from "../const/addresses";
+import { ADDRESSES } from "../const/addresses"; // 更新地址導入
 import { ethers } from "ethers";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -34,7 +34,7 @@ export default function StorePage() {
   const [useBBAddress, setUseBBAddress] = useState(false);
 
   // 根據狀態變數選擇合約地址
-  const selectedAddress = useBBAddress ? TOOLS_BB_ADDRESS : TOOLS_ADDRESS;
+  const selectedAddress = useBBAddress ? ADDRESSES.TOOLS_BB : ADDRESSES.TOOLS_0;
 
   // 連接合約
   const { contract } = useContract(selectedAddress);
