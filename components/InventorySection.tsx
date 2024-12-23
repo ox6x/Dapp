@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack, Flex, Heading, Skeleton } from '@chakra-ui/react';
 import Quantity from './Quantity'; // 引入動態數量選擇器組件
 
-const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
+const InventorySection = ({ ownedTools, loadingOwnedTools, contractIndex }: any) => {
     const address = useAddress();
-    const { contract: toolContract } = useContract(ADDRESSES.TOOLS_0); // 根據需求更改索引
-    const { contract: stakingContract } = useContract(ADDRESSES.STAKING_0);
+    const { contract: toolContract } = useContract(ADDRESSES[`TOOLS_${contractIndex}`]);
+    const { contract: stakingContract } = useContract(ADDRESSES[`STAKING_${contractIndex}`]);
 
     const handleOnClick = async (id: string, quantity: number) => {
         if (!address) {
@@ -19,13 +19,13 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
             // 檢查是否已經授權
             const isApproved = await toolContract?.erc1155.isApproved(
                 address,
-                ADDRESSES.STAKING_0,
+                ADDRESSES[`STAKING_${contractIndex}`],
             );
 
             // 如果未授權，先設置授權
             if (!isApproved) {
                 await toolContract?.erc1155.setApprovalForAll(
-                    ADDRESSES.STAKING_0,
+                    ADDRESSES[`STAKING_${contractIndex}`],
                     true,
                 );
             }
