@@ -4,8 +4,9 @@ import { STAKING_ADDRESS, TOOLS_ADDRESS, STAKING_BB_ADDRESS, TOOLS_BB_ADDRESS } 
 import { ethers } from "ethers";
 import Quantity from "./Quantity"; // 確保路徑正確
 import { useState } from 'react';
+import RewardBalances from "./RewardBalances"; // Import the new component
 
-const EquippedSection = ({ equippedTools }: any) => {
+const EquippedSection = ({ equippedTools, rewardBalances }: any) => {
     const address = useAddress();
     const [useBBAddress, setUseBBAddress] = useState(false);
 
@@ -76,22 +77,22 @@ const EquippedSection = ({ equippedTools }: any) => {
                         return (
                             <Card key={tokenId} p={5} borderRadius="lg" boxShadow="xl">
                                 <Flex align="flex-start" justify="space-between" gap={6}>
-                                    {/* 左側圖片與操作 */}
+                                    {/* 左侧图片与操作 */}
                                     <Stack spacing={4} align="center" w="50%">
-                                        {/* 圖片 */}
+                                        {/* 图片 */}
                                         <MediaRenderer
                                             src={nftData?.metadata?.image || ""}
                                             height="200px"
                                             width="200px"
                                             style={{ borderRadius: "12px" }}
                                         />
-                                        {/* 數量選擇器 */}
+                                        {/* 数量选择器 */}
                                         <Quantity
                                             minQuantity={1}
                                             onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
                                             buttonText="Off"
                                         />
-                                        {/* Claim 按鈕 */}
+                                        {/* Claim 按钮 */}
                                         <Button
                                             onClick={() => handleClaimClick(tokenId)}
                                             bg="green.400"
@@ -104,7 +105,7 @@ const EquippedSection = ({ equippedTools }: any) => {
                                         </Button>
                                     </Stack>
 
-                                    {/* 右側 NFT 信息 */}
+                                    {/* 右侧 NFT 信息 */}
                                     <Stack spacing={4} w="50%">
                                         <Text fontSize="2xl" fontWeight="bold" textAlign="left">
                                             {nftData?.metadata?.name}
@@ -121,6 +122,7 @@ const EquippedSection = ({ equippedTools }: any) => {
                             </Card>
                         );
                     })}
+                <RewardBalances rewardBalances={rewardBalances} /> {/* Use the new component */}
             </Card>
         </Box>
     );
