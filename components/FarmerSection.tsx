@@ -1,25 +1,23 @@
 import { Box, Card, Heading, Text } from "@chakra-ui/react";
 import { MediaRenderer } from "@thirdweb-dev/react";
 import { ethers } from "ethers";
-import { ADDRESSES } from "../const/addresses"; // 更新地址導入
-import './FarmerSection.module.scss';
 
 const FarmerSection = ({ ownedFarmers, rewardBalance }: any) => (
-  <Box mb={6} className="container">
-    <Card p={4} className="card">
-      <Heading fontSize="lg" mb={4} className="title">
+  <Box mb={6}>
+    <Card p={4}>
+      <Heading fontSize="lg" mb={4}>
         Avatar
       </Heading>
       {ownedFarmers?.map((nft: any) => (
-        <Box key={nft.metadata.id} className="nft-box">
+        <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
           <MediaRenderer src={nft.metadata.image} height="150px" width="100%" />
         </Box>
       ))}
-      <Text fontSize={"sm"} fontWeight={"bold"} mb={2} className="text">
+      <Text fontSize={"sm"} fontWeight={"bold"} mb={2}>
         bBNB Balance:
       </Text>
       {rewardBalance && (
-        <Text fontSize={"sm"} className="balance">{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
+        <Text fontSize={"sm"}>{ethers.utils.formatUnits(rewardBalance, 18)}</Text>
       )}
     </Card>
   </Box>
