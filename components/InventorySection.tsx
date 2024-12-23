@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack, Flex, Heading, Skeleton, FormControl, FormLabel, Switch } from '@chakra-ui/react';
 import Quantity from './Quantity'; // 引入动态数量选择器组件
 import { useState } from 'react';
+import RewardBalances from "./RewardBalances"; // Import the new component
 
-const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
+const InventorySection = ({ ownedTools, loadingOwnedTools, rewardBalances }: any) => {
     const address = useAddress();
     const [useBBAddress, setUseBBAddress] = useState(false);
 
@@ -87,7 +88,7 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
                                             style={{ borderRadius: "8px" }}
                                         />
                                         
-                                        {/* 名稱和數量 */}
+                                        {/* 名称和数量 */}
                                         <Flex align="center" gap={2}>
                                             <Text fontSize="md" fontWeight="bold">
                                                 {nft.metadata.name}
@@ -109,6 +110,7 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
                         </SimpleGrid>
                     )}
                 </Skeleton>
+                <RewardBalances rewardBalances={rewardBalances} /> {/* Use the new component */}
             </Card>
         </Box>
     );
