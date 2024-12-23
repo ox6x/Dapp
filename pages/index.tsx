@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { ADDRESSES } from "../const/addresses";
@@ -14,44 +14,22 @@ const Home: NextPage = () => {
   const address = useAddress();
   const [contractIndex, setContractIndex] = useState(0);
   const [rewardBalance, setRewardBalance] = useState(null);
-  const [ownedFarmers, setOwnedFarmers] = useState([]);
-  const [loadingOwnedFarmers, setLoadingOwnedFarmers] = useState(true);
-  const [ownedTools, setOwnedTools] = useState([]);
-  const [loadingOwnedTools, setLoadingOwnedTools] = useState(true);
-  const [equippedTools, setEquippedTools] = useState([]);
-  const [rewardBalanceData, setRewardBalanceData] = useState(null);
-
-  const fetchContractsData = useCallback(async (index: number) => {
-    const { contract: toolsContract } = useContract(ADDRESSES[`TOOLS_${index}`]);
-    const { contract: stakingContract } = useContract(ADDRESSES[`STAKING_${index}`]);
-    const { contract: rewardContract } = useContract(ADDRESSES[`REWARDS_${index}`]);
-    
-    const ownedFarmersData = await useOwnedNFTs(toolsContract, address);
-    const ownedToolsData = await useOwnedNFTs(toolsContract, address);
-    const equippedToolsData = await useContractRead(stakingContract, "getStakeInfo", [address]);
-    const rewardBalanceData = await useContractRead(rewardContract, "balanceOf", [address]);
-
-    setOwnedFarmers(ownedFarmersData);
-    setLoadingOwnedFarmers(false);
-
-    setOwnedTools(ownedToolsData);
-    setLoadingOwnedTools(false);
-
-    setEquippedTools(equippedToolsData);
-
-    setRewardBalanceData(rewardBalanceData);
-  }, [address]);
 
   const handleSwitchContract = (index: number) => {
     setContractIndex(index);
-    setLoadingOwnedFarmers(true);
-    setLoadingOwnedTools(true);
-    fetchContractsData(index);
   };
 
-  useEffect(() => {
-    fetchContractsData(contractIndex);
-  }, [contractIndex, fetchContractsData]);
+  const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
+  const { contract: toolsContract } = useContract(ADDRESSES[`TOOLS_${contractIndex}`]);
+  const { contract: stakingContract } = useContract(ADDRESSES[`STAKING_${contractIndex}`]);
+  const { contract: rewardContract } = useContract(ADDRESSES[`REWARDS_${contractIndex}`]);
+
+  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
+  const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
+
+  const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
+
+  const { data: rewardBalanceData } = useContractRead(rewardContract, "balanceOf", [address]);
 
   useEffect(() => {
     if (rewardBalanceData) {
