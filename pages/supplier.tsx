@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Text,
   Card,
@@ -16,7 +16,7 @@ import {
   useNFTs,
 } from "@thirdweb-dev/react";
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
-import { TOOLS_ADDRESS, TOOLS_BB_ADDRESS } from "../const/addresses";
+import { TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -27,17 +27,12 @@ import Link from "next/link";
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
-  const [contractAddress, setContractAddress] = useState(TOOLS_ADDRESS);
-  const [contract, setContract] = useState(null);
-
-  useEffect(() => {
-    const { contract: newContract } = useContract(contractAddress);
-    setContract(newContract);
-  }, [contractAddress]);
-
+  // 連接合約
+  const { contract } = useContract(TOOLS_ADDRESS);
+  // 取得 NFT 資料
   const { data: nfts } = useNFTs(contract);
 
-  // Slick Slider 设置
+  // Slick Slider 設定
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -49,34 +44,34 @@ export default function StorePage() {
     centerPadding: "0",
   };
 
-  // 加载时显示
+  // 載入中顯示
   const renderSpinner = () => (
     <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
       <Spinner />
     </Flex>
   );
 
-  // 单个 NFT 卡片
+  // 單個 NFT 卡片
   const NFTComponent = ({ nft }: { nft: NFTType }) => {
     const { data, isLoading } = useActiveClaimCondition(contract, nft.metadata.id);
 
     const [quantity, setQuantity] = useState(1);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // 计算总价格
+    // 計算總價格
     const totalPrice = !isLoading && data
       ? ethers.utils.formatEther(
           ethers.BigNumber.from(data.price).mul(quantity)
         )
       : "Loading...";
 
-    // 执行交易
+    // 執行交易
     const handleTransaction = async () => {
       if (!contract || isProcessing) return;
 
       setIsProcessing(true);
       try {
-        // 执行领取（claim）
+        // 執行領取（claim）
         await contract.erc1155.claim(nft.metadata.id, quantity);
         alert(`Successfully purchased ${quantity} x ${nft.metadata.name}!`);
       } catch (error) {
@@ -87,11 +82,11 @@ export default function StorePage() {
       }
     };
 
-    // 数量调整
+    // 數量調整
     const incrementQuantity = () => setQuantity((prev) => prev + 1);
     const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
 
-    // 输入框
+    // 輸入框
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(e.target.value, 10);
       setQuantity(isNaN(value) || value < 1 ? 1 : value);
@@ -179,7 +174,7 @@ export default function StorePage() {
     );
   };
 
-  // 生成 NFT Slider
+  // 產生 NFT Slider
   const renderNFTSlider = () => (
     <div className={styles.sliderWrapper}>
       <Slider {...sliderSettings}>
@@ -194,7 +189,7 @@ export default function StorePage() {
 
   return (
     <Container maxW="1200px" className={styles.storePage}>
-      {/* Header 区块 */}
+      {/* Header 區塊 */}
       <Flex
         className={styles.headerSection}
         direction="row"
@@ -206,11 +201,9 @@ export default function StorePage() {
             <Button width="fit-content">Back</Button>
           </Flex>
         </Link>
-        <Button onClick={() => setContractAddress(TOOLS_ADDRESS)}>ETH</Button>
-        <Button onClick={() => setContractAddress(TOOLS_BB_ADDRESS)}>bETH</Button>
       </Flex>
 
-      {/* 主标题、文字描述 */}
+      {/* 主標題、文字敘述 */}
       <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
         Coinbase NFT Hub
       </Heading>
@@ -218,7 +211,7 @@ export default function StorePage() {
         Experience a new era of digital assets with seamless NFT accessibility and advanced DeFi utility.
       </Text>
 
-      {/* NFT 列表或加载中 Spinner */}
+      {/* NFT 列表或載入中 Spinner */}
       {!nfts ? renderSpinner() : renderNFTSlider()}
     </Container>
   );
