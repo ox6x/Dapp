@@ -6,7 +6,7 @@ const FarmerSection = ({ ownedFarmers, rewardBalance }: any) => (
   <Box mb={6}>
     <Card p={4}>
       <Heading fontSize="lg" mb={4}>
-        Farmer
+        Avatar
       </Heading>
       {ownedFarmers?.map((nft: any) => (
         <Box key={nft.metadata.id} borderWidth="1px" borderRadius="lg" overflow="hidden" mb={4}>
