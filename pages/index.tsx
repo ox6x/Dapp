@@ -26,17 +26,17 @@ const Home: NextPage = () => {
     if (rewardBalanceData) {
       setRewardBalance(rewardBalanceData);
     }
-  }, [rewardBalanceData, contractIndex]); // 添加 contractIndex 作为依赖项
+  }, [rewardBalanceData, contractIndex]);
 
   if (!address) {
     return <LoginSection />;
   }
 
-  if (loadingOwnedFarmers) {
+  if (loadingOwnedFarmers || loadingOwnedTools) {
     return <LoadingScreen />;
   }
 
-  if (ownedFarmersData?.length === 0) {
+  if (!ownedFarmersData || ownedFarmersData.length === 0) {
     return (
       <Container maxW={"container.sm"} px={4}>
         <ClaimFarmer />
