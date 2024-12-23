@@ -15,7 +15,7 @@ const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [address, setAddress] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [ownedFarmersData, setOwnedFarmersData] = useState(null);
+  const [ownedFarmersData, setOwnedFarmersData] = useState<NFT[] | null>(null);
   const [loadingOwnedFarmers, setLoadingOwnedFarmers] = useState(true);
   
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
       if (farmerContract && addr) {
         const { data, isLoading } = useOwnedNFTs(farmerContract, addr);
-        setOwnedFarmersData(data);
+        setOwnedFarmersData(data || null); // 確保 data 是 NFT[] 或 null
         setLoadingOwnedFarmers(isLoading);
       }
     }
