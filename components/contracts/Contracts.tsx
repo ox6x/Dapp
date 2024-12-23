@@ -1,7 +1,7 @@
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS, STAKING_ADDRESS, REWARDS_ADDRESS } from "../../const/addresses";
 
-export const Contracts = () => {
+export const AContracts = () => {
   const address = useAddress();
 
   const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
