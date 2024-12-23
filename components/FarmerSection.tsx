@@ -1,6 +1,7 @@
 import { Box, Card, Heading, Text } from "@chakra-ui/react";
 import { MediaRenderer } from "@thirdweb-dev/react";
 import { ethers } from "ethers";
+import { ADDRESSES } from "../const/addresses"; // 更新地址導入
 import './FarmerSection.module.scss';
 
 const FarmerSection = ({ ownedFarmers, rewardBalance }: any) => (
