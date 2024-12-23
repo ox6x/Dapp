@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { ADDRESSES } from "../const/addresses";
@@ -26,7 +26,10 @@ const Home: NextPage = () => {
     if (rewardBalanceData) {
       setRewardBalance(rewardBalanceData);
     }
-  }, [rewardBalanceData, contractIndex]); // 添加 contractIndex 作为依赖项
+  }, [rewardBalanceData]);
+
+  const memoizedOwnedFarmers = useMemo(() => ownedFarmersData || [], [ownedFarmersData]);
+  const memoizedRewardBalance = useMemo(() => rewardBalance, [rewardBalance]);
 
   if (!address) {
     return <LoginSection />;
@@ -51,7 +54,7 @@ const Home: NextPage = () => {
         <option value={1}>Contract 1</option>
         {/* 根據需要添加更多選項 */}
       </Select>
-      <FarmerSection ownedFarmers={ownedFarmersData || []} rewardBalance={rewardBalance} />
+      <FarmerSection ownedFarmers={memoizedOwnedFarmers} rewardBalance={memoizedRewardBalance} />
       <InventorySection ownedTools={ownedToolsData || []} loadingOwnedTools={loadingOwnedTools} contractIndex={contractIndex} />
       <EquippedSection equippedTools={equippedToolsData || []} contractIndex={contractIndex} />
     </Container>
