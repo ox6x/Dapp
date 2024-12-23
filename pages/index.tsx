@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { ADDRESSES } from "../const/addresses";
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     if (rewardBalanceData) {
       setRewardBalance(rewardBalanceData);
     }
-  }, [rewardBalanceData, contractIndex]); // 添加 contractIndex 作为依赖项
+  }, [rewardBalanceData, contractIndex]);
 
   if (!address) {
     return <LoginSection />;
@@ -44,9 +44,14 @@ const Home: NextPage = () => {
     );
   }
 
+  // 合約切換不影響其他邏輯
+  const handleContractChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setContractIndex(Number(e.target.value));
+  };
+
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <Select onChange={(e) => setContractIndex(Number(e.target.value))} value={contractIndex}>
+      <Select onChange={handleContractChange} value={contractIndex}>
         <option value={0}>Contract 0</option>
         <option value={1}>Contract 1</option>
         {/* 根據需要添加更多選項 */}
