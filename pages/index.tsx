@@ -11,6 +11,7 @@ import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
 import { Contracts0 } from "../components/contracts/Contracts0";
 import { Contracts1 } from "../components/contracts/Contracts1";
+import RewardBalances from "../components/RewardBalances";  // Import the new component
 
 const Home: NextPage = () => {
   const [currentContract, setCurrentContract] = useState(0);
@@ -35,6 +36,11 @@ const Home: NextPage = () => {
     );
   }
 
+  const rewardBalances = [
+    { label: "bBNB", balance: contracts.rewardBalance },
+    { label: "BB", balance: contracts.rewardBalanceBB }
+  ];
+
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
       <Select onChange={(e) => setCurrentContract(parseInt(e.target.value, 10))} value={currentContract}>
@@ -42,7 +48,8 @@ const Home: NextPage = () => {
         <option value={1}>Contracts 1</option>
         {/* You can add more options as you add more contract groups */}
       </Select>
-      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={contracts.rewardBalance} rewardBalanceBB={contracts.rewardBalance} />
+      <FarmerSection ownedFarmers={ownedFarmers} />
+      <RewardBalances rewardBalances={rewardBalances} /> {/* Use the new component */}
       <InventorySection ownedTools={contracts.ownedTools} loadingOwnedTools={contracts.loadingOwnedTools} />
       <EquippedSection equippedTools={contracts.equippedTools} />
     </Container>
