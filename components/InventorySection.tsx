@@ -1,13 +1,13 @@
 import { MediaRenderer, useAddress, useContract } from '@thirdweb-dev/react';
-import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
+import { ADDRESSES } from '../const/addresses'; // 更新地址導入
 import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack, Flex, Heading, Skeleton } from '@chakra-ui/react';
-import Quantity from './Quantity'; // 引入动态数量选择器组件
+import Quantity from './Quantity'; // 引入動態數量選擇器組件
 
 const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
     const address = useAddress();
-    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
-    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+    const { contract: toolContract } = useContract(ADDRESSES.TOOLS_0); // 根據需求更改索引
+    const { contract: stakingContract } = useContract(ADDRESSES.STAKING_0);
 
     const handleOnClick = async (id: string, quantity: number) => {
         if (!address) {
@@ -16,21 +16,21 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
         }
 
         try {
-            // 检查是否已经授权
+            // 檢查是否已經授權
             const isApproved = await toolContract?.erc1155.isApproved(
                 address,
-                STAKING_ADDRESS,
+                ADDRESSES.STAKING_0,
             );
 
-            // 如果未授权，先设置授权
+            // 如果未授權，先設置授權
             if (!isApproved) {
                 await toolContract?.erc1155.setApprovalForAll(
-                    STAKING_ADDRESS,
+                    ADDRESSES.STAKING_0,
                     true,
                 );
             }
 
-            // 调用 stake 方法
+            // 調用 stake 方法
             await stakingContract?.call("stake", [id, quantity]);
             console.log(`Staked ${quantity} of token ID ${id}.`);
         } catch (error) {
@@ -63,7 +63,7 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
                                     _hover={{ boxShadow: "lg" }}
                                 >
                                     <Stack align="center" spacing={4}>
-                                        {/* 显示 NFT 图片 */}
+                                        {/* 顯示 NFT 圖片 */}
                                         <MediaRenderer 
                                             src={nft.metadata.image} 
                                             height="120px"
@@ -81,7 +81,7 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
                                             </Text>
                                         </Flex>
 
-                                        {/* 动态选择器，整合 Equip 功能 */}
+                                        {/* 動態選擇器，整合 Equip 功能 */}
                                         <Quantity
                                             minQuantity={1}
                                             onQuantityChange={(quantity) => handleOnClick(nft.metadata.id, quantity)}
