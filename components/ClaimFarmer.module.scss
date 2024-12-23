@@ -1,0 +1,71 @@
+/* SCSS for ClaimFarmer Component - Binance Black & Gold Theme */
+$primary-color: #f0b90b; // Binance Gold
+$background-color: #121212; // Binance Black
+$text-color: #ffffff; // White for text
+$button-hover-color: darken($primary-color, 10%);
+$border-radius: 8px;
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: $background-color;
+  color: $text-color;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  color: $primary-color;
+}
+
+.box {
+  border-radius: $border-radius;
+  overflow: hidden;
+  margin: 2rem 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  img {
+    border-radius: $border-radius;
+    object-fit: cover;
+  }
+}
+
+.web3-button {
+  background-color: $primary-color;
+  color: $text-color;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $button-hover-color;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.5);
+  }
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: 1.5rem;
+  }
+
+  .box {
+    margin: 1.5rem 0;
+  }
+}
