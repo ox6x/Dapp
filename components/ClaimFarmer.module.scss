@@ -1,7 +1,7 @@
-// CoinBase 风格的 SCSS 配置
-$primary-color: #0052ff; // CoinBase 蓝色
-$background-color: #f9fbfd; // 浅背景色
-$text-color: #333333; // 默认文本颜色
+// CoinBase 风格 SCSS 配置
+$primary-color: #0052ff; // CoinBase Blue
+$background-color: #f9fbfd; // Light Background
+$text-color: #333333; // Text Color
 $button-hover-color: darken($primary-color, 10%);
 $border-radius: 12px;
 
@@ -13,7 +13,7 @@ $border-radius: 12px;
   min-height: 100vh;
   background-color: $background-color;
   color: $text-color;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   padding: 20px;
   text-align: center;
 
@@ -24,7 +24,6 @@ $border-radius: 12px;
       font-size: 2.5rem;
       font-weight: bold;
       margin-bottom: 1rem;
-      color: darken($primary-color, 15%);
     }
 
     p {
@@ -46,12 +45,6 @@ $border-radius: 12px;
       border-radius: $border-radius;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-      img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-      }
     }
 
     .claimButton {
@@ -59,7 +52,6 @@ $border-radius: 12px;
       color: #ffffff;
       padding: 0.75rem 1.5rem;
       font-size: 1.2rem;
-      font-weight: bold;
       border: none;
       border-radius: $border-radius;
       cursor: pointer;
