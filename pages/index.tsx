@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     if (rewardBalanceData) {
       setRewardBalance(rewardBalanceData);
     }
-  }, [rewardBalanceData]);
+  }, [rewardBalanceData, contractIndex]); // 添加 contractIndex 作为依赖项
 
   if (!address) {
     return <LoginSection />;
