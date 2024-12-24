@@ -1,6 +1,6 @@
 import { useAddress, useContractRead, useOwnedNFTs, useContract } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import { getToolsAddress, FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS } from "../const/addresses";
+import { getToolsAddress, FARMER_ADDRESS, getRewardsAddress, getStakingAddress } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Container, Button, Flex } from "@chakra-ui/react";
 
@@ -21,8 +21,8 @@ const Home: NextPage = () => {
   };
 
   const { contract: farmerContract } = useContract(FARMER_ADDRESS);
-  const { contract: stakingContract } = useContract(STAKING_ADDRESS);
-  const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
+  const { contract: stakingContract } = useContract(getStakingAddress());
+  const { contract: rewardContract } = useContract(getRewardsAddress());
 
   const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
