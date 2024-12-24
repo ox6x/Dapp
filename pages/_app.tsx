@@ -1,31 +1,34 @@
+import { ThirdwebProvider, ConnectWallet } from "@thirdweb-dev/react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
-import NavBar from "../components/NavBar";
-import { useEffect, useState } from "react";
+import type { AppProps } from "next/app";
+import NavBar from "../components/NavBar"; // 確保路徑正確
+import '../styles/globals.scss'; // 導入全局 SCSS 文件
 
-function MyApp({ Component, pageProps }: any) {
-    const [ownedFarmers, setOwnedFarmers] = useState<any[]>([]);
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
-    useEffect(() => {
-        // 假設您從 API 或區塊鏈獲取數據
-        async function fetchFarmers() {
-            const response = await fetch("/api/farmers");
-            const farmers = await response.json();
-            setOwnedFarmers(farmers);
-        }
-
-        fetchFarmers();
-    }, []);
-
-    return (
-        <ThirdwebProvider>
-            <ChakraProvider>
-                {/* 傳入 ownedFarmers */}
-                <NavBar ownedFarmers={ownedFarmers} />
-                <Component {...pageProps} />
-            </ChakraProvider>
-        </ThirdwebProvider>
-    );
+export default function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <ThirdwebProvider
+      clientId={CLIENT_ID}
+      activeChain={{
+        chainId: 97,
+        rpc: ["https://97.rpc.thirdweb.com"],
+        nativeCurrency: {
+          name: "Binance Smart Chain Testnet",
+          symbol: "tBNB",
+          decimals: 18,
+        },
+        name: "BSC Testnet",
+        chain: "bsc-testnet",
+        shortName: "tBNB",
+        testnet: true,
+        slug: "bsc-testnet",
+      }}
+    >
+      <ChakraProvider>
+        <NavBar />
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </ThirdwebProvider>
+  );
 }
-
-export default MyApp;
