@@ -1,5 +1,16 @@
 // index.module.scss
 
+body {
+  zoom: 1; /* 確保瀏覽器縮放為 100% */
+  transform: none; /* 確保沒有應用 transform 屬性 */
+  margin: 0; /* 移除默認的外邊距 */
+  padding: 0; /* 移除默認的內邊距 */
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  min-height: 100vh; /* 使 body 佔滿整個視窗高度 */
+}
+
 .container {
   background-color: #f3ba2f; // Binance 黃色背景
   padding: 16px;
