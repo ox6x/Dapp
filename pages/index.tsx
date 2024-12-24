@@ -15,7 +15,7 @@ const Home: NextPage = () => {
   const [version, setVersionState] = useState('V1');
   const address = useAddress();
 
-  const handleVersionChange = (event) => {
+  const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newVersion = event.target.value;
     setVersionState(newVersion);
     setVersion(newVersion);
