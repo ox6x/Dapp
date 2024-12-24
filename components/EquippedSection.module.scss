@@ -1,1 +1,100 @@
+// EquippedSection.module.scss - Binance Inspired
 
+$binance-yellow: #f3ba2f;
+$binance-yellow-hover: #d19e00;
+$bg-white: #ffffff;
+$text-dark: #333333;
+$gray-light: #f5f5f5;
+$green: #28a745;
+$green-hover: #218838;
+
+.equippedSection {
+  margin-bottom: 1.5rem;
+
+  .card {
+    padding: 1rem;
+    background-color: $bg-white;
+    border: 1px solid $gray-light;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+    .heading {
+      font-size: 1.125rem;
+      margin-bottom: 1rem;
+      color: $binance-yellow;
+    }
+
+    .nftBox {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      margin-bottom: 1rem;
+
+      .leftSection {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .nftImage {
+        width: 200px;
+        height: 200px;
+        border-radius: 12px;
+      }
+
+      .quantityButton {
+        margin-top: 1rem;
+        background-color: $green;
+        color: $bg-white;
+        &:hover {
+          background-color: $green-hover;
+        }
+        border-radius: 8px;
+        width: 100%;
+      }
+
+      .claimButton {
+        margin-top: 1rem;
+        background-color: $green;
+        color: $bg-white;
+        &:hover {
+          background-color: $green-hover;
+        }
+        border-radius: 8px;
+        width: 100%;
+      }
+
+      .rightSection {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .nftName {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: left;
+        color: $text-dark;
+      }
+
+      .divider {
+        margin: 1rem 0;
+      }
+
+      .equippedQuantity {
+        font-size: 1rem;
+        font-weight: medium;
+        color: $text-dark;
+      }
+
+      .tokenRewards {
+        font-size: 1rem;
+        font-weight: medium;
+        color: $binance-yellow;
+      }
+    }
+  }
+}
