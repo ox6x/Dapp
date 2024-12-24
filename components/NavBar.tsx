@@ -100,11 +100,17 @@ export default function NavBar() {
                                         >
                                             <img 
                                                 src={nft.metadata.image ?? undefined} // 使用 null 合并操作符处理 null 值
-                                                alt={nft.metadata.name || "NFT Image"} // 提供默认值
+                                                alt={
+                                                    nft.metadata.name
+                                                        ? nft.metadata.name.toString() // 将 number 转换为 string
+                                                        : "NFT Image"
+                                                }
                                                 style={{ width: "100%", borderRadius: "8px" }} 
                                             />
                                             <p style={{ marginTop: "8px", fontSize: "14px", textAlign: "center" }}>
-                                                {nft.metadata.name || "Unnamed NFT"} // 提供默认名称
+                                                {nft.metadata.name
+                                                    ? nft.metadata.name.toString() // 转换为 string
+                                                    : "Unnamed NFT"}
                                             </p>
                                         </Flex>
                                     ))}
