@@ -19,8 +19,8 @@
   color: #5a6f8e; // 较浅的蓝色
 }
 
-// 下拉选择框样式
-select {
+// 下拉选择框样式 - 添加局部类名
+.selectDropdown {
   border: 2px solid #f3ba2f;
   border-radius: 8px;
   font-size: 16px;
@@ -72,7 +72,7 @@ select {
 }
 
 // 按钮样式
-button {
+.button {
   background-color: #f3ba2f;
   color: #ffffff;
   border: none;
