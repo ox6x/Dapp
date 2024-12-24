@@ -1,50 +1,55 @@
-// LoginSection.module.scss - Binance Inspired
-
-$binance-yellow: #f3ba2f;
-$bg-dark: #12161c;
-$bg-light: #f7f7f7;
-$text-dark: #242d35;
-$text-light: #ffffff;
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: $bg-dark;
-}
-
-.content {
+.loginContainer {
+  background: linear-gradient(180deg, #ffffff, #f3f4f6); /* Binance 漸層背景 */
+  border: 2px solid #f3ba2f; /* 黃色邊框 */
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 400px;
+  margin: auto;
   text-align: center;
-  background-color: $bg-light;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    border-color: #d4a214; /* 深黃 */
+  }
 }
 
-.heading {
-  font-size: 2rem;
-  color: $text-dark;
-  margin-bottom: 1rem;
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2b6cb0; /* Binance 藍 */
+  margin-bottom: 16px;
 }
 
 .description {
-  font-size: 1.2rem;
-  color: $text-dark;
-  margin-bottom: 2rem;
+  font-size: 16px;
+  color: #333333; /* 深灰色 */
+  margin-bottom: 24px;
 }
 
-.connectButton {
-  background-color: $binance-yellow;
-  color: $text-light;
+.loginButton {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #f3ba2f; /* Binance 黃 */
+  padding: 14px 28px;
   border: none;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s;
 
   &:hover {
-    background-color: darken($binance-yellow, 10%);
+    background-color: #d4a214; /* 深黃 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    background-color: #e5e7eb; /* 禁用灰色 */
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 }
