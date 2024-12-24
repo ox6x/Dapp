@@ -227,8 +227,8 @@ export default function StorePage() {
           onChange={handleVersionChange}
           width="fit-content"
         >
-          <option value="V1">V1</option>
-          <option value="V2">V2</option>
+          <option value="V1">ETH</option>
+          <option value="V2">bETH</option>
         </Select>
       </Flex>
 
