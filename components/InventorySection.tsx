@@ -1,13 +1,16 @@
-import { MediaRenderer, useAddress, useContract } from '@thirdweb-dev/react';
-import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
-import Link from 'next/link';
-import { Text, Box, Button, Card, SimpleGrid, Stack, Flex, Heading, Skeleton } from '@chakra-ui/react';
-import Quantity from './Quantity';
+import { MediaRenderer, useAddress, useContract } from "@thirdweb-dev/react";
+import { getStakingAddress, getToolsAddress } from "../const/addresses"; // 动态获取地址
+import Link from "next/link";
+import { Text, Box, Button, Card, SimpleGrid, Stack, Flex, Heading, Skeleton } from "@chakra-ui/react";
+import Quantity from "./Quantity";
 
 const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
     const address = useAddress();
-    const { contract: toolContract } = useContract(TOOLS_ADDRESS);
-    const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+    const stakingAddress = getStakingAddress(); // 动态获取 Staking 地址
+    const toolsAddress = getToolsAddress(); // 动态获取 Tools 地址
+
+    const { contract: toolContract } = useContract(toolsAddress);
+    const { contract: stakingContract } = useContract(stakingAddress);
 
     const handleOnClick = async (id: string, quantity: number) => {
         if (!address) {
@@ -21,9 +24,9 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
         }
 
         try {
-            const isApproved = await toolContract.erc1155.isApproved(address, STAKING_ADDRESS);
+            const isApproved = await toolContract.erc1155.isApproved(address, stakingAddress); // 使用动态地址
             if (!isApproved) {
-                await toolContract.erc1155.setApprovalForAll(STAKING_ADDRESS, true);
+                await toolContract.erc1155.setApprovalForAll(stakingAddress, true); // 使用动态地址
             }
 
             await stakingContract.call("stake", [id, quantity]);
