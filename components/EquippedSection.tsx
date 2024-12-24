@@ -3,6 +3,7 @@ import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from 
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import Quantity from "./Quantity"; // 確保路徑正確
+import styles from './EquippedSection.module.scss';
 
 const EquippedSection = ({ equippedTools }: any) => {
     const address = useAddress();
@@ -38,9 +39,9 @@ const EquippedSection = ({ equippedTools }: any) => {
     };
 
     return (
-        <Box>
-            <Card p={4}>
-                <Heading fontSize="lg" mb={4}>
+        <Box className={styles.equippedSection}>
+            <Card className={styles.card}>
+                <Heading className={styles.heading}>
                     Activated
                 </Heading>
                 {equippedTools &&
@@ -58,51 +59,39 @@ const EquippedSection = ({ equippedTools }: any) => {
                         const claimableCarrot = ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18);
 
                         return (
-                            <Card key={tokenId} p={5} borderRadius="lg" boxShadow="xl">
-                                <Flex align="flex-start" justify="space-between" gap={6}>
-                                    {/* 左側圖片與操作 */}
-                                    <Stack spacing={4} align="center" w="50%">
-                                        {/* 圖片 */}
-                                        <MediaRenderer
-                                            src={nftData?.metadata?.image || ""}
-                                            height="200px"
-                                            width="200px"
-                                            style={{ borderRadius: "12px" }}
-                                        />
-                                        {/* 數量選擇器 */}
-                                        <Quantity
-                                            minQuantity={1}
-                                            onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
-                                            buttonText="Off"
-                                        />
-                                        {/* Claim 按鈕 */}
-                                        <Button
-                                            onClick={() => handleClaimClick(tokenId)}
-                                            bg="green.400"
-                                            color="white"
-                                            _hover={{ bg: "green.500" }}
-                                            borderRadius="md"
-                                            w="full"
-                                        >
-                                            Claim
-                                        </Button>
-                                    </Stack>
+                            <Box key={tokenId} className={styles.nftBox}>
+                                <Stack spacing={4} className={styles.leftSection}>
+                                    <MediaRenderer
+                                        src={nftData?.metadata?.image || ""}
+                                        className={styles.nftImage}
+                                    />
+                                    <Quantity
+                                        minQuantity={1}
+                                        onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
+                                        buttonText="Off"
+                                        className={styles.quantityButton}
+                                    />
+                                    <Button
+                                        onClick={() => handleClaimClick(tokenId)}
+                                        className={styles.claimButton}
+                                    >
+                                        Claim
+                                    </Button>
+                                </Stack>
 
-                                    {/* 右側 NFT 信息 */}
-                                    <Stack spacing={4} w="50%">
-                                        <Text fontSize="2xl" fontWeight="bold" textAlign="left">
-                                            {nftData?.metadata?.name}
-                                        </Text>
-                                        <Divider />
-                                        <Text fontSize="lg" fontWeight="medium" color="gray.600">
-                                            Equipped Quantity: {equippedQuantity}
-                                        </Text>
-                                        <Text fontSize="lg" fontWeight="medium" color="blue.600">
-                                            Token Rewards: {claimableCarrot}
-                                        </Text>
-                                    </Stack>
-                                </Flex>
-                            </Card>
+                                <Stack spacing={4} className={styles.rightSection}>
+                                    <Text className={styles.nftName}>
+                                        {nftData?.metadata?.name}
+                                    </Text>
+                                    <Divider className={styles.divider} />
+                                    <Text className={styles.equippedQuantity}>
+                                        Equipped Quantity: {equippedQuantity}
+                                    </Text>
+                                    <Text className={styles.tokenRewards}>
+                                        Token Rewards: {claimableCarrot}
+                                    </Text>
+                                </Stack>
+                            </Box>
                         );
                     })}
             </Card>
