@@ -8,7 +8,8 @@
 }
 
 .select {
-  width: 100px;
+  width: auto; // 設置寬度為自適應
+  display: inline-block; // 確保寬度適應內容
   margin-bottom: 16px;
   background-color: #ffffff;
   border: 1px solid #f3ba2f;
