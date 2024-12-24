@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
 import { ADDRESSES } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container } from "@chakra-ui/react";
+import { Container, Button, Flex } from "@chakra-ui/react";
 
 import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
@@ -12,9 +13,10 @@ import EquippedSection from "../components/EquippedSection";
 
 const Home: NextPage = () => {
   const address = useAddress();
+  const [selectedToolsContract, setSelectedToolsContract] = useState(ADDRESSES.TOOLS_0);
 
   const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
-  const { contract: toolsContract } = useContract(ADDRESSES.TOOLS_0); // 根據需求更改索引
+  const { contract: toolsContract } = useContract(selectedToolsContract); // 根據需求更改索引
   const { contract: stakingContract } = useContract(ADDRESSES.STAKING_0);
   const { contract: rewardContract } = useContract(ADDRESSES.REWARDS_0);
 
@@ -42,6 +44,14 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
+      <Flex justifyContent="space-between" mb={4}>
+        <Button onClick={() => setSelectedToolsContract(ADDRESSES.TOOLS_0)}>
+          Use TOOLS_0
+        </Button>
+        <Button onClick={() => setSelectedToolsContract(ADDRESSES.TOOLS_BB)}>
+          Use TOOLS_BB
+        </Button>
+      </Flex>
       <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
       <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
       <EquippedSection equippedTools={equippedTools} />
