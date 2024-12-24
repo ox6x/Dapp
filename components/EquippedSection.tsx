@@ -70,10 +70,12 @@ const EquippedSection = ({ equippedTools }: any) => {
                                         onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
                                         buttonText="Off"
                                         className={styles.quantityButton}
+                                        style={{ width: "auto" }} // 確保按鈕寬度自適應內容
                                     />
                                     <Button
                                         onClick={() => handleClaimClick(tokenId)}
                                         className={styles.claimButton}
+                                        width="auto" // Chakra UI 屬性，按鈕寬度自適應內容
                                     >
                                         Claim
                                     </Button>
