@@ -2,7 +2,7 @@ import { Box, Card, Heading, Text, Stack, Flex, Button, Divider } from "@chakra-
 import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
-import Quantity from "./Quantity"; // 確保路徑正確
+import Quantity from "./Quantity";
 import styles from './EquippedSection.module.scss';
 
 const EquippedSection = ({ equippedTools }: any) => {
@@ -41,9 +41,7 @@ const EquippedSection = ({ equippedTools }: any) => {
     return (
         <Box className={styles.equippedSection}>
             <Card className={styles.card}>
-                <Heading className={styles.heading}>
-                    Activated
-                </Heading>
+                <Heading className={styles.heading}>Activated</Heading>
                 {equippedTools &&
                     equippedTools[0].map((nft: ethers.BigNumber) => {
                         const tokenId = nft.toNumber();
@@ -58,41 +56,91 @@ const EquippedSection = ({ equippedTools }: any) => {
                         const claimableCarrot = ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18);
 
                         return (
-                            <Box key={tokenId} className={styles.nftBox}>
-                                <Stack spacing={4} className={styles.leftSection}>
+                            <Flex
+                                key={tokenId}
+                                className={styles.nftBox}
+                                direction={{ base: "column", md: "row" }}
+                                border="1px solid #e2e8f0"
+                                borderRadius="lg"
+                                p={4}
+                                mb={4}
+                                gap={4}
+                            >
+                                {/* 左側：圖片和名稱 */}
+                                <Stack
+                                    spacing={4}
+                                    className={styles.leftSection}
+                                    align="center"
+                                    flex={{ base: "0 0 auto", md: "0 0 200px" }}
+                                >
                                     <MediaRenderer
                                         src={nftData?.metadata?.image || ""}
                                         className={styles.nftImage}
+                                        alt={nftData?.metadata?.name || "NFT Image"}
+                                        style={{
+                                            width: "150px",
+                                            height: "150px",
+                                            borderRadius: "8px",
+                                            objectFit: "cover",
+                                        }}
                                     />
-                                    <Quantity
-                                        minQuantity={1}
-                                        onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
-                                        buttonText="Off"
-                                        className={styles.quantityButton}
-                                        style={{ width: "auto" }} // 確保按鈕寬度自適應內容
-                                    />
-                                    <Button
-                                        onClick={() => handleClaimClick(tokenId)}
-                                        className={styles.claimButton}
-                                        width="auto" // Chakra UI 屬性，按鈕寬度自適應內容
+                                    <Text
+                                        className={styles.nftName}
+                                        fontWeight="bold"
+                                        fontSize="lg"
+                                        textAlign="center"
                                     >
-                                        Claim
-                                    </Button>
-                                </Stack>
-
-                                <Stack spacing={4} className={styles.rightSection}>
-                                    <Text className={styles.nftName}>
                                         {nftData?.metadata?.name}
                                     </Text>
-                                    <Divider className={styles.divider} />
-                                    <Text className={styles.equippedQuantity}>
-                                        Equipped Quantity: {equippedQuantity}
-                                    </Text>
-                                    <Text className={styles.tokenRewards}>
-                                        Token Rewards: {claimableCarrot}
-                                    </Text>
                                 </Stack>
-                            </Box>
+
+                                {/* 右側：操作和信息 */}
+                                <Flex
+                                    direction="column"
+                                    justify="space-between"
+                                    className={styles.rightSection}
+                                    flex="1"
+                                >
+                                    {/* 操作按鈕 */}
+                                    <Stack spacing={4} direction="row" justify="space-between">
+                                        <Quantity
+                                            minQuantity={1}
+                                            onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
+                                            buttonText="Off"
+                                            className={styles.quantityButton}
+                                        />
+                                        <Button
+                                            onClick={() => handleClaimClick(tokenId)}
+                                            className={styles.claimButton}
+                                            bg="blue.500"
+                                            color="white"
+                                            _hover={{ bg: "blue.400" }}
+                                            _active={{ bg: "blue.600" }}
+                                            flex="0 0 auto"
+                                        >
+                                            Claim
+                                        </Button>
+                                    </Stack>
+
+                                    {/* 獎勵和裝備數量 */}
+                                    <Box mt={4}>
+                                        <Divider className={styles.divider} />
+                                        <Flex
+                                            justify="space-between"
+                                            className={styles.rewardInfo}
+                                            mt={4}
+                                            flexWrap="wrap"
+                                        >
+                                            <Text className={styles.equippedQuantity} fontWeight="medium">
+                                                Equipped Quantity: {equippedQuantity}
+                                            </Text>
+                                            <Text className={styles.tokenRewards} fontWeight="medium" color="green.500">
+                                                Token Rewards: {claimableCarrot}
+                                            </Text>
+                                        </Flex>
+                                    </Box>
+                                </Flex>
+                            </Flex>
                         );
                     })}
             </Card>
