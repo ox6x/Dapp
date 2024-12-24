@@ -20,7 +20,7 @@ import styles from './NavBar.module.scss';
 export default function NavBar() {
     const address = useAddress();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [placement, setPlacement] = useState("right"); // Drawer placement can be "top", "right", "bottom", "left"
+    const [placement, setPlacement] = useState<"top" | "right" | "bottom" | "left">("right"); // Corrected type
 
     if (!address) {
         return null;
