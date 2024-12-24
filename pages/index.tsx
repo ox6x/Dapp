@@ -21,14 +21,15 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const initializeContracts = async () => {
-      const farmer = await useContract(FARMER_ADDRESS);
-      const tools = await useContract(TOOLS_ADDRESS);
-      const staking = await useContract(STAKING_ADDRESS);
-      const rewards = await useContract(REWARDS_ADDRESS);
-      setFarmerContract(farmer.contract);
-      setToolsContract(tools.contract);
-      setStakingContract(staking.contract);
-      setRewardContract(rewards.contract);
+      const farmerResult = await useContract(FARMER_ADDRESS);
+      const toolsResult = await useContract(TOOLS_ADDRESS);
+      const stakingResult = await useContract(STAKING_ADDRESS);
+      const rewardsResult = await useContract(REWARDS_ADDRESS);
+
+      if (farmerResult.contract) setFarmerContract(farmerResult.contract);
+      if (toolsResult.contract) setToolsContract(toolsResult.contract);
+      if (stakingResult.contract) setStakingContract(stakingResult.contract);
+      if (rewardsResult.contract) setRewardContract(rewardsResult.contract);
     };
 
     initializeContracts();
