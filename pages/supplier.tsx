@@ -154,7 +154,8 @@ export default function StorePage() {
     <div className={styles.sliderWrapper}>
       <Slider
         {...{
-          dots: true,
+          dots: false, // 隱藏下面的三個點
+          arrows: false, // 隱藏左右箭頭
           infinite: true,
           speed: 500,
           slidesToShow: 1,
