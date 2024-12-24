@@ -2,7 +2,7 @@ import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdwe
 import type { NextPage } from "next";
 import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, setVersion } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container, Select } from "@chakra-ui/react";
+import { Container, Button, Flex } from "@chakra-ui/react";
 
 import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
@@ -25,8 +25,7 @@ const Home: NextPage = () => {
     }
   }, []);
 
-  const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newVersion = event.target.value as "V1" | "V2";
+  const handleVersionChange = (newVersion: "V1" | "V2") => {
     setVersionState(newVersion);
     setVersion(newVersion);
     if (typeof window !== 'undefined') {
@@ -64,10 +63,23 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <Select value={version} onChange={handleVersionChange} width="fit-content" mb={4}>
-        <option value="V1">V1</option>
-        <option value="V2">V2</option>
-      </Select>
+      <Flex mb={4} justifyContent="center">
+        <Button
+          onClick={() => handleVersionChange("V1")}
+          isActive={version === "V1"}
+          colorScheme={version === "V1" ? "blue" : "gray"}
+          mr={2}
+        >
+          V1
+        </Button>
+        <Button
+          onClick={() => handleVersionChange("V2")}
+          isActive={version === "V2"}
+          colorScheme={version === "V2" ? "blue" : "gray"}
+        >
+          V2
+        </Button>
+      </Flex>
       <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
       <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
       <EquippedSection equippedTools={equippedTools} />
