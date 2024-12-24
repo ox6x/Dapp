@@ -1,11 +1,11 @@
-import { Container, Flex, Heading, Link, Box } from "@chakra-ui/react";
+import { Container, Flex, Heading, Link, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Button, IconButton } from "@chakra-ui/react";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
-import { useState } from "react";
+import { FaWallet } from "react-icons/fa";
 import styles from './NavBar.module.scss';
 
 export default function NavBar() {
     const address = useAddress();
-    const [isWalletVisible, setWalletVisible] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     if (!address) {
         return null;
@@ -23,23 +23,27 @@ export default function NavBar() {
                     <Link href="/supplier" className={styles.link}>
                         Supplier
                     </Link>
-
-                    {/* Toggle for wallet */}
-                    <Box
-                        onClick={() => setWalletVisible(!isWalletVisible)}
-                        className={styles.walletToggle}
-                    ></Box>
-
-                    {/* Wallet sliding container */}
-                    <Box
-                        className={`${styles.walletContent} ${
-                            isWalletVisible ? styles.visible : ""
-                        }`}
-                    >
-                        <ConnectWallet className={styles.connectWallet} />
-                    </Box>
+                    {/* 隱藏的按鈕 */}
+                    <IconButton 
+                        icon={<FaWallet />} 
+                        aria-label="Open Wallet" 
+                        onClick={onOpen} 
+                        className={styles.walletIconButton} 
+                        variant="ghost"
+                    />
                 </Flex>
             </Flex>
+
+            {/* Drawer for Connect Wallet */}
+            <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerBody display="flex" alignItems="center" justifyContent="center">
+                        <ConnectWallet className={styles.connectWallet} />
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
         </Container>
     );
 }
