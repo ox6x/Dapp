@@ -32,10 +32,8 @@ const contractReducer = (state: State, action: Action): State => {
       return { ...state, version: action.version };
     case "SET_CONTRACT":
       return { ...state, contract: action.contract };
-    default: {
-      const _: never = action; // 类型保护
-      throw new Error(`Unhandled action type: ${action.type}`);
-    }
+    default:
+      throw new Error(`Unhandled action type`);
   }
 };
 
