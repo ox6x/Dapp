@@ -180,11 +180,10 @@ export default function StorePage() {
 
       {/* 主標題與描述 */}
       <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
-        Binance NFT Hub
+        Web3 NFT Hub
       </Heading>
       <Text textAlign="center" className={styles.pageSubtitle}>
-        Experience a new era of digital assets with seamless NFT accessibility
-        and advanced DeFi utility.
+        Unlock the full potential of digital assets with seamless NFT accessibility and advanced DeFi tools.
       </Text>
 
       {/* NFT 列表或加載中 Spinner */}
