@@ -15,7 +15,7 @@ import { ConnectWallet, useAddress, useContract, useNFTs, useTokenBalance } from
 import { FaWallet } from "react-icons/fa";
 import styles from './NavBar.module.scss';
 import { useState, useEffect } from "react";
-import { NFT } from "@thirdweb-dev/sdk"; // 确保正确导入 NFT 类型
+import { NFT } from "@thirdweb-dev/sdk";
 
 const NFT_CONTRACT_ADDRESS = "0x605f710b66Cc10A0bc0DE7BD8fe786D5C9719179";
 const TOKEN_CONTRACT_ADDRESS = "0x0Ad1149eec66A20cB69D114Aec704626C22b7852";
@@ -25,7 +25,7 @@ export default function NavBar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     
     // State to hold user NFTs and token balances
-    const [nfts, setNfts] = useState<NFT[]>([]); // 添加类型注解 NFT[]
+    const [nfts, setNfts] = useState<NFT[]>([]);
     const [tokenBalance, setTokenBalance] = useState<string>("0");
 
     // Load NFT and Token data
@@ -37,7 +37,7 @@ export default function NavBar() {
 
     useEffect(() => {
         if (nftData) {
-            setNfts(nftData); // 正确赋值
+            setNfts(nftData);
         }
         if (tokenData) {
             setTokenBalance(tokenData.displayValue || "0");
@@ -60,7 +60,6 @@ export default function NavBar() {
                     <Link href="/supplier" className={styles.link}>
                         Supplier
                     </Link>
-                    {/* Wallet Drawer Button */}
                     <IconButton 
                         icon={<FaWallet />} 
                         aria-label="Open Wallet" 
@@ -71,7 +70,6 @@ export default function NavBar() {
                 </Flex>
             </Flex>
 
-            {/* Drawer for Connect Wallet */}
             <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
                 <DrawerOverlay />
                 <DrawerContent>
@@ -80,13 +78,11 @@ export default function NavBar() {
                         <ConnectWallet className={styles.connectWallet} />
                         <Heading size="md" mt={6}>Your Assets</Heading>
                         
-                        {/* Display Token Balance */}
                         <Flex mt={4} flexDirection="column" alignItems="center">
                             <Heading size="sm">Token Balance</Heading>
                             <p>{tokenBalance} TOKEN_SYMBOL</p>
                         </Flex>
 
-                        {/* Display NFTs */}
                         <Flex mt={6} flexDirection="column" alignItems="center" w="full">
                             <Heading size="sm">Your NFTs</Heading>
                             {nfts && nfts.length > 0 ? (
@@ -103,12 +99,12 @@ export default function NavBar() {
                                             w="150px"
                                         >
                                             <img 
-                                                src={nft.metadata.image} 
-                                                alt={nft.metadata.name} 
+                                                src={nft.metadata.image ?? undefined} // 使用 null 合并操作符处理 null 值
+                                                alt={nft.metadata.name || "NFT Image"} // 提供默认值
                                                 style={{ width: "100%", borderRadius: "8px" }} 
                                             />
                                             <p style={{ marginTop: "8px", fontSize: "14px", textAlign: "center" }}>
-                                                {nft.metadata.name}
+                                                {nft.metadata.name || "Unnamed NFT"} // 提供默认名称
                                             </p>
                                         </Flex>
                                     ))}
