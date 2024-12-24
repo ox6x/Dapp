@@ -1,5 +1,5 @@
 .equippedContainer {
-  background: linear-gradient(180deg, #ffffff, #f9f9f9); /* 柔和漸層背景 */
+  background: linear-gradient(180deg, #ffffff, #f9f9f9); /* 柔和渐层背景 */
   border: 1px solid #f3ba2f;
   border-radius: 12px;
   padding: 20px;
@@ -9,13 +9,14 @@
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    border-color: #d4a214; /* 深黃 */
+    border-color: #d4a214; /* 深黄 */
   }
 }
 
 .tool {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* 使内容两端对齐 */
   margin-bottom: 16px;
 
   &:last-child {
@@ -27,7 +28,7 @@
   width: 50px;
   height: 50px;
   margin-right: 16px;
-  border: 2px solid #d1d5db; /* 更明顯的灰色邊框 */
+  border: 2px solid #d1d5db; /* 更明显的灰色边框 */
   border-radius: 8px;
   background-color: #f3f4f6;
   padding: 5px;
@@ -36,6 +37,36 @@
 .toolName {
   font-size: 16px;
   font-weight: bold;
-  color: #f3ba2f; /* Binance 黃 */
+  color: #f3ba2f; /* Binance 黄 */
   text-transform: capitalize;
+}
+
+/* Claim 按钮样式 */
+.claimButton {
+  background-color: #2b6cb0; /* 蓝色主色 */
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: #225a9d; /* 深蓝色 */
+    transform: scale(1.05); /* 轻微放大效果 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 增加阴影 */
+  }
+
+  &:active {
+    transform: scale(0.95); /* 点击时缩小效果 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 更小的阴影 */
+  }
+
+  &:disabled {
+    background-color: #d1d5db; /* 灰色 */
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 }
