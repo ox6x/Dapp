@@ -3,6 +3,7 @@ import { STAKING_ADDRESS, TOOLS_ADDRESS } from '../const/addresses';
 import Link from 'next/link';
 import { Text, Box, Button, Card, SimpleGrid, Stack, Flex, Heading, Skeleton } from '@chakra-ui/react';
 import Quantity from './Quantity'; // 引入动态数量选择器组件
+import styles from './InventorySection.module.scss';
 
 const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
     const address = useAddress();
@@ -39,44 +40,39 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
     };
 
     return (
-        <Box mb={6}>
-            <Card p={4}>
-                <Heading fontSize="lg" mb={4}>
+        <Box className={styles.inventorySection}>
+            <Card className={styles.card}>
+                <Heading className={styles.heading}>
                     Locker
                 </Heading>
                 <Skeleton isLoaded={!loadingOwnedTools}>
                     {ownedTools?.length === 0 ? (
-                        <Box textAlign="center" mt={10}>
-                            <Text fontSize="lg" color="gray.600">No tools available.</Text>
+                        <Box className={styles.noToolsBox}>
+                            <Text className={styles.noToolsText}>No tools available.</Text>
                             <Link href="/shop">
-                                <Button mt={4} colorScheme="blue">Shop Tools</Button>
+                                <Button className={styles.shopButton}>Shop Tools</Button>
                             </Link>
                         </Box>
                     ) : (
-                        <SimpleGrid columns={[1, 2, 3]} spacing={6} mt={6}>
+                        <SimpleGrid columns={[1, 2, 3]} spacing={6} className={styles.toolsGrid}>
                             {ownedTools?.map((nft: any) => (
                                 <Card 
                                     key={nft.metadata.id} 
-                                    p={5} 
-                                    borderRadius="md" 
-                                    boxShadow="md"
-                                    _hover={{ boxShadow: "lg" }}
+                                    className={styles.toolCard}
                                 >
                                     <Stack align="center" spacing={4}>
                                         {/* 显示 NFT 图片 */}
                                         <MediaRenderer 
                                             src={nft.metadata.image} 
-                                            height="120px"
-                                            width="120px"
-                                            style={{ borderRadius: "8px" }}
+                                            className={styles.toolMedia}
                                         />
                                         
                                         {/* 名稱和數量 */}
-                                        <Flex align="center" gap={2}>
-                                            <Text fontSize="md" fontWeight="bold">
+                                        <Flex className={styles.toolInfo}>
+                                            <Text className={styles.toolName}>
                                                 {nft.metadata.name}
                                             </Text>
-                                            <Text fontSize="sm" color="gray.600">
+                                            <Text className={styles.toolSupply}>
                                                 ({nft.supply?.toString() || "0"})
                                             </Text>
                                         </Flex>
@@ -86,6 +82,7 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
                                             minQuantity={1}
                                             onQuantityChange={(quantity) => handleOnClick(nft.metadata.id, quantity)}
                                             buttonText="On"
+                                            className={styles.quantityButton}
                                         />
                                     </Stack>
                                 </Card>
