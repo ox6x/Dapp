@@ -1,6 +1,6 @@
 type Version = 'V1' | 'V2';
 
-let ADDRESS_VERSION: Version = 'V1';
+let ADDRESS_VERSION: Version = (typeof window !== 'undefined' ? localStorage.getItem('ADDRESS_VERSION') as Version : 'V1') || 'V1';
 
 const versionAddresses: Record<Version, { TOOLS_ADDRESS: string; REWARDS_ADDRESS: string; STAKING_ADDRESS: string }> = {
   V1: {
@@ -22,4 +22,7 @@ export const STAKING_ADDRESS = versionAddresses[ADDRESS_VERSION].STAKING_ADDRESS
 
 export const setVersion = (version: Version) => {
   ADDRESS_VERSION = version;
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('ADDRESS_VERSION', version);
+  }
 };
