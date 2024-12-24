@@ -174,13 +174,13 @@ export default function StorePage() {
           width="5ch"
         >
           <option value="V1">ETH</option>
-          <option value="V2">bETH</option>
+          <option value="V2">bETH</</option>
         </Select>
       </Flex>
 
       {/* 主標題與描述 */}
       <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
-        Coinbase NFT Hub
+        Binance NFT Hub
       </Heading>
       <Text textAlign="center" className={styles.pageSubtitle}>
         Experience a new era of digital assets with seamless NFT accessibility
