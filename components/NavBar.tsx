@@ -1,27 +1,27 @@
 import { Container, Flex, Heading, Link } from "@chakra-ui/react";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
+import styles from './NavBar.module.scss';
 
 export default function NavBar() {
-    const address = useAddress(); // 获取钱包地址
+    const address = useAddress();
 
-    // 如果未连接钱包，不渲染 NavBar
     if (!address) {
         return null;
     }
 
     return (
-        <Container maxW={"1200px"} py={4}>
-            <Flex direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
-                <Heading>
+        <Container className={styles.navBarContainer}>
+            <Flex className={styles.navBarFlex}>
+                <Heading className={styles.heading}>
                     <Link href="/" style={{ textDecoration: "none" }}>
                         BaseBot
                     </Link>
                 </Heading>
                 <Flex alignItems={"center"} justifyContent={"flex-end"} w="auto">
-                    <Link href="/supplier" style={{ marginRight: "1rem", fontSize: "1rem", textDecoration: "none" }}>
+                    <Link href="/supplier" className={styles.link}>
                         Supplier
                     </Link>
-                    <ConnectWallet style={{ fontSize: "1rem", padding: "0.5rem 1rem" }} />
+                    <ConnectWallet className={styles.connectWallet} />
                 </Flex>
             </Flex>
         </Container>
