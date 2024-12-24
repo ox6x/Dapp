@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "./Quantity.module.scss";
 
 interface QuantityProps {
   onQuantityChange: (quantity: number) => void;
