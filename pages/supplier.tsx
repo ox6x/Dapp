@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import {
   Text,
   Card,
@@ -26,11 +26,10 @@ import { useContractState } from "../contexts/ContractContext";
 export default function StorePage() {
   const { state, dispatch } = useContractState();
   const { contract } = state;
-  const { data: nfts } = useNFTs(contract);
+  const { data: nfts } = useNFTs(contract || undefined);
 
   const handleVersionChange = (newVersion: "V1" | "V2") => {
     dispatch({ type: "SET_VERSION", version: newVersion });
-    // Additional logic to reinitialize contract if needed
   };
 
   const sliderSettings = {
@@ -71,7 +70,7 @@ export default function StorePage() {
         alert(`Successfully purchased ${quantity} x ${nft.metadata.name}!`);
       } catch (error) {
         console.error("Transaction failed:", error);
-        alert("Transaction failed, please try again.");
+        alert(`Transaction failed: ${error.message || "Please try again."}`);
       } finally {
         setIsProcessing(false);
       }
@@ -92,46 +91,19 @@ export default function StorePage() {
         p={5}
         className={styles.nftCard}
       >
-        <MediaRenderer
-          src={nft.metadata.image}
-          height="100%"
-          width="100%"
-          className={styles.nftImage}
-        />
-        <Text
-          fontSize="2xl"
-          fontWeight="bold"
-          my={5}
-          textAlign="center"
-          className={styles.nftTitle}
-        >
+        <MediaRenderer src={nft.metadata.image} height="100%" width="100%" />
+        <Text fontSize="2xl" fontWeight="bold" my={5} textAlign="center">
           {nft.metadata.name}
         </Text>
-
         {!isLoading && data ? (
-          <Text
-            textAlign="center"
-            my={5}
-            className={styles.nftPrice}
-          >
+          <Text textAlign="center" my={5}>
             Total Cost: {totalPrice} {data.currencyMetadata.symbol}
           </Text>
         ) : (
           <Text textAlign="center">Loading...</Text>
         )}
-
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          gap="10px"
-          mt={5}
-          className={styles.quantityControl}
-        >
-          <Button
-            onClick={decrementQuantity}
-            disabled={isProcessing || quantity <= 1}
-            width="fit-content"
-          >
+        <Flex justifyContent="center" alignItems="center" gap="10px" mt={5}>
+          <Button onClick={decrementQuantity} disabled={isProcessing || quantity <= 1}>
             -
           </Button>
           <Input
@@ -142,23 +114,16 @@ export default function StorePage() {
             width="60px"
             textAlign="center"
           />
-          <Button
-            onClick={incrementQuantity}
-            disabled={isProcessing}
-            width="fit-content"
-          >
+          <Button onClick={incrementQuantity} disabled={isProcessing}>
             +
           </Button>
         </Flex>
-
         <Flex justifyContent="center" mt={5}>
           <Button
             onClick={handleTransaction}
             isLoading={isProcessing}
             loadingText="Processing"
             colorScheme="blue"
-            width="fit-content"
-            className={styles.rentButton}
           >
             Acquire
           </Button>
@@ -167,44 +132,43 @@ export default function StorePage() {
     );
   };
 
-  const renderNFTSlider = () => (
-    <div className={styles.sliderWrapper}>
-      <Slider {...sliderSettings}>
-        {nfts?.map((nftItem) => (
-          <div key={nftItem.metadata.id}>
-            <NFTComponent nft={nftItem} />
-          </div>
-        ))}
-      </Slider>
-    </div>
-  );
+  const renderNFTSlider = () => {
+    if (!nfts || nfts.length === 0) {
+      return <Text textAlign="center">No NFTs available</Text>;
+    }
+
+    return (
+      <div className={styles.sliderWrapper}>
+        <Slider {...sliderSettings}>
+          {nfts.map((nftItem) => (
+            <div key={nftItem.metadata.id}>
+              <NFTComponent nft={nftItem} />
+            </div>
+          ))}
+        </Slider>
+      </div>
+    );
+  };
 
   return (
     <Container maxW="1200px" className={styles.storePage}>
-      <Flex
-        className={styles.headerSection}
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      <Flex direction="row" justifyContent="space-between" alignItems="center">
         <Link href="/">
-          <Flex justifyContent="center">
-            <Button width="fit-content">Back</Button>
-          </Flex>
+          <Button width="fit-content">Back</Button>
         </Link>
         <Flex>
-          <Button onClick={() => handleVersionChange("V1")} width="fit-content" m={2}>V1</Button>
-          <Button onClick={() => handleVersionChange("V2")} width="fit-content" m={2}>V2</Button>
+          <Button onClick={() => handleVersionChange("V1")} width="fit-content" m={2}>
+            V1
+          </Button>
+          <Button onClick={() => handleVersionChange("V2")} width="fit-content" m={2}>
+            V2
+          </Button>
         </Flex>
       </Flex>
-
-      <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
+      <Heading mt="40px" textAlign="center">
         Coinbase NFT Hub
       </Heading>
-      <Text textAlign="center" className={styles.pageSubtitle}>
-        Experience a new era of digital assets with seamless NFT accessibility and advanced DeFi utility.
-      </Text>
-
+      <Text textAlign="center">Experience seamless NFT accessibility.</Text>
       {!nfts ? renderSpinner() : renderNFTSlider()}
     </Container>
   );
