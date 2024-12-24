@@ -13,33 +13,33 @@ import { useState, useEffect } from "react";
 
 const Home: NextPage = () => {
   const [version, setVersionState] = useState<"V1" | "V2">('V1');
+  const [farmerContract, setFarmerContract] = useState(null);
+  const [toolsContract, setToolsContract] = useState(null);
+  const [stakingContract, setStakingContract] = useState(null);
+  const [rewardContract, setRewardContract] = useState(null);
   const address = useAddress();
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedVersion = localStorage.getItem('ADDRESS_VERSION') as "V1" | "V2";
-      if (savedVersion) {
-        setVersionState(savedVersion);
-        setVersion(savedVersion);
-      }
-    }
-  }, []);
+    const initializeContracts = async () => {
+      const farmer = await useContract(FARMER_ADDRESS);
+      const tools = await useContract(TOOLS_ADDRESS);
+      const staking = await useContract(STAKING_ADDRESS);
+      const rewards = await useContract(REWARDS_ADDRESS);
+      setFarmerContract(farmer);
+      setToolsContract(tools);
+      setStakingContract(staking);
+      setRewardContract(rewards);
+    };
+
+    initializeContracts();
+  }, [version]);
 
   const handleVersionChange = (newVersion: "V1" | "V2") => {
     setVersionState(newVersion);
     setVersion(newVersion);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('ADDRESS_VERSION', newVersion);
-      window.location.reload(); // 重新加载页面以应用更改
-    }
   };
 
-  const { contract: farmercontract } = useContract(FARMER_ADDRESS);
-  const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
-  const { contract: stakingContract } = useContract(STAKING_ADDRESS);
-  const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
-
-  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmercontract, address);
+  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
   const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
