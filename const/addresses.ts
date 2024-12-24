@@ -1,6 +1,8 @@
-let ADDRESS_VERSION = 'V1';
+type Version = 'V1' | 'V2';
 
-const versionAddresses = {
+let ADDRESS_VERSION: Version = 'V1';
+
+const versionAddresses: Record<Version, { TOOLS_ADDRESS: string; REWARDS_ADDRESS: string; STAKING_ADDRESS: string }> = {
   V1: {
     TOOLS_ADDRESS: '0x605f710b66Cc10A0bc0DE7BD8fe786D5C9719179',
     REWARDS_ADDRESS: '0x0Ad1149eec66A20cB69D114Aec704626C22b7852',
@@ -18,6 +20,6 @@ export const TOOLS_ADDRESS = versionAddresses[ADDRESS_VERSION].TOOLS_ADDRESS;
 export const REWARDS_ADDRESS = versionAddresses[ADDRESS_VERSION].REWARDS_ADDRESS;
 export const STAKING_ADDRESS = versionAddresses[ADDRESS_VERSION].STAKING_ADDRESS;
 
-export const setVersion = (version) => {
+export const setVersion = (version: Version) => {
   ADDRESS_VERSION = version;
 };
