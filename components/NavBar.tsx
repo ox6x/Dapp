@@ -17,7 +17,7 @@ import styles from './NavBar.module.scss';
 import { useState, useEffect } from "react";
 
 const NFT_CONTRACT_ADDRESS = "0x605f710b66Cc10A0bc0DE7BD8fe786D5C9719179";
-const TOKEN_CONTRACT_ADDRESS = "your-token-contract-address";
+const TOKEN_CONTRACT_ADDRESS = "0x0Ad1149eec66A20cB69D114Aec704626C22b7852";
 
 export default function NavBar() {
     const address = useAddress();
