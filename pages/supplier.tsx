@@ -31,29 +31,14 @@ export default function StorePage() {
   const [contract, setContract] = useState(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedVersion = localStorage.getItem('ADDRESS_VERSION') as "V1" | "V2";
-      if (savedVersion) {
-        setVersionState(savedVersion);
-        setVersion(savedVersion);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (version) {
-      const { contract } = useContract(TOOLS_ADDRESS);
-      setContract(contract);
-    }
+    const { contract } = useContract(TOOLS_ADDRESS);
+    setContract(contract);
   }, [version]);
 
   // 切换版本
   const handleVersionChange = (newVersion: "V1" | "V2") => {
     setVersionState(newVersion);
     setVersion(newVersion);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('ADDRESS_VERSION', newVersion);
-    }
   };
 
   // 取得 NFT 资料
