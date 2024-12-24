@@ -29,6 +29,8 @@ body {
   border-radius: 4px;
   padding: 4px 8px; // 增加左右 padding 以適應字體
   font-size: 1rem; // 確保字體大小適中
+  width: auto; // 使寬度自適應字體
+  white-space: nowrap; // 防止換行
 }
 
 .section {
