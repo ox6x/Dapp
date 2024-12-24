@@ -39,7 +39,7 @@ export default function NavBar() {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-                    <DrawerBody display="flex" alignItems="center" justifyContent="center">
+                    <DrawerBody display="flex" flexDirection="column" alignItems="center" justifyContent="flex-start" pt={10}>
                         <ConnectWallet className={styles.connectWallet} />
                     </DrawerBody>
                 </DrawerContent>
