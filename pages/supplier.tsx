@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   Card,
@@ -29,6 +29,16 @@ import styles from "./supplier.module.scss";
 
 export default function StorePage() {
   const [version, setVersionState] = useState<"V1" | "V2">('V1');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedVersion = localStorage.getItem('ADDRESS_VERSION') as "V1" | "V2";
+      if (savedVersion) {
+        setVersionState(savedVersion);
+        setVersion(savedVersion);
+      }
+    }
+  }, []);
 
   // 切换版本
   const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
