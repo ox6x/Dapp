@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './LoginSection.module.scss';
-import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
+import { ConnectWallet } from "@thirdweb-dev/react";
 
 const LoginSection = () => {
   return (
@@ -12,9 +12,13 @@ const LoginSection = () => {
         <p className={styles.description}>
           Log in to access your dashboard and manage your digital assets.
         </p>
-        {/* 登錄按鈕 */}
+        {/* Connect Wallet 按鈕 */}
         <div className={styles.form}>
-          <button className={styles.loginButton}>Log In</button>
+          <ConnectWallet 
+            className={styles.connectWalletButton}
+            theme="light" /* 設置按鈕主題 */
+            btnTitle="Connect Wallet" /* 自定義按鈕標題 */
+          />
         </div>
       </div>
     </div>
