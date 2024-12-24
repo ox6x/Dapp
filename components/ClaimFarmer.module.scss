@@ -1,13 +1,10 @@
-// 幣安風格設計的 SCSS
-$primary-color: #F3BA2F; // 黃色
-$background-color: #121212; // 黑色背景
-$secondary-background-color: #181818; // 深灰背景
-$text-color: #FFFFFF; // 白色文字
-$secondary-text-color: #B3B3B3; // 灰色文字
-$border-color: #2E2E2E; // 灰色邊框
+// CoinBase 风格 SCSS 配置
+$primary-color: #0052ff; // CoinBase Blue
+$background-color: #f9fbfd; // Light Background
+$text-color: #333333; // Text Color
 $button-hover-color: darken($primary-color, 10%);
+$border-radius: 12px;
 
-// 容器樣式
 .container {
   display: flex;
   flex-direction: column;
@@ -16,62 +13,59 @@ $button-hover-color: darken($primary-color, 10%);
   min-height: 100vh;
   background-color: $background-color;
   color: $text-color;
-  text-align: center;
+  font-family: 'Inter', sans-serif;
   padding: 20px;
-}
+  text-align: center;
 
-// 頂部樣式
-.header {
-  margin-bottom: 30px;
+  .header {
+    margin-bottom: 2rem;
 
-  h1 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
 
-  p {
-    font-size: 1rem;
-    color: $secondary-text-color;
-    margin-bottom: 20px;
-    line-height: 1.5;
-  }
-}
-
-// 內容區域
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .mediaContainer {
-    margin-bottom: 20px;
-
-    .media {
-      border-radius: 10px;
-      border: 1px solid $border-color;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    p {
+      font-size: 1rem;
+      color: darken($text-color, 20%);
+      line-height: 1.5;
+      max-width: 600px;
+      margin: 0 auto;
     }
   }
-}
 
-// 按鈕樣式
-.claimButton {
-  background-color: $primary-color;
-  color: $text-color;
-  border: none;
-  border-radius: 5px;
-  padding: 12px 24px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
 
-  &:hover {
-    background-color: $button-hover-color;
-  }
+    .mediaContainer {
+      border-radius: $border-radius;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-  &:active {
-    transform: scale(0.98);
+    .claimButton {
+      background: $primary-color;
+      color: #ffffff;
+      padding: 0.75rem 1.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: $border-radius;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+
+      &:hover {
+        background: $button-hover-color;
+        transform: scale(1.05);
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px lighten($primary-color, 40%);
+      }
+    }
   }
 }

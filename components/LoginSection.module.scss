@@ -1,66 +1,61 @@
-// 幣安風格設計的 SCSS
-$primary-color: #F3BA2F; // 黃色
-$background-color: #121212; // 黑色背景
-$secondary-background-color: #181818; // 深灰背景
-$text-color: #FFFFFF; // 白色文字
-$secondary-text-color: #B3B3B3; // 灰色文字
+// CoinBase-inspired SCSS styles
+
+$primary-color: #0052ff; // CoinBase Blue
+$background-color: #f9fbfd; // Light Background
+$text-color: #333333; // Dark Text
 $button-hover-color: darken($primary-color, 10%);
-$border-color: #2E2E2E; // 灰色邊框
+$border-radius: 12px;
 
-.loginContainer {
+.container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
+  justify-content: center;
+  min-height: 100vh;
   background-color: $background-color;
-  color: $text-color;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.content {
   text-align: center;
+  max-width: 400px;
+  background: #ffffff;
+  padding: 40px 20px;
+  border-radius: $border-radius;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.loginCard {
-  background-color: $secondary-background-color;
-  border: 1px solid $border-color;
-  border-radius: 10px;
-  padding: 40px;
-  width: 400px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
-
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-  }
-}
-
-.loginTitle {
-  font-size: 1.8rem;
+.heading {
+  font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.loginDescription {
-  font-size: 1rem;
-  color: $secondary-text-color;
-  margin-bottom: 30px;
-}
-
-.loginButton {
-  background-color: $primary-color;
   color: $text-color;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+  margin-bottom: 1rem;
+}
+
+.description {
   font-size: 1rem;
-  font-weight: bold;
+  color: darken($text-color, 20%);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.connectButton {
+  background: $primary-color;
+  color: #ffffff;
+  border: none;
+  border-radius: $border-radius;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: background 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: $button-hover-color;
+    background: $button-hover-color;
+    transform: scale(1.05);
   }
 
-  &:active {
-    transform: scale(0.98);
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px lighten($primary-color, 40%);
   }
 }
