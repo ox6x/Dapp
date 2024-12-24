@@ -7,6 +7,7 @@ interface QuantityProps {
   minQuantity?: number;
   buttonText?: string;
   className?: string;
+  style?: React.CSSProperties; // 新增 style 属性
 }
 
 const Quantity: React.FC<QuantityProps> = ({
@@ -15,6 +16,7 @@ const Quantity: React.FC<QuantityProps> = ({
   minQuantity = 1,
   buttonText = "Confirm",
   className,
+  style, // 接收 style 属性
 }) => {
   const [quantity, setQuantity] = useState<number>(minQuantity);
 
@@ -51,7 +53,7 @@ const Quantity: React.FC<QuantityProps> = ({
   };
 
   return (
-    <div className={`${styles.quantityContainer} ${className}`}>
+    <div className={`${styles.quantityContainer} ${className}`} style={style}>
       <button
         className={styles.decrementButton}
         onClick={handleDecrement}
