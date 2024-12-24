@@ -94,6 +94,9 @@ $gray-light: #f5f5f5;
         background-color: $binance-yellow;
         color: $bg-white;
         border-radius: 4px;
+        padding: 0.5rem 1rem;
+        border: none;
+        cursor: pointer;
         &:hover {
           background-color: $binance-yellow-hover;
         }
@@ -104,15 +107,21 @@ $gray-light: #f5f5f5;
         text-align: center;
         border: 1px solid #ccc;
         border-radius: 4px;
+        padding: 0.5rem;
       }
     }
 
     .rentButton {
       display: block;
-      margin: 0 auto;
+      width: 100%;
+      padding: 0.75rem;
       background-color: $binance-yellow;
       color: $bg-white;
+      text-align: center;
       border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
       &:hover {
         background-color: $binance-yellow-hover;
       }
