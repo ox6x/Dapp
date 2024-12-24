@@ -1,1 +1,25 @@
+// index.module.scss
 
+.container {
+  background-color: #f3ba2f; // Binance 黃色背景
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.select {
+  width: 100px;
+  margin-bottom: 16px;
+  background-color: #ffffff;
+  border: 1px solid #f3ba2f;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.section {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
