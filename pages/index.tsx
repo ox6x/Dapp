@@ -91,9 +91,8 @@ const Home: NextPage = () => {
       <Select
         value={version}
         onChange={handleVersionChange}
-        width="200px"
+        width="fit-content"
         mb={4}
-        placeholder="Select"
       >
         <option value="V1">ETH</option>
         <option value="V2">bETH</option>
