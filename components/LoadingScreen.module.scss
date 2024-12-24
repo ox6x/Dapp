@@ -1,22 +1,36 @@
-/* components/LoadingScreen.module.scss */
-
-/* 設置全局樣式 */
 .loadingScreenContainer {
-  height: 100vh; /* 使容器佔滿整個視窗高度 */
   display: flex;
-  justify-content: center; /* 水平置中 */
-  align-items: center; /* 垂直置中 */
-  background-color: #f3f4f6; /* 幣安背景色 */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f3f4f6, #ffffff); /* Binance 漸層背景 */
 }
 
-.loadingScreenFlex {
-  display: flex;
-  justify-content: center; /* 水平置中 */
-  align-items: center; /* 垂直置中 */
-}
-
-.loadingSpinner {
+.spinner {
   width: 50px;
   height: 50px;
-  color: #f0b90b; /* 幣安黃色 */
+  border: 4px solid #f3ba2f; /* 外圍黃色 */
+  border-top: 4px solid transparent; /* 中心透明 */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.message {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2b6cb0; /* Binance 藍 */
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Keyframe 動畫 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
