@@ -28,6 +28,7 @@ import styles from "./supplier.module.scss";
 
 export default function StorePage() {
   const [version, setVersionState] = useState<"V1" | "V2">('V1');
+  const [contract, setContract] = useState(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -39,15 +40,22 @@ export default function StorePage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (version) {
+      const { contract } = useContract(TOOLS_ADDRESS);
+      setContract(contract);
+    }
+  }, [version]);
+
   // 切换版本
   const handleVersionChange = (newVersion: "V1" | "V2") => {
     setVersionState(newVersion);
     setVersion(newVersion);
-    window.location.reload(); // 重新加载页面以应用更改
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ADDRESS_VERSION', newVersion);
+    }
   };
 
-  // 连接合约
-  const { contract } = useContract(TOOLS_ADDRESS);
   // 取得 NFT 资料
   const { data: nfts } = useNFTs(contract);
 
