@@ -4,53 +4,64 @@ $background-color: #121212; // 黑色背景
 $secondary-background-color: #181818; // 深灰背景
 $text-color: #FFFFFF; // 白色文字
 $secondary-text-color: #B3B3B3; // 灰色文字
-$button-hover-color: darken($primary-color, 10%);
 $border-color: #2E2E2E; // 灰色邊框
+$button-hover-color: darken($primary-color, 10%);
 
-.claimFarmerContainer {
+// 容器樣式
+.container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
+  justify-content: center;
+  min-height: 100vh;
   background-color: $background-color;
   color: $text-color;
   text-align: center;
+  padding: 20px;
 }
 
-.claimCard {
-  background-color: $secondary-background-color;
-  border: 1px solid $border-color;
-  border-radius: 10px;
-  padding: 40px;
-  width: 400px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+// 頂部樣式
+.header {
+  margin-bottom: 30px;
 
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1rem;
+    color: $secondary-text-color;
+    margin-bottom: 20px;
+    line-height: 1.5;
   }
 }
 
-.claimTitle {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 20px;
+// 內容區域
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .mediaContainer {
+    margin-bottom: 20px;
+
+    .media {
+      border-radius: 10px;
+      border: 1px solid $border-color;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+  }
 }
 
-.claimDescription {
-  font-size: 1rem;
-  color: $secondary-text-color;
-  margin-bottom: 30px;
-}
-
+// 按鈕樣式
 .claimButton {
   background-color: $primary-color;
   color: $text-color;
   border: none;
   border-radius: 5px;
-  padding: 10px 20px;
+  padding: 12px 24px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
