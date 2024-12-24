@@ -56,12 +56,10 @@
   .nftImage {
     border-radius: 8px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-    }
+    /* 移除陰影 */
+    box-shadow: none;
+    /* 禁止 :hover 效果 */
+    transition: none;
   }
 
   button {
