@@ -1,45 +1,22 @@
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, setVersion } from "../const/addresses";
+import { ADDRESSES } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container, Button, Flex } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 
 import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
-import { useState, useEffect } from "react";
-import { SmartContract, BaseContract } from "@thirdweb-dev/sdk";
 
 const Home: NextPage = () => {
-  const [version, setVersionState] = useState<"V1" | "V2">('V1');
-  const [farmerContract, setFarmerContract] = useState<SmartContract<BaseContract> | null>(null);
-  const [toolsContract, setToolsContract] = useState<SmartContract<BaseContract> | null>(null);
-  const [stakingContract, setStakingContract] = useState<SmartContract<BaseContract> | null>(null);
-  const [rewardContract, setRewardContract] = useState<SmartContract<BaseContract> | null>(null);
   const address = useAddress();
 
-  useEffect(() => {
-    const initializeContracts = async () => {
-      const farmerResult = await useContract(FARMER_ADDRESS);
-      const toolsResult = await useContract(TOOLS_ADDRESS);
-      const stakingResult = await useContract(STAKING_ADDRESS);
-      const rewardsResult = await useContract(REWARDS_ADDRESS);
-
-      if (farmerResult.contract) setFarmerContract(farmerResult.contract);
-      if (toolsResult.contract) setToolsContract(toolsResult.contract);
-      if (stakingResult.contract) setStakingContract(stakingResult.contract);
-      if (rewardsResult.contract) setRewardContract(rewardsResult.contract);
-    };
-
-    initializeContracts();
-  }, [version]);
-
-  const handleVersionChange = (newVersion: "V1" | "V2") => {
-    setVersionState(newVersion);
-    setVersion(newVersion);
-  };
+  const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
+  const { contract: toolsContract } = useContract(ADDRESSES.TOOLS_0); // 根據需求更改索引
+  const { contract: stakingContract } = useContract(ADDRESSES.STAKING_0);
+  const { contract: rewardContract } = useContract(ADDRESSES.REWARDS_0);
 
   const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
@@ -65,23 +42,6 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <Flex mb={4} justifyContent="center">
-        <Button
-          onClick={() => handleVersionChange("V1")}
-          isActive={version === "V1"}
-          colorScheme={version === "V1" ? "blue" : "gray"}
-          mr={2}
-        >
-          ETH
-        </Button>
-        <Button
-          onClick={() => handleVersionChange("V2")}
-          isActive={version === "V2"}
-          colorScheme={version === "V2" ? "blue" : "gray"}
-        >
-          bETH
-        </Button>
-      </Flex>
       <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
       <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
       <EquippedSection equippedTools={equippedTools} />
