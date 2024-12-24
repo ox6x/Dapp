@@ -1,4 +1,4 @@
- import React, {
+import React, {
   createContext,
   useReducer,
   useContext,
@@ -6,18 +6,19 @@
   useEffect,
 } from "react";
 import { useContract } from "@thirdweb-dev/react";
+import { SmartContract } from "@thirdweb-dev/sdk"; // 根据实际需求调整导入
 import { getToolsAddress, setVersion } from "../const/addresses";
 
 type Version = "V1" | "V2";
 
 type State = {
   version: Version;
-  contract: any; // 可根据具体的合约类型替换 `any`，例如 SmartContract<BaseContract>
+  contract: SmartContract | null; // 明确类型
 };
 
 type Action =
   | { type: "SET_VERSION"; version: Version }
-  | { type: "SET_CONTRACT"; contract: any };
+  | { type: "SET_CONTRACT"; contract: SmartContract };
 
 const ContractContext = createContext<{
   state: State;
@@ -31,8 +32,10 @@ const contractReducer = (state: State, action: Action): State => {
       return { ...state, version: action.version };
     case "SET_CONTRACT":
       return { ...state, contract: action.contract };
-    default:
+    default: {
+      const _: never = action; // 类型保护
       throw new Error(`Unhandled action type: ${action.type}`);
+    }
   }
 };
 
