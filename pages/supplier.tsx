@@ -227,14 +227,14 @@ export default function StorePage() {
             colorScheme={version === "V1" ? "blue" : "gray"}
             mr={2}
           >
-            V1
+            ETH
           </Button>
           <Button
             onClick={() => handleVersionChange("V2")}
             isActive={version === "V2"}
             colorScheme={version === "V2" ? "blue" : "gray"}
           >
-            V2
+            bETH
           </Button>
         </Flex>
       </Flex>
