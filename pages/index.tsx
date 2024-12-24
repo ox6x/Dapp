@@ -1,6 +1,6 @@
-import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
+import { useAddress, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, setVersion } from "../const/addresses";
+import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Container, Button, Flex } from "@chakra-ui/react";
 
@@ -9,32 +9,19 @@ import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
-import { useState, useEffect } from "react";
+import { useContractState } from "../contexts/ContractContext";
 
 const Home: NextPage = () => {
-  const [version, setVersionState] = useState<"V1" | "V2">('V1');
+  const { state, dispatch } = useContractState();
+  const { version, contract: toolsContract } = state;
   const address = useAddress();
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedVersion = localStorage.getItem('ADDRESS_VERSION') as "V1" | "V2";
-      if (savedVersion) {
-        setVersionState(savedVersion);
-        setVersion(savedVersion);
-      }
-    }
-  }, []);
-
   const handleVersionChange = (newVersion: "V1" | "V2") => {
-    setVersionState(newVersion);
-    setVersion(newVersion);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('ADDRESS_VERSION', newVersion);
-    }
+    dispatch({ type: "SET_VERSION", version: newVersion });
+    // Additional logic to reinitialize contract if needed
   };
 
   const { contract: farmercontract } = useContract(FARMER_ADDRESS);
-  const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
   const { contract: stakingContract } = useContract(STAKING_ADDRESS);
   const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
 
