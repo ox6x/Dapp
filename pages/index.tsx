@@ -12,13 +12,16 @@ import EquippedSection from "../components/EquippedSection";
 import { useState } from "react";
 
 const Home: NextPage = () => {
-  const [version, setVersionState] = useState<"V1" | "V2">('V1');
+  const [version, setVersionState] = useState<"V1" | "V2">(
+    (localStorage.getItem('ADDRESS_VERSION') as "V1" | "V2") || 'V1'
+  );
   const address = useAddress();
 
   const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newVersion = event.target.value as "V1" | "V2";
     setVersionState(newVersion);
     setVersion(newVersion);
+    localStorage.setItem('ADDRESS_VERSION', newVersion);
     window.location.reload(); // 重新加载页面以应用更改
   };
 
