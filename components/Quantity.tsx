@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 
 interface QuantityProps {
-  onQuantityChange: (quantity: number) => void; // 回调函数，处理数量变化
-  minQuantity?: number; // 最小数量，默认为 1
-  buttonText?: string; // 按钮文本，默认为 "Confirm"
+  onQuantityChange: (quantity: number) => void;
+  minQuantity?: number;
+  buttonText?: string;
+  className?: string; // 添加 className 屬性
 }
 
 const Quantity: React.FC<QuantityProps> = ({
   onQuantityChange,
   minQuantity = 1,
   buttonText = "Confirm",
+  className, // 接收 className 屬性
 }) => {
   const [quantity, setQuantity] = useState<number>(minQuantity);
 
@@ -34,7 +36,7 @@ const Quantity: React.FC<QuantityProps> = ({
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div className={className} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <button
         onClick={handleDecrement}
         style={{
