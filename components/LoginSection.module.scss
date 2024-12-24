@@ -1,61 +1,20 @@
-// CoinBase-inspired SCSS styles
+// LoadingScreen.module.scss - Binance Inspired
 
-$primary-color: #0052ff; // CoinBase Blue
-$background-color: #f9fbfd; // Light Background
-$text-color: #333333; // Dark Text
-$button-hover-color: darken($primary-color, 10%);
-$border-radius: 12px;
+$binance-yellow: #f3ba2f;
+$bg-white: #ffffff;
 
-.container {
-  display: flex;
-  align-items: center;
+.loadingScreenContainer {
+  max-width: 640px;
+  padding: 1rem;
+}
+
+.loadingScreenFlex {
+  height: 100vh;
   justify-content: center;
-  min-height: 100vh;
-  background-color: $background-color;
-  padding: 20px;
-  font-family: 'Inter', sans-serif;
+  align-items: center;
 }
 
-.content {
-  text-align: center;
-  max-width: 400px;
-  background: #ffffff;
-  padding: 40px 20px;
-  border-radius: $border-radius;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.heading {
-  font-size: 2rem;
-  font-weight: bold;
-  color: $text-color;
-  margin-bottom: 1rem;
-}
-
-.description {
-  font-size: 1rem;
-  color: darken($text-color, 20%);
-  margin-bottom: 2rem;
-  line-height: 1.5;
-}
-
-.connectButton {
-  background: $primary-color;
-  color: #ffffff;
-  border: none;
-  border-radius: $border-radius;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-
-  &:hover {
-    background: $button-hover-color;
-    transform: scale(1.05);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px lighten($primary-color, 40%);
-  }
+.loadingSpinner {
+  size: 64px;
+  color: $binance-yellow;
 }
