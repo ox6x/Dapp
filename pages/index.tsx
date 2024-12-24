@@ -1,4 +1,4 @@
-import styles from "./index.module.scss";
+import styles from "./index.module.scss"; // 引入 Binance SCSS
 import {
   useAddress,
   useContract,
@@ -14,8 +14,6 @@ import {
   setVersion,
 } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container, Select } from "@chakra-ui/react";
-
 import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
@@ -79,31 +77,39 @@ const Home: NextPage = () => {
   // 沒有農民的情況
   if (ownedFarmers?.length === 0) {
     return (
-      <Container maxW={"container.sm"} px={4}>
+      <div className={styles.container}>
         <ClaimFarmer />
-      </Container>
+      </div>
     );
   }
 
   // 主頁內容
   return (
-    <Container maxW={"container.sm"} px={4} py={6}>
-      {/* 下拉選單：位於頂部 */}
-      <Select
-        value={version}
-        onChange={handleVersionChange}
-        width="fit-content"
-        mb={4}
-      >
-        <option value="V1">ETH</option>
-        <option value="V2">bETH</option>
-      </Select>
+    <div className={styles.container}>
+      {/* 頂部區域 */}
+      <div className={styles.header}>
+        <div className={styles.logo}>Binance DApp</div>
+        <select
+          className={styles.select}
+          value={version}
+          onChange={handleVersionChange}
+        >
+          <option value="V1">ETH</option>
+          <option value="V2">bETH</option>
+        </select>
+      </div>
 
       {/* 各個區塊 */}
-      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
-      <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
-      <EquippedSection equippedTools={equippedTools} />
-    </Container>
+      <div className={styles.card}>
+        <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
+      </div>
+      <div className={styles.card}>
+        <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
+      </div>
+      <div className={styles.card}>
+        <EquippedSection equippedTools={equippedTools} />
+      </div>
+    </div>
   );
 };
 
