@@ -31,7 +31,7 @@ export default function StorePage() {
   const [version, setVersionState] = useState('V1');
 
   // 切换版本
-  const handleVersionChange = (event) => {
+  const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newVersion = event.target.value;
     setVersionState(newVersion);
     setVersion(newVersion);
