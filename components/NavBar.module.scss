@@ -50,19 +50,21 @@ $border-radius: 8px;
 /* Wallet toggle container */
 .walletToggle {
   position: relative;
-  height: 60px; /* Adjust to match your design */
-  overflow: hidden; /* Hide content outside the bounds */
+  overflow: hidden;
   cursor: pointer;
 
-  /* Hover effect for the toggle area (gray bar) */
+  /* Gray toggle bar for interaction */
   &::after {
     content: '';
     display: block;
     background-color: gray;
-    height: 10px;
-    width: 100px;
+    height: 50px;
+    width: 10px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     border-radius: 4px;
-    margin: 10px auto;
     transition: background-color 0.3s ease;
 
     &:hover {
@@ -71,18 +73,20 @@ $border-radius: 8px;
   }
 }
 
-/* Sliding animation for the wallet */
+/* Sliding wallet container */
 .walletContent {
-  position: absolute;
-  top: -60px; /* Hidden by default */
-  transition: top 0.3s ease-in-out;
-  z-index: 10;
+  position: fixed;
+  top: 0;
+  right: -300px; /* Initially hidden off-screen */
+  height: 100%;
+  width: 300px; /* Adjust width to your preference */
   background-color: $bg-white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
   padding: 1rem;
-  border-radius: $border-radius;
+  transition: right 0.3s ease-in-out;
+  z-index: 10;
 
   &.visible {
-    top: 0; /* Slide into view when visible */
+    right: 0; /* Slide into view */
   }
 }
