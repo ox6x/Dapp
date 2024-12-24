@@ -23,7 +23,6 @@ import EquippedSection from "../components/EquippedSection";
 import { useState, useEffect } from "react";
 
 const Home: NextPage = () => {
-  // 處理版本狀態
   const [version, setVersionState] = useState<"V1" | "V2">("V1");
   const address = useAddress();
 
@@ -43,17 +42,15 @@ const Home: NextPage = () => {
     setVersion(newVersion);
     if (typeof window !== "undefined") {
       localStorage.setItem("ADDRESS_VERSION", newVersion);
-      window.location.reload(); // 重新加載頁面以應用更改
+      window.location.reload();
     }
   };
 
-  // 合約初始化
   const { contract: farmerContract } = useContract(FARMER_ADDRESS);
   const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
   const { contract: stakingContract } = useContract(STAKING_ADDRESS);
   const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
 
-  // 加載數據
   const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(
     farmerContract,
     address
@@ -65,17 +62,14 @@ const Home: NextPage = () => {
   const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
   const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
 
-  // 登錄界面
   if (!address) {
     return <LoginSection />;
   }
 
-  // 加載界面
   if (loadingOwnedFarmers) {
     return <LoadingScreen />;
   }
 
-  // 沒有農民的情況
   if (ownedFarmers?.length === 0) {
     return (
       <Container maxW={"container.sm"} px={4}>
@@ -84,7 +78,6 @@ const Home: NextPage = () => {
     );
   }
 
-  // 主頁內容
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
       {/* 下拉選單：位於頂部 */}
@@ -93,7 +86,6 @@ const Home: NextPage = () => {
         onChange={handleVersionChange}
         width="200px"
         mb={4}
-        placeholder="Select"
       >
         <option value="V1">ETH</option>
         <option value="V2">bETH</option>
