@@ -2,6 +2,7 @@ import { ThirdwebProvider, ConnectWallet } from "@thirdweb-dev/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import NavBar from "../components/NavBar"; // 確保路徑正確
+import { ContractProvider } from "../contexts/ContractContext"; // Import the ContractProvider
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -23,10 +24,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         slug: "bsc-testnet",
       }}
     >
-      <ChakraProvider>
-        <NavBar />
-        <Component {...pageProps} />
-      </ChakraProvider>
+      <ContractProvider>
+        <ChakraProvider>
+          <NavBar />
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </ContractProvider>
     </ThirdwebProvider>
   );
 }
