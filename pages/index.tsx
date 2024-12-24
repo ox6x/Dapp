@@ -83,10 +83,9 @@ const Home: NextPage = () => {
     <Container className={styles.container} maxW={"container.sm"} px={4} py={6}>
       {/* 下拉選單：位於頂部 */}
       <Select
-        className={styles.select}
-        value={version}
-        onChange={handleVersionChange}
-        mb={4}
+          value={version}
+          onChange={handleVersionChange}
+          width="auto"
       >
         <option value="V1">ETH</option>
         <option value="V2">bETH</option>
