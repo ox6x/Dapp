@@ -1,149 +1,142 @@
-// 幣安風格配色
-$primary-color: #F3BA2F; // 黃色
-$background-color: #121212; // 深黑色背景
-$secondary-background-color: #181818; // 深灰背景
-$text-color: #FFFFFF; // 白色文字
-$secondary-text-color: #B3B3B3; // 灰色文字
-$border-color: #2E2E2E; // 邊框灰色
-$button-hover-color: darken($primary-color, 10%);
+/* supplier.module.scss - CoinBase Inspired */
+/*
+   1. CoinBase 常見配色：
+      - 藍 (#0052ff 或相近) + 白色背景 + 灰色/黑色文字
+   2. 顯示對區塊鏈的深度理解： 
+      - 色彩乾淨、留白舒適，搭配「去中心化」科技感
+   3. 針對 StorePage 基礎樣式設定
+*/
 
-// 全局樣式
-body {
-  background-color: $background-color;
-  color: $text-color;
-  font-family: "Arial", sans-serif;
-  margin: 0;
-  padding: 0;
-}
+/* -------------------------
+   0. SCSS 變數
+------------------------- */
+$coinbase-blue: #0052ff;       /* CoinBase 主色 */
+$coinbase-blue-hover: #0037b3; /* Hover 時再深一些 */
+$bg-white: #ffffff;
+$text-dark: #333333;
+$gray-light: #f5f5f5;
 
-// 容器樣式
+/* -------------------------
+   1. 頁面大容器 (storePage)
+------------------------- */
 .storePage {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: $secondary-background-color;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+  background-color: $bg-white; /* 背景以白為基底 */
+  min-height: 100vh;           /* 使頁面充滿視窗 */
+  padding: 2rem 1rem;
 
-.sliderWrapper {
-  margin-top: 20px;
+  .pageTitle {
+    text-align: center;
+    margin: 40px 0 10px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: $coinbase-blue;     /* CoinBase 藍色標題 */
+  }
 
-  .slick-slider {
+  .pageSubtitle {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: $text-dark;
+    max-width: 640px;
+    margin: 0 auto 20px auto;
+  }
+
+  /* 使 Header / 返回按鈕 與標題之間留更多空間 */
+  .headerSection {
+    margin-bottom: 1rem;
+  }
+
+  /* -------------------------
+     1.1 Slider 容器
+  ------------------------- */
+  .sliderWrapper {
+    margin: 2rem auto;
+    max-width: 800px;
+
+    /* 可針對 Slick-Dots、Arrow 進行樣式調整 */
     .slick-dots {
-      bottom: -10px;
-      
+      bottom: -2rem;
       li button:before {
-        color: $text-color;
+        color: $coinbase-blue;
       }
       li.slick-active button:before {
-        color: $primary-color;
+        color: $coinbase-blue-hover;
+      }
+    }
+    .slick-arrow {
+      &:before {
+        color: $coinbase-blue;
       }
     }
   }
-}
 
-// 卡片樣式
-.nftCard {
-  background-color: $secondary-background-color;
-  border: 1px solid $border-color;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+  /* -------------------------
+     1.2 NFT Card 區域
+  ------------------------- */
+  .nftCard {
+    background-color: $bg-white;
+    border: 1px solid $gray-light;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem auto;
+    max-width: 500px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-  }
-}
+    .nftImage {
+      border-radius: 8px;
+      width: 100%;
+      height: auto;
+    }
 
-.nftImage {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
+    .nftTitle {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: $text-dark;
+      margin: 1rem 0;
+    }
 
-.nftTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: $text-color;
-}
+    .nftPrice {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: $text-dark;
+      font-weight: 500;
+    }
 
-.nftPrice {
-  font-size: 1.2rem;
-  color: $primary-color;
-}
+    .quantityControl {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 1rem 0;
 
-// 按鈕樣式
-button {
-  background-color: $primary-color;
-  color: $text-color;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s, transform 0.1s;
+      button {
+        background-color: $coinbase-blue;
+        color: $bg-white;
+        border-radius: 4px;
+        &:hover {
+          background-color: $coinbase-blue-hover;
+        }
+      }
 
-  &:hover {
-    background-color: $button-hover-color;
-  }
+      input {
+        width: 60px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+    }
 
-  &:active {
-    transform: scale(0.98);
-  }
-
-  &:disabled {
-    background-color: $border-color;
-    cursor: not-allowed;
-  }
-}
-
-.rentButton {
-  margin-top: 10px;
-}
-
-.quantityControl {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-
-  button {
-    width: 40px;
-    height: 40px;
-  }
-
-  input {
-    width: 60px;
-    text-align: center;
-    background-color: $background-color;
-    color: $text-color;
-    border: 1px solid $border-color;
-    border-radius: 5px;
-    padding: 5px;
-  }
-}
-
-// 下拉選單樣式
-select {
-  background-color: $secondary-background-color;
-  color: $text-color;
-  border: 1px solid $border-color;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-    border-color: $primary-color;
-  }
-
-  option {
-    background-color: $background-color;
-    color: $text-color;
+    .rentButton {
+      display: block;
+      margin: 0 auto;
+      background-color: $coinbase-blue;
+      color: $bg-white;
+      border-radius: 4px;
+      &:hover {
+        background-color: $coinbase-blue-hover;
+      }
+    }
   }
 }
