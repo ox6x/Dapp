@@ -8,6 +8,7 @@ import {
   Flex,
   Heading,
   Spinner,
+  Select
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -16,7 +17,7 @@ import {
   useNFTs,
 } from "@thirdweb-dev/react";
 import { NFT as NFTType } from "@thirdweb-dev/sdk";
-import { TOOLS_ADDRESS } from "../const/addresses";
+import { TOOLS_ADDRESS, setVersion } from "../const/addresses";
 import { ethers } from "ethers";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -27,12 +28,22 @@ import Link from "next/link";
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
-  // 連接合約
+  const [version, setVersionState] = useState('V1');
+
+  // 切换版本
+  const handleVersionChange = (event) => {
+    const newVersion = event.target.value;
+    setVersionState(newVersion);
+    setVersion(newVersion);
+    window.location.reload(); // 重新加载页面以应用更改
+  };
+
+  // 连接合约
   const { contract } = useContract(TOOLS_ADDRESS);
-  // 取得 NFT 資料
+  // 取得 NFT 资料
   const { data: nfts } = useNFTs(contract);
 
-  // Slick Slider 設定
+  // Slick Slider 设置
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -44,34 +55,34 @@ export default function StorePage() {
     centerPadding: "0",
   };
 
-  // 載入中顯示
+  // 加载中显示
   const renderSpinner = () => (
     <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
       <Spinner />
     </Flex>
   );
 
-  // 單個 NFT 卡片
+  // 单个 NFT 卡片
   const NFTComponent = ({ nft }: { nft: NFTType }) => {
     const { data, isLoading } = useActiveClaimCondition(contract, nft.metadata.id);
 
     const [quantity, setQuantity] = useState(1);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // 計算總價格
+    // 计算总价格
     const totalPrice = !isLoading && data
       ? ethers.utils.formatEther(
           ethers.BigNumber.from(data.price).mul(quantity)
         )
       : "Loading...";
 
-    // 執行交易
+    // 执行交易
     const handleTransaction = async () => {
       if (!contract || isProcessing) return;
 
       setIsProcessing(true);
       try {
-        // 執行領取（claim）
+        // 执行领取（claim）
         await contract.erc1155.claim(nft.metadata.id, quantity);
         alert(`Successfully purchased ${quantity} x ${nft.metadata.name}!`);
       } catch (error) {
@@ -82,11 +93,11 @@ export default function StorePage() {
       }
     };
 
-    // 數量調整
+    // 数量调整
     const incrementQuantity = () => setQuantity((prev) => prev + 1);
     const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
 
-    // 輸入框
+    // 输入框
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = parseInt(e.target.value, 10);
       setQuantity(isNaN(value) || value < 1 ? 1 : value);
@@ -174,7 +185,7 @@ export default function StorePage() {
     );
   };
 
-  // 產生 NFT Slider
+  // 产生 NFT Slider
   const renderNFTSlider = () => (
     <div className={styles.sliderWrapper}>
       <Slider {...sliderSettings}>
@@ -189,7 +200,7 @@ export default function StorePage() {
 
   return (
     <Container maxW="1200px" className={styles.storePage}>
-      {/* Header 區塊 */}
+      {/* Header 区块 */}
       <Flex
         className={styles.headerSection}
         direction="row"
@@ -201,9 +212,17 @@ export default function StorePage() {
             <Button width="fit-content">Back</Button>
           </Flex>
         </Link>
+        <Select
+          value={version}
+          onChange={handleVersionChange}
+          width="fit-content"
+        >
+          <option value="V1">V1</option>
+          <option value="V2">V2</option>
+        </Select>
       </Flex>
 
-      {/* 主標題、文字敘述 */}
+      {/* 主标题、文字叙述 */}
       <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
         Coinbase NFT Hub
       </Heading>
@@ -211,7 +230,7 @@ export default function StorePage() {
         Experience a new era of digital assets with seamless NFT accessibility and advanced DeFi utility.
       </Text>
 
-      {/* NFT 列表或載入中 Spinner */}
+      {/* NFT 列表或加载中 Spinner */}
       {!nfts ? renderSpinner() : renderNFTSlider()}
     </Container>
   );
