@@ -150,14 +150,16 @@ export default function StorePage() {
   const renderNFTSlider = () => (
     <div className={styles.sliderWrapper}>
       <Slider
-        dots={true}
-        infinite={true}
-        speed={500}
-        slidesToShow={1}
-        slidesToScroll={1}
-        autoplay={false}
-        centerMode={true}
-        centerPadding="0"
+        {...{
+          dots: true,
+          infinite: true,
+          speed: 500,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          autoplay: false,
+          centerMode: true,
+          centerPadding: "0",
+        }}
       >
         {nfts?.map((nftItem) => (
           <div key={nftItem.metadata.id}>
@@ -170,12 +172,13 @@ export default function StorePage() {
 
   return (
     <Container maxW="1200px" className={styles.storePage}>
-      {/* Header */}
-      <Flex justifyContent="space-between" alignItems="center">
+      {/* Header: 將下拉選單移至原 Back 按鈕位置 */}
+      <Flex justifyContent="flex-start" alignItems="center" mt={5}>
         <Select
           value={version}
           onChange={handleVersionChange}
-          width="fit-content"
+          width="200px"
+          placeholder="Select Version"
         >
           <option value="V1">ETH</option>
           <option value="V2">bETH</option>
