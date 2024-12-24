@@ -4,14 +4,14 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #ffffff, #f9f9f9); /* Binance 背景漸層 */
+  background: linear-gradient(180deg, #ffffff, #f9f9f9); /* 背景漸層 */
   padding: 20px;
 }
 
 /* 登錄框樣式 */
 .loginBox {
   background: #ffffff;
-  border: 2px solid #f3ba2f; /* Binance 黃色邊框 */
+  border: 2px solid #f3ba2f; /* 黃色邊框 */
   border-radius: 16px;
   max-width: 400px;
   width: 100%;
@@ -31,7 +31,7 @@
 .title {
   font-size: 28px;
   font-weight: bold;
-  color: #2b6cb0; /* Binance 藍色 */
+  color: #2b6cb0; /* 藍色 */
   margin-bottom: 16px;
 }
 
@@ -55,7 +55,7 @@
   font-size: 16px;
   font-weight: bold;
   color: #ffffff;
-  background-color: #f3ba2f; /* Binance 黃色 */
+  background-color: #f3ba2f; /* 黃色 */
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
