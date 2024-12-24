@@ -1,15 +1,26 @@
-import { ConnectWallet } from "@thirdweb-dev/react";
+import React from "react";
 import styles from "./LoginSection.module.scss";
+import { useAddress, useMetamask } from "@thirdweb-dev/react";
 
-const LoginSection = () => {
+const LoginSection: React.FC = () => {
+  const address = useAddress();
+  const connectWithMetamask = useMetamask();
+
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <h1 className={styles.heading}>Welcome to Crypto Hub</h1>
-        <p className={styles.description}>
-          Join us to unlock exclusive rewards and start your Web3 journey effortlessly.
-        </p>
-        <ConnectWallet className={styles.connectButton} />
+    <div className={styles.loginContainer}>
+      <div className={styles.loginCard}>
+        <div className={styles.loginTitle}>Welcome to Binance DApp</div>
+        <div className={styles.loginDescription}>
+          Please connect your wallet to continue.
+        </div>
+        {!address && (
+          <button
+            className={styles.loginButton}
+            onClick={connectWithMetamask}
+          >
+            Connect Wallet
+          </button>
+        )}
       </div>
     </div>
   );
