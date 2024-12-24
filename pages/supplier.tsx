@@ -62,7 +62,7 @@ export default function StorePage() {
 
   const renderSpinner = () => (
     <Flex h="50vh" justifyContent="center" alignItems="center">
-      <Spinner />
+      <Spinner color="#f3ba2f" size="xl" />
     </Flex>
   );
 
@@ -96,19 +96,26 @@ export default function StorePage() {
     };
 
     return (
-      <Card overflow="hidden" p={5} className={styles.nftCard}>
+      <Card
+        overflow="hidden"
+        p={5}
+        className={styles.nftCard}
+        border="1px solid #f3ba2f"
+        borderRadius="12px"
+        boxShadow="0 6px 12px rgba(0, 0, 0, 0.1)"
+      >
         <MediaRenderer
           src={nft.metadata.image}
           height="100%"
           width="100%"
           className={styles.nftImage}
         />
-        <Text fontSize="2xl" fontWeight="bold" my={5} textAlign="center">
+        <Text fontSize="2xl" fontWeight="bold" my={5} textAlign="center" color="#2b6cb0">
           {nft.metadata.name}
         </Text>
-        <Text textAlign="center" my={5}>
+        <Text textAlign="center" my={5} color="#333333">
           {claimCondition
-            ? `Total Cost: ${totalPrice} ${claimCondition.currencyMetadata.symbol}`
+            ? `Price: ${totalPrice} ${claimCondition.currencyMetadata.symbol}`
             : "Loading..."}
         </Text>
         <Flex justifyContent="center" alignItems="center" gap="10px" mt={5}>
@@ -132,7 +139,9 @@ export default function StorePage() {
             onClick={handleTransaction}
             isLoading={isProcessing}
             loadingText="Processing"
-            colorScheme="blue"
+            bg="#f3ba2f"
+            _hover={{ bg: "#d4a214" }}
+            color="white"
           >
             Acquire
           </Button>
@@ -166,12 +175,15 @@ export default function StorePage() {
 
   return (
     <Container maxW="1200px" className={styles.storePage}>
-      {/* Header: 將下拉選單移至原 Back 按鈕位置 */}
+      {/* Header */}
       <Flex justifyContent="flex-start" alignItems="center" mt={5}>
         <Select
           value={version}
           onChange={handleVersionChange}
           width="auto"
+          border="2px solid #f3ba2f"
+          borderRadius="8px"
+          color="#2b6cb0"
         >
           <option value="V1">ETH</option>
           <option value="V2">bETH</option>
@@ -179,11 +191,11 @@ export default function StorePage() {
       </Flex>
 
       {/* 主標題與描述 */}
-      <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
-        Web3 NFT Hub
+      <Heading mt="40px" textAlign="center" color="#f3ba2f" className={styles.pageTitle}>
+        Web3 NFT Marketplace
       </Heading>
-      <Text textAlign="center" className={styles.pageSubtitle}>
-        Unlock the full potential of digital assets with seamless NFT accessibility and advanced DeFi tools.
+      <Text textAlign="center" color="#2b6cb0" className={styles.pageSubtitle}>
+        Discover, acquire, and manage your digital assets effortlessly.
       </Text>
 
       {/* NFT 列表或加載中 Spinner */}
