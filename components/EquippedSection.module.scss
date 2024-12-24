@@ -1,22 +1,22 @@
 .equippedContainer {
-  background: linear-gradient(180deg, #ffffff, #f9f9f9); /* 柔和渐层背景 */
+  background: linear-gradient(180deg, #ffffff, #f8f8f8); /* 更柔和的背景渐变 */
   border: 1px solid #f3ba2f;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    border-color: #d4a214; /* 深黄 */
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    border-color: #e0a800; /* 略深的黄 */
   }
 }
 
 .tool {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 使内容两端对齐 */
+  justify-content: space-between; /* 两端对齐 */
   margin-bottom: 16px;
 
   &:last-child {
@@ -28,10 +28,19 @@
   width: 50px;
   height: 50px;
   margin-right: 16px;
-  border: 2px solid #d1d5db; /* 更明显的灰色边框 */
+  border: 2px solid #e5e7eb; /* 更柔和的灰色 */
   border-radius: 8px;
-  background-color: #f3f4f6;
+  background-color: #f9fafb; /* 浅灰背景 */
   padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 防止内容溢出 */
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: #cbd5e0; /* 浅蓝灰 */
+  }
 }
 
 .toolName {
@@ -39,6 +48,7 @@
   font-weight: bold;
   color: #f3ba2f; /* Binance 黄 */
   text-transform: capitalize;
+  margin-right: auto; /* 占据左侧剩余空间 */
 }
 
 /* Claim 按钮样式 */
@@ -51,7 +61,7 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
 
   &:hover {
     background-color: #225a9d; /* 深蓝色 */
@@ -68,5 +78,86 @@
     background-color: #d1d5db; /* 灰色 */
     cursor: not-allowed;
     opacity: 0.7;
+  }
+}
+
+/* 新增的标题样式 */
+.heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333333;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* 左右布局的样式 */
+.leftSection,
+.rightSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* NFT 图片样式 */
+.nftImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* 分隔线样式 */
+.divider {
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
+}
+
+/* 内容对齐方式 */
+.nftBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+/* 数量按钮样式 */
+.quantityButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #f3f4f6;
+    border-color: #cbd5e0;
+  }
+
+  &:active {
+    background: #e2e8f0;
+    transform: scale(0.95);
   }
 }
