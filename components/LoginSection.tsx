@@ -5,16 +5,14 @@ const LoginSection = () => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
-        <h1 className={styles.title}>Welcome to Binance Dapp</h1>
+        {/* 主標題 */}
+        <h1 className={styles.title}>Welcome to Binance DApp</h1>
+        {/* 描述文字 */}
         <p className={styles.description}>
-          Log in to manage your assets, explore the marketplace, and unlock new opportunities.
+          Log in to access your dashboard and manage your digital assets.
         </p>
+        {/* 登錄按鈕 */}
         <div className={styles.form}>
-          <input
-            type="text"
-            placeholder="Enter your wallet address"
-            className={styles.input}
-          />
           <button className={styles.loginButton}>Log In</button>
         </div>
       </div>
