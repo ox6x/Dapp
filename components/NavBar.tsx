@@ -15,6 +15,7 @@ import { ConnectWallet, useAddress, useContract, useNFTs, useTokenBalance } from
 import { FaWallet } from "react-icons/fa";
 import styles from './NavBar.module.scss';
 import { useState, useEffect } from "react";
+import { NFT } from "@thirdweb-dev/sdk"; // 确保正确导入 NFT 类型
 
 const NFT_CONTRACT_ADDRESS = "0x605f710b66Cc10A0bc0DE7BD8fe786D5C9719179";
 const TOKEN_CONTRACT_ADDRESS = "0x0Ad1149eec66A20cB69D114Aec704626C22b7852";
@@ -24,8 +25,8 @@ export default function NavBar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     
     // State to hold user NFTs and token balances
-    const [nfts, setNfts] = useState([]);
-    const [tokenBalance, setTokenBalance] = useState("0");
+    const [nfts, setNfts] = useState<NFT[]>([]); // 添加类型注解 NFT[]
+    const [tokenBalance, setTokenBalance] = useState<string>("0");
 
     // Load NFT and Token data
     const { contract: nftContract } = useContract(NFT_CONTRACT_ADDRESS, "nft-collection");
@@ -36,10 +37,10 @@ export default function NavBar() {
 
     useEffect(() => {
         if (nftData) {
-            setNfts(nftData);
+            setNfts(nftData); // 正确赋值
         }
         if (tokenData) {
-            setTokenBalance(tokenData.displayValue);
+            setTokenBalance(tokenData.displayValue || "0");
         }
     }, [nftData, tokenData]);
 
