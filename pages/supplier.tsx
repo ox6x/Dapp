@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   Card,
@@ -8,9 +8,7 @@ import {
   Flex,
   Heading,
   Spinner,
-  Switch,
   FormControl,
-  FormLabel,
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -31,15 +29,12 @@ import styles from "./supplier.module.scss";
 
 export default function StorePage() {
   // 狀態變數來選擇合約地址
-  const [useBBAddress, setUseBBAddress] = useState(false);
-
-  // 根據狀態變數選擇合約地址
-  const selectedAddress = useBBAddress ? ADDRESSES.TOOLS_BB : ADDRESSES.TOOLS_0;
+  const [selectedAddress, setSelectedAddress] = useState(ADDRESSES.TOOLS_0);
 
   // 連接合約
-  const { contract } = useContract(selectedAddress);
+  const { contract, isLoading: isContractLoading } = useContract(selectedAddress);
   // 取得 NFT 資料
-  const { data: nfts } = useNFTs(contract);
+  const { data: nfts, isLoading: isNFTsLoading } = useNFTs(contract);
 
   // Slick Slider 設定
   const sliderSettings = {
@@ -59,6 +54,11 @@ export default function StorePage() {
       <Spinner />
     </Flex>
   );
+
+  // 合約地址切換
+  const handleSwitchContract = (address: string) => {
+    setSelectedAddress(address);
+  };
 
   // 單個 NFT 卡片
   const NFTComponent = ({ nft }: { nft: NFTType }) => {
@@ -213,14 +213,12 @@ export default function StorePage() {
 
         {/* 合約地址切換 */}
         <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="contract-switch" mb="0">
-            Use TOOLS_BB_ADDRESS
-          </FormLabel>
-          <Switch
-            id="contract-switch"
-            isChecked={useBBAddress}
-            onChange={() => setUseBBAddress(!useBBAddress)}
-          />
+          <Button onClick={() => handleSwitchContract(ADDRESSES.TOOLS_0)}>
+            Use TOOLS_0
+          </Button>
+          <Button onClick={() => handleSwitchContract(ADDRESSES.TOOLS_BB)}>
+            Use TOOLS_BB
+          </Button>
         </FormControl>
       </Flex>
 
@@ -233,7 +231,7 @@ export default function StorePage() {
       </Text>
 
       {/* NFT 列表或載入中 Spinner */}
-      {!nfts ? renderSpinner() : renderNFTSlider()}
+      {isContractLoading || isNFTsLoading ? renderSpinner() : renderNFTSlider()}
     </Container>
   );
 }
