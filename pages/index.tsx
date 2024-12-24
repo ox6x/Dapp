@@ -4,7 +4,7 @@ import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, setVer
 import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Container, Select } from "@chakra-ui/react";
 
-import LoginSection from "../components/LoginSection"; // 新增導入
+import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
@@ -12,11 +12,11 @@ import EquippedSection from "../components/EquippedSection";
 import { useState } from "react";
 
 const Home: NextPage = () => {
-  const [version, setVersionState] = useState('V1');
+  const [version, setVersionState] = useState<"V1" | "V2">('V1');
   const address = useAddress();
 
   const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newVersion = event.target.value;
+    const newVersion = event.target.value as "V1" | "V2";
     setVersionState(newVersion);
     setVersion(newVersion);
     window.location.reload(); // 重新加载页面以应用更改
