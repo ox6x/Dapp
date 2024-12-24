@@ -25,7 +25,6 @@ import "slick-carousel/slick/slick-theme.css";
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
-  // 處理版本切換
   const [version, setVersionState] = useState<"V1" | "V2">("V1");
 
   useEffect(() => {
@@ -42,14 +41,12 @@ export default function StorePage() {
     const newVersion = event.target.value as "V1" | "V2";
     setVersionState(newVersion);
     setVersion(newVersion);
-    window.location.reload(); // 重新加載頁面應用合約更改
+    window.location.reload();
   };
 
-  // 連接合約並加載 NFT
   const { contract } = useContract(TOOLS_ADDRESS);
   const { data: nfts } = useNFTs(contract);
 
-  // 處理數量調整邏輯
   const useQuantity = (initialQuantity = 1) => {
     const [quantity, setQuantity] = useState(initialQuantity);
 
@@ -63,14 +60,12 @@ export default function StorePage() {
     return { quantity, increment, decrement, handleInputChange };
   };
 
-  // 加載中的顯示
   const renderSpinner = () => (
     <Flex h="50vh" justifyContent="center" alignItems="center">
       <Spinner />
     </Flex>
   );
 
-  // 單個 NFT 卡片渲染
   const NFTComponent = ({ nft }: { nft: NFTType }) => {
     const { data: claimCondition, isLoading } = useActiveClaimCondition(
       contract,
@@ -146,7 +141,6 @@ export default function StorePage() {
     );
   };
 
-  // NFT Slider 渲染
   const renderNFTSlider = () => (
     <div className={styles.sliderWrapper}>
       <Slider
@@ -178,7 +172,6 @@ export default function StorePage() {
           value={version}
           onChange={handleVersionChange}
           width="200px"
-          placeholder="Select"
         >
           <option value="V1">ETH</option>
           <option value="V2">bETH</option>
