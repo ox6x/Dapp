@@ -1,1 +1,110 @@
+// 幣安風格配色
+$primary-color: #F3BA2F; // 黃色
+$background-color: #121212; // 黑色背景
+$secondary-background-color: #181818; // 深灰背景
+$text-color: #FFFFFF; // 白色文字
+$secondary-text-color: #B3B3B3; // 灰色文字
+$border-color: #2E2E2E; // 灰色邊框
+$button-hover-color: darken($primary-color, 10%);
 
+// 全局樣式
+body {
+  background-color: $background-color;
+  color: $text-color;
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+// 頂部區域樣式
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: $secondary-background-color;
+  border-bottom: 1px solid $border-color;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $primary-color;
+  }
+
+  .select {
+    background-color: $secondary-background-color;
+    color: $text-color;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+  }
+}
+
+// 主容器樣式
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: $secondary-background-color;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+// 卡片樣式
+.card {
+  background-color: $secondary-background-color;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: $text-color;
+  }
+
+  .content {
+    font-size: 1rem;
+    color: $secondary-text-color;
+  }
+}
+
+// 按鈕樣式
+.button {
+  background-color: $primary-color;
+  color: $text-color;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
+
+  &:hover {
+    background-color: $button-hover-color;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background-color: $border-color;
+    cursor: not-allowed;
+  }
+}
