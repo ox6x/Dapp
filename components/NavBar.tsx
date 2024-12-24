@@ -24,13 +24,13 @@ import { FaWallet } from "react-icons/fa";
 import styles from './NavBar.module.scss';
 
 // 多個合約地址
-const contracts = {
+const contracts: Record<"V1" | "V2", string> = {
   V1: "0x605f710b66Cc10A0bc0DE7BD8fe786D5C9719179", // V1 工具合約地址
   V2: "0xf747821D7A019B0C8c11824a141D2EA6De89cA34", // V2 工具合約地址
 };
 
 // 代幣合約地址
-const tokens = {
+const tokens: Record<"TOKEN1" | "TOKEN2", string> = {
   TOKEN1: "0x1234567890abcdef1234567890abcdef12345678", // 第一個代幣合約地址
   TOKEN2: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd", // 第二個代幣合約地址
 };
@@ -66,18 +66,19 @@ export default function NavBar() {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerBody display="flex" flexDirection="column" alignItems="flex-start" justifyContent="flex-start" pt={6}>
+            {/* NFTs Section */}
             <Heading as="h2" size="lg" mb={6}>
               Your NFTs
             </Heading>
 
-            {/* 顯示 NFTs */}
             {Object.keys(contracts).map((version) => {
-              const { contract: toolContract } = useContract(contracts[version]);
+              const versionKey = version as keyof typeof contracts; // 明確鍵的類型
+              const { contract: toolContract } = useContract(contracts[versionKey]);
 
               return (
-                <Box key={version} w="100%" mb={6}>
+                <Box key={versionKey} w="100%" mb={6}>
                   <Heading size="md" mb={4}>
-                    Version {version}
+                    Version {versionKey}
                   </Heading>
                   <Stack spacing={4}>
                     {[1, 2, 3].map((tokenId) => {
@@ -85,7 +86,7 @@ export default function NavBar() {
 
                       return (
                         <Flex
-                          key={`${version}-${tokenId}`}
+                          key={`${versionKey}-${tokenId}`}
                           direction="row"
                           border="1px solid #e2e8f0"
                           borderRadius="lg"
@@ -93,7 +94,7 @@ export default function NavBar() {
                           align="center"
                           gap={6}
                         >
-                          {/* NFT 圖片 */}
+                          {/* NFT Image */}
                           <MediaRenderer
                             src={nftData?.metadata?.image || ""}
                             alt={nftData?.metadata?.name || "NFT Image"}
@@ -105,7 +106,7 @@ export default function NavBar() {
                             }}
                           />
 
-                          {/* NFT 資訊 */}
+                          {/* NFT Info */}
                           <Stack>
                             <Text fontWeight="bold">
                               {nftData?.metadata?.name || "Unknown NFT"}
@@ -120,12 +121,13 @@ export default function NavBar() {
               );
             })}
 
-            {/* 顯示 Tokens */}
+            {/* Tokens Section */}
             <Heading as="h2" size="lg" mb={6}>
               Your Tokens
             </Heading>
             {Object.keys(tokens).map((token) => {
-              const { contract: tokenContract } = useContract(tokens[token]);
+              const tokenKey = token as keyof typeof tokens; // 明確鍵的類型
+              const { contract: tokenContract } = useContract(tokens[tokenKey]);
               const { data: tokenBalance } = useContractRead(
                 tokenContract,
                 "balanceOf",
@@ -133,7 +135,7 @@ export default function NavBar() {
               );
 
               return (
-                <Box key={token} w="100%" mb={4}>
+                <Box key={tokenKey} w="100%" mb={4}>
                   <Flex
                     direction="row"
                     border="1px solid #e2e8f0"
@@ -142,7 +144,7 @@ export default function NavBar() {
                     align="center"
                     justify="space-between"
                   >
-                    <Text fontWeight="bold">{token}</Text>
+                    <Text fontWeight="bold">{tokenKey}</Text>
                     <Text>
                       Balance:{" "}
                       {tokenBalance
