@@ -8,7 +8,6 @@ import {
   Flex,
   Heading,
   Spinner,
-  Select
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -29,6 +28,8 @@ import styles from "./supplier.module.scss";
 
 export default function StorePage() {
   const [version, setVersionState] = useState<"V1" | "V2">('V1');
+  const { contract, setContract } = useContract(TOOLS_ADDRESS);
+  const { data: nfts } = useNFTs(contract);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -36,22 +37,17 @@ export default function StorePage() {
       if (savedVersion) {
         setVersionState(savedVersion);
         setVersion(savedVersion);
+        setContract(TOOLS_ADDRESS);
       }
     }
-  }, []);
+  }, [setContract]);
 
   // 切换版本
-  const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newVersion = event.target.value as "V1" | "V2";
+  const handleVersionChange = (newVersion: "V1" | "V2") => {
     setVersionState(newVersion);
     setVersion(newVersion);
-    window.location.reload(); // 重新加载页面以应用更改
+    setContract(TOOLS_ADDRESS); // 重新初始化合约
   };
-
-  // 连接合约
-  const { contract } = useContract(TOOLS_ADDRESS);
-  // 取得 NFT 资料
-  const { data: nfts } = useNFTs(contract);
 
   // Slick Slider 设置
   const sliderSettings = {
@@ -222,14 +218,10 @@ export default function StorePage() {
             <Button width="fit-content">Back</Button>
           </Flex>
         </Link>
-        <Select
-          value={version}
-          onChange={handleVersionChange}
-          width="fit-content"
-        >
-          <option value="V1">V1</option>
-          <option value="V2">V2</option>
-        </Select>
+        <Flex>
+          <Button onClick={() => handleVersionChange("V1")} width="fit-content" m={2}>V1</Button>
+          <Button onClick={() => handleVersionChange("V2")} width="fit-content" m={2}>V2</Button>
+        </Flex>
       </Flex>
 
       {/* 主标题、文字叙述 */}
