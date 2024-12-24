@@ -21,6 +21,7 @@ import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
 import { useState, useEffect } from "react";
+import styles from './index.module.scss'; // 引入 SCSS 文件
 
 const Home: NextPage = () => {
   const [version, setVersionState] = useState<"V1" | "V2">("V1");
@@ -72,16 +73,17 @@ const Home: NextPage = () => {
 
   if (ownedFarmers?.length === 0) {
     return (
-      <Container maxW={"container.sm"} px={4}>
+      <Container className={styles.container} maxW={"container.sm"} px={4}>
         <ClaimFarmer />
       </Container>
     );
   }
 
   return (
-    <Container maxW={"container.sm"} px={4} py={6}>
+    <Container className={styles.container} maxW={"container.sm"} px={4} py={6}>
       {/* 下拉選單：位於頂部 */}
       <Select
+        className={styles.select}
         value={version}
         onChange={handleVersionChange}
         width="5ch"
@@ -92,9 +94,15 @@ const Home: NextPage = () => {
       </Select>
 
       {/* 各個區塊 */}
-      <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
-      <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
-      <EquippedSection equippedTools={equippedTools} />
+      <div className={styles.section}>
+        <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
+      </div>
+      <div className={styles.section}>
+        <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
+      </div>
+      <div className={styles.section}>
+        <EquippedSection equippedTools={equippedTools} />
+      </div>
     </Container>
   );
 };
