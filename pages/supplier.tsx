@@ -8,7 +8,6 @@ import {
   Flex,
   Heading,
   Spinner,
-  Select
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -41,8 +40,7 @@ export default function StorePage() {
   }, []);
 
   // 切换版本
-  const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newVersion = event.target.value as "V1" | "V2";
+  const handleVersionChange = (newVersion: "V1" | "V2") => {
     setVersionState(newVersion);
     setVersion(newVersion);
     window.location.reload(); // 重新加载页面以应用更改
@@ -222,14 +220,23 @@ export default function StorePage() {
             <Button width="fit-content">Back</Button>
           </Flex>
         </Link>
-        <Select
-          value={version}
-          onChange={handleVersionChange}
-          width="fit-content"
-        >
-          <option value="V1">V1</option>
-          <option value="V2">V2</option>
-        </Select>
+        <Flex>
+          <Button
+            onClick={() => handleVersionChange("V1")}
+            isActive={version === "V1"}
+            colorScheme={version === "V1" ? "blue" : "gray"}
+            mr={2}
+          >
+            V1
+          </Button>
+          <Button
+            onClick={() => handleVersionChange("V2")}
+            isActive={version === "V2"}
+            colorScheme={version === "V2" ? "blue" : "gray"}
+          >
+            V2
+          </Button>
+        </Flex>
       </Flex>
 
       {/* 主标题、文字叙述 */}
