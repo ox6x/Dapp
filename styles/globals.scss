@@ -1,0 +1,23 @@
+/* styles/globals.scss */
+
+/* 設置全局樣式 */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fbfd; /* Light Background */
+  color: #333333; /* Text Color */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #333333;
+}
+
+a {
+  color: #0052ff; /* CoinBase Blue */
+  text-decoration: none;
+
+  &:hover {
+    color: darken(#0052ff, 10%);
+  }
+}
+
+/* 添加其他全局樣式 */
