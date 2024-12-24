@@ -20,6 +20,7 @@ import {
   Heading,
   Spinner,
   Box,
+  Flex,
 } from "@chakra-ui/react";
 
 import LoginSection from "../components/LoginSection";
@@ -94,8 +95,8 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW="container.sm" px={4} py={6}>
-      {/* 下拉選單 */}
-      <Box mb={6}>
+      {/* 下拉選單包裹在 Flex 中 */}
+      <Flex mb={6} alignItems="center">
         <Select
           value={version}
           onChange={handleVersionChange}
@@ -106,7 +107,7 @@ const Home: NextPage = () => {
           <option value="V1">ETH</option>
           <option value="V2">bETH</option>
         </Select>
-      </Box>
+      </Flex>
 
       {/* 各個區塊 */}
       <VStack spacing={6} align="stretch">
