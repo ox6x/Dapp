@@ -18,17 +18,11 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
 
         try {
             // 检查是否已经授权
-            const isApproved = await toolContract?.erc1155.isApproved(
-                address,
-                STAKING_ADDRESS,
-            );
+            const isApproved = await toolContract?.erc1155.isApproved(address, STAKING_ADDRESS);
 
             // 如果未授权，先设置授权
             if (!isApproved) {
-                await toolContract?.erc1155.setApprovalForAll(
-                    STAKING_ADDRESS,
-                    true,
-                );
+                await toolContract?.erc1155.setApprovalForAll(STAKING_ADDRESS, true);
             }
 
             // 调用 stake 方法
@@ -40,17 +34,25 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
     };
 
     return (
-        <Box className={styles.inventorySection}>
-            <Card className={styles.card}>
-                <Heading className={styles.heading}>
+        <Box className={styles.inventorySection} p={4}>
+            <Card className={styles.card} p={6}>
+                <Heading className={styles.heading} mb={4}>
                     Locker
                 </Heading>
                 <Skeleton isLoaded={!loadingOwnedTools}>
                     {ownedTools?.length === 0 ? (
-                        <Box className={styles.noToolsBox}>
-                            <Text className={styles.noToolsText}>No tools available.</Text>
+                        <Box textAlign="center" p={6}>
+                            <Text fontSize="lg" fontWeight="medium" mb={4}>
+                                No tools available.
+                            </Text>
                             <Link href="/shop">
-                                <Button className={styles.shopButton}>Shop Tools</Button>
+                                <Button
+                                    colorScheme="blue"
+                                    variant="solid"
+                                    className={styles.shopButton}
+                                >
+                                    Shop Tools
+                                </Button>
                             </Link>
                         </Box>
                     ) : (
@@ -59,25 +61,40 @@ const InventorySection = ({ ownedTools, loadingOwnedTools }: any) => {
                                 <Card 
                                     key={nft.metadata.id} 
                                     className={styles.toolCard}
+                                    p={4}
+                                    shadow="md"
+                                    borderRadius="lg"
                                 >
                                     <Stack align="center" spacing={4}>
-                                        {/* 显示 NFT 图片 */}
+                                        {/* NFT 图片 */}
                                         <MediaRenderer 
                                             src={nft.metadata.image} 
+                                            alt={nft.metadata.name || "Tool Image"}
                                             className={styles.toolMedia}
+                                            style={{
+                                                width: "150px",
+                                                height: "150px",
+                                                objectFit: "cover",
+                                                borderRadius: "8px",
+                                            }}
                                         />
                                         
-                                        {/* 名稱和數量 */}
-                                        <Flex className={styles.toolInfo}>
-                                            <Text className={styles.toolName}>
+                                        {/* 名称和数量 */}
+                                        <Flex
+                                            justify="space-between"
+                                            align="center"
+                                            w="full"
+                                            className={styles.toolInfo}
+                                        >
+                                            <Text fontSize="md" fontWeight="bold">
                                                 {nft.metadata.name}
                                             </Text>
-                                            <Text className={styles.toolSupply}>
+                                            <Text color="gray.500" fontSize="sm">
                                                 ({nft.supply?.toString() || "0"})
                                             </Text>
                                         </Flex>
 
-                                        {/* 动态选择器，整合 Equip 功能 */}
+                                        {/* 动态选择器 */}
                                         <Quantity
                                             minQuantity={1}
                                             onQuantityChange={(quantity) => handleOnClick(nft.metadata.id, quantity)}
