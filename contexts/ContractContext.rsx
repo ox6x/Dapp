@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, ReactNode } from "react";
+import React, { createContext, useReducer, useContext, ReactNode, useEffect } from "react";
 import { useContract } from "@thirdweb-dev/react";
 import { TOOLS_ADDRESS, setVersion } from "../const/addresses";
 
