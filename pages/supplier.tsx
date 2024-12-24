@@ -3,12 +3,16 @@ import {
   Text,
   Card,
   Button,
-  Input,
   Container,
   Flex,
   Heading,
   Spinner,
   Select,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -22,6 +26,7 @@ import { ethers } from "ethers";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import debounce from "lodash.debounce";
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
@@ -47,19 +52,6 @@ export default function StorePage() {
   const { contract } = useContract(TOOLS_ADDRESS);
   const { data: nfts } = useNFTs(contract);
 
-  const useQuantity = (initialQuantity = 1) => {
-    const [quantity, setQuantity] = useState(initialQuantity);
-
-    const increment = () => setQuantity((prev) => prev + 1);
-    const decrement = () => setQuantity((prev) => Math.max(1, prev - 1));
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(e.target.value, 10);
-      setQuantity(isNaN(value) || value < 1 ? 1 : value);
-    };
-
-    return { quantity, increment, decrement, handleInputChange };
-  };
-
   const renderSpinner = () => (
     <Flex h="50vh" justifyContent="center" alignItems="center">
       <Spinner color="#f3ba2f" size="xl" />
@@ -71,14 +63,31 @@ export default function StorePage() {
       contract,
       nft.metadata.id
     );
-    const { quantity, increment, decrement, handleInputChange } = useQuantity();
+    const [quantity, setQuantity] = useState(1);
     const [isProcessing, setIsProcessing] = useState(false);
 
+    const maxQuantity = 1000; // 假设最大购买数量
     const totalPrice = claimCondition
       ? ethers.utils.formatEther(
           ethers.BigNumber.from(claimCondition.price).mul(quantity)
         )
       : "Loading...";
+
+    const debouncedSetQuantity = debounce((value: number) => {
+      setQuantity(value);
+    }, 300);
+
+    const handleQuantityChange = (valueAsString: string, valueAsNumber: number) => {
+      if (valueAsNumber > maxQuantity) {
+        alert(`The maximum quantity available is ${maxQuantity}`);
+        debouncedSetQuantity(maxQuantity);
+      } else if (valueAsNumber < 1) {
+        alert("Quantity cannot be less than 1");
+        debouncedSetQuantity(1);
+      } else {
+        debouncedSetQuantity(valueAsNumber);
+      }
+    };
 
     const handleTransaction = async () => {
       if (!contract || isProcessing) return;
@@ -119,21 +128,25 @@ export default function StorePage() {
             : "Loading..."}
         </Text>
         <Flex justifyContent="center" alignItems="center" gap="10px" mt={5}>
-          <Button onClick={decrement} disabled={isProcessing || quantity <= 1}>
-            -
-          </Button>
-          <Input
-            type="number"
+          <NumberInput
             value={quantity}
-            onChange={handleInputChange}
-            disabled={isProcessing}
-            width="60px"
-            textAlign="center"
-          />
-          <Button onClick={increment} disabled={isProcessing}>
-            +
-          </Button>
+            onChange={handleQuantityChange}
+            min={1}
+            max={maxQuantity}
+            clampValueOnBlur // 自动修正非法值
+            isDisabled={isProcessing}
+            width="120px"
+          >
+            <NumberInputField placeholder="Enter quantity" />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
         </Flex>
+        <Text textAlign="center" color="green.500" mt={2}>
+          Total: {claimCondition ? `${totalPrice} ${claimCondition.currencyMetadata.symbol}` : "Loading..."}
+        </Text>
         <Flex justifyContent="center" mt={5}>
           <Button
             onClick={handleTransaction}
@@ -154,8 +167,8 @@ export default function StorePage() {
     <div className={styles.sliderWrapper}>
       <Slider
         {...{
-          dots: false, // 隱藏下面的三個點
-          arrows: false, // 隱藏左右箭頭
+          dots: false,
+          arrows: false,
           infinite: true,
           speed: 500,
           slidesToShow: 1,
