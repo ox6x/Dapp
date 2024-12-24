@@ -10,13 +10,14 @@ import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
 import { useState, useEffect } from "react";
+import { SmartContract, BaseContract } from "@thirdweb-dev/sdk";
 
 const Home: NextPage = () => {
   const [version, setVersionState] = useState<"V1" | "V2">('V1');
-  const [farmerContract, setFarmerContract] = useState(null);
-  const [toolsContract, setToolsContract] = useState(null);
-  const [stakingContract, setStakingContract] = useState(null);
-  const [rewardContract, setRewardContract] = useState(null);
+  const [farmerContract, setFarmerContract] = useState<SmartContract<BaseContract> | null>(null);
+  const [toolsContract, setToolsContract] = useState<SmartContract<BaseContract> | null>(null);
+  const [stakingContract, setStakingContract] = useState<SmartContract<BaseContract> | null>(null);
+  const [rewardContract, setRewardContract] = useState<SmartContract<BaseContract> | null>(null);
   const address = useAddress();
 
   useEffect(() => {
