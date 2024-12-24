@@ -1,130 +1,143 @@
-// supplier.module.scss - Binance Inspired
-
-$binance-yellow: #f3ba2f;
-$binance-yellow-hover: #d19e00;
-$bg-white: #ffffff;
-$text-dark: #333333;
-$gray-light: #f5f5f5;
-
+// 頁面容器
 .storePage {
-  background-color: $bg-white;
-  min-height: 100vh;
-  padding: 2rem 1rem;
+  background-color: #f3f4f6; /* Binance 背景灰 */
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
 
-  .pageTitle {
-    text-align: center;
-    margin: 40px 0 10px;
-    font-size: 2rem;
-    font-weight: 700;
-    color: $binance-yellow;
+// 頁面標題
+.pageTitle {
+  color: #f3ba2f; /* Binance 黃色 */
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+// 頁面副標題
+.pageSubtitle {
+  color: #2b6cb0; /* Binance 藍色 */
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+// 下拉選單樣式
+.select {
+  border: 1px solid #f3ba2f;
+  border-radius: 5px;
+  background-color: white;
+  padding: 5px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: #d4a214; /* 深黃色 */
+    outline: none;
   }
+}
 
-  .pageSubtitle {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1rem;
-    color: $text-dark;
-    max-width: 640px;
-    margin: 0 auto 20px auto;
-  }
+// NFT 滑塊包裝器
+.sliderWrapper {
+  margin-top: 20px;
 
-  .headerSection {
-    margin-bottom: 1rem;
-  }
+  .slick-dots {
+    bottom: -30px;
 
-  .sliderWrapper {
-    margin: 2rem auto;
-    max-width: 800px;
-
-    .slick-dots {
-      bottom: -2rem;
-      li button:before {
-        color: $binance-yellow;
-      }
-      li.slick-active button:before {
-        color: $binance-yellow-hover;
-      }
-    }
-    .slick-arrow {
-      &:before {
-        color: $binance-yellow;
-      }
-    }
-  }
-
-  .nftCard {
-    background-color: $bg-white;
-    border: 1px solid $gray-light;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 1rem auto;
-    max-width: 500px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-
-    .nftImage {
-      border-radius: 8px;
-      width: 100%;
-      height: auto;
-    }
-
-    .nftTitle {
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: $text-dark;
-      margin: 1rem 0;
-    }
-
-    .nftPrice {
-      text-align: center;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      color: $text-dark;
-      font-weight: 500;
-    }
-
-    .quantityControl {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin: 1rem 0;
-
+    li {
       button {
-        background-color: $binance-yellow;
-        color: $bg-white;
-        border-radius: 4px;
-        padding: 0.5rem 1rem;
-        border: none;
-        cursor: pointer;
-        &:hover {
-          background-color: $binance-yellow-hover;
+        &:before {
+          color: #d4a214; /* 黃色點 */
+          opacity: 0.5;
         }
       }
 
-      input {
-        width: 60px;
-        text-align: center;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 0.5rem;
-      }
-    }
-
-    .rentButton {
-      display: block;
-      width: 100%;
-      padding: 0.75rem;
-      background-color: $binance-yellow;
-      color: $bg-white;
-      text-align: center;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-      &:hover {
-        background-color: $binance-yellow-hover;
+      &.slick-active button:before {
+        opacity: 1;
       }
     }
   }
+}
+
+// NFT 卡片樣式
+.nftCard {
+  border: 2px solid #e5e7eb; /* 灰色邊框 */
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    border-color: #f3ba2f; /* Binance 黃色邊框 */
+  }
+}
+
+// NFT 圖片樣式
+.nftImage {
+  border-radius: 10px;
+  margin-bottom: 20px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+// 按鈕樣式
+button {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+
+  &.chakra-button {
+    &:disabled {
+      cursor: not-allowed;
+      background-color: #e5e7eb; /* 禁用灰色 */
+    }
+  }
+
+  &:not(:disabled) {
+    &:hover {
+      background-color: #d4a214; /* 深黃 */
+    }
+  }
+
+  &.chakra-button--blue {
+    background-color: #2b6cb0; /* Binance 藍色 */
+    &:hover {
+      background-color: #225a9d; /* 深藍 */
+    }
+  }
+}
+
+// 輸入框樣式
+input[type="number"] {
+  width: 60px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #d1d5db; /* 灰色邊框 */
+  border-radius: 5px;
+  font-size: 16px;
+
+  &:focus {
+    border-color: #f3ba2f; /* 黃色焦點 */
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: #f9fafb; /* 禁用背景灰 */
+    border-color: #e5e7eb;
+  }
+}
+
+// 加載中樣式
+.spinner {
+  color: #f3ba2f; /* 黃色 Spinner */
+  margin-top: 50px;
 }
