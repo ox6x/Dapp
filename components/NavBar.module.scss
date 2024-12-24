@@ -1,1 +1,69 @@
+// 幣安風格設計的 SCSS
+$primary-color: #F3BA2F; // 黃色
+$background-color: #121212; // 黑色背景
+$secondary-background-color: #181818; // 深灰背景
+$text-color: #FFFFFF; // 白色文字
+$secondary-text-color: #B3B3B3; // 灰色文字
+$link-hover-color: lighten($primary-color, 10%);
+$border-color: #2E2E2E; // 灰色邊框
 
+.navBarContainer {
+  background-color: $secondary-background-color;
+  padding: 20px;
+  border-bottom: 1px solid $border-color;
+}
+
+.navBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: $primary-color;
+  text-decoration: none;
+
+  &:hover {
+    color: $link-hover-color;
+  }
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+}
+
+.navLink {
+  font-size: 1rem;
+  color: $text-color;
+  text-decoration: none;
+  margin-right: 1rem;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $link-hover-color;
+  }
+}
+
+.walletButton {
+  font-size: 1rem;
+  color: $text-color;
+  background-color: $primary-color;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+
+  &:hover {
+    background-color: lighten($primary-color, 10%);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
