@@ -1,52 +1,231 @@
-/* styles/globals.scss */
+/* 顏色變量 */
+$binance-yellow: #f3ba2f;
+$binance-dark-yellow: #d4a214;
+$binance-blue: #2b6cb0;
+$binance-dark-blue: #225a9d;
+$gray-light: #f9fafb;
+$gray-medium: #e5e7eb;
+$gray-dark: #333333;
+$white: #ffffff;
 
-/* 設置全局樣式 */
+/* 全局字體與排版 */
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #f3f4f6; /* 幣安背景色 */
-  color: #1e2022; /* 幣安文字顏色 */
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: $gray-dark;
+  background-color: $gray-light;
+  margin: 0;
+  padding: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #1e2022; /* 標題文字顏色 */
+  font-weight: 700;
+  color: $binance-blue;
+  margin: 0;
+  line-height: 1.4;
+}
+
+p, span, li {
+  font-size: 16px;
+  color: $gray-dark;
 }
 
 a {
-  color: #f0b90b; /* 幣安黃色 */
+  color: $binance-blue;
   text-decoration: none;
+  transition: color 0.3s ease;
 
   &:hover {
-    color: darken(#f0b90b, 10%);
+    color: $binance-dark-blue;
   }
 }
 
-/* 添加其他全局樣式 */
+/* 通用容器 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: $white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Flexbox 工具類 */
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 網格系統 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* 按鈕樣式 */
 button {
-  background-color: #f0b90b;
-  color: #1e2022;
-  border: none;
-  padding: 10px 20px;
+  display: inline-block;
   font-size: 16px;
+  font-weight: bold;
+  color: $white;
+  background-color: $binance-blue;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s;
 
   &:hover {
-    background-color: darken(#f0b90b, 10%);
+    background-color: $binance-dark-blue;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    background-color: $gray-medium;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &.primary {
+    background-color: $binance-yellow;
+    &:hover {
+      background-color: $binance-dark-yellow;
+    }
   }
 }
 
-input, textarea {
-  border: 1px solid #e0e0e0;
-  padding: 10px;
+/* 表單樣式 */
+input, select, textarea {
   font-size: 16px;
+  color: $gray-dark;
+  border: 1px solid $gray-medium;
+  border-radius: 8px;
+  padding: 10px;
   width: 100%;
   box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus {
+    border-color: $binance-yellow;
+    box-shadow: 0 0 4px rgba(243, 186, 47, 0.7);
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: $gray-light;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 }
 
+/* 卡片樣式 */
 .card {
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: $white;
+  border: 1px solid $gray-medium;
+  border-radius: 12px;
   padding: 20px;
-  margin: 20px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* 標題與間距 */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: $binance-blue;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: $gray-dark;
+  margin-bottom: 16px;
+}
+
+/* 警告與提示 */
+.alert {
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 20px;
+
+  &.success {
+    background-color: rgba(43, 108, 176, 0.1); /* Binance 藍色淡化 */
+    border: 1px solid $binance-blue;
+    color: $binance-blue;
+  }
+
+  &.warning {
+    background-color: rgba(243, 186, 47, 0.1); /* Binance 黃色淡化 */
+    border: 1px solid $binance-yellow;
+    color: $binance-yellow;
+  }
+
+  &.error {
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid red;
+    color: red;
+  }
+}
+
+/* 加載動畫 */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid $binance-yellow;
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 通用邊框與間距 */
+.border-rounded {
+  border-radius: 12px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.pt-20 {
+  padding-top: 20px;
+}
+
+.pb-20 {
+  padding-bottom: 20px;
 }
