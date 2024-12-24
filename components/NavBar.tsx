@@ -1,15 +1,33 @@
-import { Container, Flex, Heading, Link, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Button, IconButton } from "@chakra-ui/react";
+import { 
+    Container, 
+    Flex, 
+    Heading, 
+    Link, 
+    Drawer, 
+    DrawerBody, 
+    DrawerOverlay, 
+    DrawerContent, 
+    DrawerCloseButton, 
+    useDisclosure, 
+    Button, 
+    IconButton, 
+    Image, 
+    Text 
+} from "@chakra-ui/react";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { FaWallet } from "react-icons/fa";
 import styles from './NavBar.module.scss';
 
-export default function NavBar() {
+export default function NavBar({ ownedFarmers }: { ownedFarmers: any[] }) {
     const address = useAddress();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     if (!address) {
         return null;
     }
+
+    // 获取用户拥有的第一个 Farmer NFT
+    const firstFarmer = ownedFarmers?.[0];
 
     return (
         <Container className={styles.navBarContainer}>
@@ -23,7 +41,6 @@ export default function NavBar() {
                     <Link href="/supplier" className={styles.link}>
                         Supplier
                     </Link>
-                    {/* 隱藏的按鈕 */}
                     <IconButton 
                         icon={<FaWallet />} 
                         aria-label="Open Wallet" 
@@ -40,6 +57,27 @@ export default function NavBar() {
                 <DrawerContent>
                     <DrawerCloseButton />
                     <DrawerBody display="flex" flexDirection="column" alignItems="center" justifyContent="flex-start" pt={10}>
+                        {/* 如果用户有 Farmer NFT，显示头像 */}
+                        {firstFarmer ? (
+                            <Flex direction="column" align="center" mb={6}>
+                                <Image
+                                    src={firstFarmer.metadata.image}
+                                    alt={firstFarmer.metadata.name || "Farmer Avatar"}
+                                    boxSize="100px"
+                                    borderRadius="full"
+                                    objectFit="cover"
+                                    mb={3}
+                                />
+                                <Text fontWeight="bold" fontSize="lg">
+                                    {firstFarmer.metadata.name || "Unknown"}
+                                </Text>
+                            </Flex>
+                        ) : (
+                            <Text fontWeight="medium" color="gray.500" mb={6}>
+                                No Farmer Avatar
+                            </Text>
+                        )}
+                        {/* Connect Wallet Button */}
                         <ConnectWallet className={styles.connectWallet} />
                     </DrawerBody>
                 </DrawerContent>
