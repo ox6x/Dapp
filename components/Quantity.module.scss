@@ -1,36 +1,56 @@
-/* Quantity.module.scss */
-
+// Binance-style SCSS for Quantity Component
 .quantityContainer {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.button {
+// Buttons
+button {
   padding: 6px 12px;
-  background: #3182ce;
-  color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.2s;
 
-  &:hover {
-    background: darken(#3182ce, 10%);
+  &:focus {
+    outline: none;
   }
 }
 
-.input {
-  width: 50px;
-  text-align: center;
-  padding: 4px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.decrementButton,
+.incrementButton {
+  background-color: #f3ba2f;
+  color: #000;
+  
+  &:hover {
+    background-color: #d4a214;
+  }
 }
 
 .confirmButton {
-  background: #38a169;
+  background-color: #2b6cb0;
+  color: #fff;
 
   &:hover {
-    background: darken(#38a169, 10%);
+    background-color: #225a9d;
+  }
+}
+
+// Input
+.quantityInput {
+  width: 50px;
+  text-align: center;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+
+  &:focus {
+    outline: none;
+    border-color: #f3ba2f;
   }
 }
