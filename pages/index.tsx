@@ -2,7 +2,7 @@ import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdwe
 import type { NextPage } from "next";
 import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, setVersion } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container, Select } from "@chakra-ui/react";
+import { Container, Button, Flex } from "@chakra-ui/react";
 
 import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
@@ -25,13 +25,11 @@ const Home: NextPage = () => {
     }
   }, []);
 
-  const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newVersion = event.target.value as "V1" | "V2";
+  const handleVersionChange = (newVersion: "V1" | "V2") => {
     setVersionState(newVersion);
     setVersion(newVersion);
     if (typeof window !== 'undefined') {
       localStorage.setItem('ADDRESS_VERSION', newVersion);
-      window.location.reload(); // 重新加载页面以应用更改
     }
   };
 
@@ -64,10 +62,10 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <Select value={version} onChange={handleVersionChange} width="fit-content" mb={4}>
-        <option value="V1">V1</option>
-        <option value="V2">V2</option>
-      </Select>
+      <Flex justifyContent="space-between" mb={4}>
+        <Button onClick={() => handleVersionChange("V1")} width="fit-content">V1</Button>
+        <Button onClick={() => handleVersionChange("V2")} width="fit-content">V2</Button>
+      </Flex>
       <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
       <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
       <EquippedSection equippedTools={equippedTools} />
