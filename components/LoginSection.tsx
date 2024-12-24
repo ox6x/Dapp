@@ -11,7 +11,7 @@ const LoginSection: React.FC = () => {
       <div className={styles.loginCard}>
         <div className={styles.loginTitle}>Welcome to Binance DApp</div>
         <div className={styles.loginDescription}>
-          Please connect your wallet to continue.
+          Connect your wallet to start exploring the Binance ecosystem.
         </div>
         {!address && (
           <button
