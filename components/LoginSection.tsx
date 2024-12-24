@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './LoginSection.module.scss';
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 
 const LoginSection = () => {
   return (
