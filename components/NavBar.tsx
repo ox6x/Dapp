@@ -1,9 +1,11 @@
-import { Container, Flex, Heading, Link } from "@chakra-ui/react";
+import { useState } from "react";
+import { Container, Flex, Heading, Link, Box, Button, Collapse } from "@chakra-ui/react";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import styles from './NavBar.module.scss';
 
 export default function NavBar() {
     const address = useAddress();
+    const [isWalletPanelOpen, setWalletPanelOpen] = useState(false);
 
     if (!address) {
         return null;
@@ -21,9 +23,31 @@ export default function NavBar() {
                     <Link href="/supplier" className={styles.link}>
                         Supplier
                     </Link>
-                    <ConnectWallet className={styles.connectWallet} />
+                    <Button
+                        onClick={() => setWalletPanelOpen(!isWalletPanelOpen)}
+                        size="sm"
+                        ml={4}
+                        colorScheme="blue"
+                    >
+                        Wallet Panel
+                    </Button>
                 </Flex>
             </Flex>
+
+            {/* Collapsible Wallet Panel */}
+            <Collapse in={isWalletPanelOpen} animateOpacity>
+                <Box
+                    p={4}
+                    mt={2}
+                    rounded="md"
+                    shadow="md"
+                    bg="gray.50"
+                    borderWidth="1px"
+                    borderColor="gray.200"
+                >
+                    <ConnectWallet />
+                </Box>
+            </Collapse>
         </Container>
     );
 }
