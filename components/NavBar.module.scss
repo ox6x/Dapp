@@ -1,1 +1,49 @@
+// NavBar.module.scss - Binance Inspired
 
+$binance-yellow: #f3ba2f;
+$bg-white: #ffffff;
+$text-dark: #333333;
+$link-hover: darken($binance-yellow, 10%);
+$border-radius: 8px;
+
+.navBarContainer {
+  max-width: 1200px;
+  padding: 1rem 0;
+}
+
+.navBarFlex {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+  color: $binance-yellow;
+}
+
+.link {
+  margin-right: 1rem;
+  font-size: 1rem;
+  color: $text-dark;
+  text-decoration: none;
+
+  &:hover {
+    color: $link-hover;
+  }
+}
+
+.connectWallet {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: $binance-yellow;
+  color: $bg-white;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $link-hover;
+  }
+}
