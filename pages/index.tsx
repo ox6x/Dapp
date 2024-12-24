@@ -1,3 +1,4 @@
+import styles from "./index.module.scss";
 import {
   useAddress,
   useContract,
