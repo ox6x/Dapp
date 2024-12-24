@@ -1,52 +1,30 @@
+/* 頁面容器樣式 */
 .storePage {
-  background: linear-gradient(to bottom, #f5f5f5, #ebebeb);
-  padding: 20px 15px;
-  font-family: "Inter", Arial, sans-serif;
-  min-height: 100vh;
+  background: linear-gradient(180deg, #121212, #1e1e1e); /* 黑色漸層背景 */
+  padding: 20px;
+  border-radius: 12px;
 }
 
+/* 主標題樣式 */
 .pageTitle {
-  color: #f3ba2f;
-  font-size: 40px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-
-.pageSubtitle {
-  color: #2b6cb0;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.6;
-  margin-bottom: 40px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #f3ba2f; /* Binance 黃色 */
   text-align: center;
+  margin-bottom: 16px;
+  text-transform: uppercase;
 }
 
-.selectContainer {
-  .select {
-    border: 1px solid #f3ba2f;
-    border-radius: 8px;
-    background-color: white;
-    padding: 8px 15px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #000;
-    cursor: pointer;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-      border-color: #d4a214;
-    }
-
-    &:focus {
-      border-color: #f3ba2f;
-      box-shadow: 0 0 4px rgba(243, 186, 47, 0.7);
-      outline: none;
-    }
-  }
+/* 副標題樣式 */
+.pageSubtitle {
+  font-size: 18px;
+  font-weight: 500;
+  color: #e5e5e5; /* 明亮灰色 */
+  text-align: center;
+  margin-bottom: 40px;
 }
 
+/* Slider 容器 */
 .sliderWrapper {
   margin-top: 30px;
 
@@ -54,7 +32,7 @@
     bottom: -25px;
 
     li button:before {
-      color: #d4a214;
+      color: #d4a214; /* 深黃 */
       opacity: 0.5;
     }
 
@@ -65,93 +43,125 @@
   }
 }
 
+/* NFT 卡片樣式 */
 .nftCard {
-  border: 1px solid #e0e0e0;
+  background: #1e1e1e; /* 深灰底色 */
+  border: 1px solid #f3ba2f;
   border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 深色陰影 */
   padding: 20px;
-  background: #ffffff;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    border-color: #f3ba2f;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    border-color: #d4a214; /* 深黃 */
   }
 }
 
+/* NFT 圖像樣式 */
 .nftImage {
-  border-radius: 10px;
-  margin-bottom: 15px;
-  max-height: 280px;
-  object-fit: cover;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 深色陰影 */
   transition: box-shadow 0.3s;
 
   &:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
   }
 }
 
-.button {
-  font-size: 16px;
-  font-weight: 600;
+/* 按鈕樣式 */
+button {
+  font-size: 14px;
+  font-weight: bold;
   color: #ffffff;
+  background-color: #f3ba2f;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   padding: 10px 20px;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 
-  &.disabled {
+  &:hover {
+    background-color: #d4a214;
+    transform: scale(1.05); /* 放大效果 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.95); /* 點擊縮小效果 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  &:disabled {
+    background-color: #3a3a3a; /* 暗灰禁用 */
     cursor: not-allowed;
-    background-color: #e5e7eb;
-  }
-
-  &:not(.disabled):hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  &--blue {
-    background-color: #2b6cb0;
-
-    &:hover {
-      background-color: #225a9d;
-    }
+    opacity: 0.7;
   }
 }
 
-.inputNumber {
-  width: 60px;
+/* 購買按鈕 */
+.acquireButton {
+  background-color: #2b6cb0; /* Binance 藍 */
+  color: #ffffff;
+
+  &:hover {
+    background-color: #225a9d;
+  }
+}
+
+/* Input 框樣式 */
+input {
+  font-size: 14px;
   text-align: center;
-  padding: 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 5px;
-  font-size: 16px;
+  width: 60px;
+  border: 1px solid #3a3a3a;
+  background-color: #121212;
+  color: #e5e5e5;
+  border-radius: 6px;
+  padding: 5px;
+  transition: border-color 0.3s;
+
+  &:focus {
+    outline: none;
+    border-color: #f3ba2f; /* 黃色聚焦 */
+  }
+}
+
+/* 加載中 Spinner */
+.spinner {
+  color: #f3ba2f; /* Binance 黃色 */
+}
+
+/* Select 下拉選單樣式 */
+select {
+  border: 2px solid #f3ba2f;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #e5e5e5;
+  cursor: pointer;
+  background-color: #1e1e1e; /* 深灰底色 */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    border-color: #d4a214;
+  }
 
   &:focus {
     border-color: #f3ba2f;
     box-shadow: 0 0 4px rgba(243, 186, 47, 0.5);
     outline: none;
   }
-
-  &:disabled {
-    background-color: #f9fafb;
-    border-color: #e5e7eb;
-  }
 }
 
-.spinner {
-  color: #f3ba2f;
-  margin-top: 50px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* 布局 Flex 容器 */
+.flexRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
 }
