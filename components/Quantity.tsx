@@ -56,6 +56,7 @@ const Quantity: React.FC<QuantityProps> = ({
         className={styles.decrementButton}
         onClick={handleDecrement}
         aria-label="Decrement"
+        style={{ width: "auto" }} // 按鈕寬度自適應內容
       >
         -
       </button>
@@ -71,6 +72,7 @@ const Quantity: React.FC<QuantityProps> = ({
         className={styles.incrementButton}
         onClick={handleIncrement}
         aria-label="Increment"
+        style={{ width: "auto" }} // 按鈕寬度自適應內容
       >
         +
       </button>
@@ -78,6 +80,7 @@ const Quantity: React.FC<QuantityProps> = ({
         className={styles.confirmButton}
         onClick={() => onQuantityChange(quantity)}
         aria-label="Confirm"
+        style={{ width: "auto" }} // 按鈕寬度自適應內容
       >
         {buttonText}
       </button>
@@ -86,6 +89,7 @@ const Quantity: React.FC<QuantityProps> = ({
           className={styles.claimButton}
           onClick={onClaim}
           aria-label="Claim"
+          style={{ width: "auto" }} // 按鈕寬度自適應內容
         >
           Claim
         </button>
