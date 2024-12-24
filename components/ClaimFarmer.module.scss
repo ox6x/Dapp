@@ -1,73 +1,54 @@
-// ClaimFarmer.module.scss - Binance Inspired
+.claimFarmerContainer {
+  background: linear-gradient(180deg, #ffffff, #f9fafb); /* 柔和漸層背景 */
+  border: 2px solid #f3ba2f; /* Binance 黃色邊框 */
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-$binance-yellow: #f3ba2f;
-$binance-yellow-hover: #d19e00;
-$bg-white: #ffffff;
-$text-dark: #333333;
-$border-radius: 12px;
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    border-color: #d4a214; /* 深黃 */
+  }
+}
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: $bg-white;
-  color: $text-dark;
-  font-family: 'Inter', sans-serif;
-  padding: 20px;
+.title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #2b6cb0; /* Binance 藍色 */
   text-align: center;
+  margin-bottom: 20px;
+}
 
-  .header {
-    margin-bottom: 2rem;
+.description {
+  font-size: 16px;
+  color: #333333; /* 深灰色 */
+  text-align: center;
+  margin-bottom: 24px;
+}
 
-    h1 {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-      color: $binance-yellow;
-    }
+.button {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #2b6cb0; /* Binance 藍 */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s;
 
-    p {
-      font-size: 1rem;
-      color: darken($text-dark, 20%);
-      line-height: 1.5;
-      max-width: 600px;
-      margin: 0 auto;
-    }
+  &:hover {
+    background-color: #225a9d; /* 深藍 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05); /* 輕微放大效果 */
   }
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-
-    .mediaContainer {
-      border-radius: $border-radius;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .claimButton {
-      background: $binance-yellow;
-      color: #ffffff;
-      padding: 0.75rem 1.5rem;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: $border-radius;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-
-      &:hover {
-        background: $binance-yellow-hover;
-        transform: scale(1.05);
-      }
-
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px lighten($binance-yellow, 40%);
-      }
-    }
+  &:disabled {
+    background-color: #e5e7eb; /* 禁用灰色 */
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 }
