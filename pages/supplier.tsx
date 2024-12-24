@@ -28,11 +28,11 @@ import Link from "next/link";
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
-  const [version, setVersionState] = useState('V1');
+  const [version, setVersionState] = useState<"V1" | "V2">('V1');
 
   // 切换版本
   const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newVersion = event.target.value;
+    const newVersion = event.target.value as "V1" | "V2";
     setVersionState(newVersion);
     setVersion(newVersion);
     window.location.reload(); // 重新加载页面以应用更改
