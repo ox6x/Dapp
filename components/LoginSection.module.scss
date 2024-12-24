@@ -1,41 +1,41 @@
-/* 主容器 */
+/* 主容器樣式 */
 .loginContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(180deg, #ffffff, #f3f4f6); /* Binance 漸層背景 */
+  background: linear-gradient(to bottom, #ffffff, #f9f9f9); /* Binance 背景漸層 */
   padding: 20px;
 }
 
-/* 登錄框 */
+/* 登錄框樣式 */
 .loginBox {
-  background-color: #ffffff;
-  border: 2px solid #f3ba2f; /* Binance 黃邊框 */
-  border-radius: 12px;
-  padding: 24px;
+  background: #ffffff;
+  border: 2px solid #f3ba2f; /* Binance 黃色邊框 */
+  border-radius: 16px;
   max-width: 400px;
   width: 100%;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  padding: 32px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    border-color: #d4a214; /* 深黃 */
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    border-color: #d4a214; /* 深黃色 */
   }
 }
 
-/* 主標題 */
+/* 標題樣式 */
 .title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
-  color: #2b6cb0; /* Binance 藍 */
+  color: #2b6cb0; /* Binance 藍色 */
   margin-bottom: 16px;
 }
 
-/* 描述文字 */
+/* 描述文字樣式 */
 .description {
   font-size: 16px;
   color: #333333; /* 深灰色 */
@@ -46,46 +46,26 @@
 /* 表單容器 */
 .form {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 16px;
 }
 
-/* 輸入框 */
-.input {
-  font-size: 16px;
-  color: #333333;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 12px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-
-  &:focus {
-    border-color: #f3ba2f; /* Binance 黃 */
-    box-shadow: 0 0 4px rgba(243, 186, 47, 0.7);
-    outline: none;
-  }
-
-  &:hover {
-    border-color: #d4a214; /* 深黃 */
-  }
-}
-
-/* 登錄按鈕 */
+/* 登錄按鈕樣式 */
 .loginButton {
   font-size: 16px;
   font-weight: bold;
   color: #ffffff;
-  background-color: #f3ba2f; /* Binance 黃 */
-  padding: 14px 20px;
+  background-color: #f3ba2f; /* Binance 黃色 */
+  padding: 12px 24px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
 
   &:hover {
     background-color: #d4a214; /* 深黃 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     transform: scale(1.05); /* 輕微放大效果 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
 
   &:disabled {
