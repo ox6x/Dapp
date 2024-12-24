@@ -65,8 +65,8 @@ const Home: NextPage = () => {
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
       <Select value={version} onChange={handleVersionChange} width="fit-content" mb={4}>
-        <option value="V1">V1</option>
-        <option value="V2">V2</option>
+        <option value="V1">ETH</option>
+        <option value="V2">bETH</option>
       </Select>
       <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
       <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
