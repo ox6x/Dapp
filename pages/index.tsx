@@ -1,26 +1,46 @@
-import { useState } from "react";
 import { useAddress, useContract, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import { ADDRESSES } from "../const/addresses";
+import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS, setVersion } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container, Button, Flex } from "@chakra-ui/react";
+import { Container, Select } from "@chakra-ui/react";
 
 import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
 import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
+import { useState, useEffect } from "react";
 
 const Home: NextPage = () => {
+  const [version, setVersionState] = useState<"V1" | "V2">('V1');
   const address = useAddress();
-  const [selectedToolsContract, setSelectedToolsContract] = useState(ADDRESSES.TOOLS_0);
 
-  const { contract: farmerContract } = useContract(ADDRESSES.FARMER);
-  const { contract: toolsContract } = useContract(selectedToolsContract); // 根據需求更改索引
-  const { contract: stakingContract } = useContract(ADDRESSES.STAKING_0);
-  const { contract: rewardContract } = useContract(ADDRESSES.REWARDS_0);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedVersion = localStorage.getItem('ADDRESS_VERSION') as "V1" | "V2";
+      if (savedVersion) {
+        setVersionState(savedVersion);
+        setVersion(savedVersion);
+      }
+    }
+  }, []);
 
-  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
+  const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newVersion = event.target.value as "V1" | "V2";
+    setVersionState(newVersion);
+    setVersion(newVersion);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ADDRESS_VERSION', newVersion);
+      window.location.reload(); // 重新加载页面以应用更改
+    }
+  };
+
+  const { contract: farmercontract } = useContract(FARMER_ADDRESS);
+  const { contract: toolsContract } = useContract(TOOLS_ADDRESS);
+  const { contract: stakingContract } = useContract(STAKING_ADDRESS);
+  const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
+
+  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmercontract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
   const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
@@ -44,14 +64,10 @@ const Home: NextPage = () => {
 
   return (
     <Container maxW={"container.sm"} px={4} py={6}>
-      <Flex justifyContent="space-between" mb={4}>
-        <Button onClick={() => setSelectedToolsContract(ADDRESSES.TOOLS_0)}>
-          Use TOOLS_0
-        </Button>
-        <Button onClick={() => setSelectedToolsContract(ADDRESSES.TOOLS_BB)}>
-          Use TOOLS_BB
-        </Button>
-      </Flex>
+      <Select value={version} onChange={handleVersionChange} width="fit-content" mb={4}>
+        <option value="V1">V1</option>
+        <option value="V2">V2</option>
+      </Select>
       <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
       <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
       <EquippedSection equippedTools={equippedTools} />
