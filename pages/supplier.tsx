@@ -178,7 +178,7 @@ export default function StorePage() {
           value={version}
           onChange={handleVersionChange}
           width="200px"
-          placeholder="Select Version"
+          placeholder="Select"
         >
           <option value="V1">ETH</option>
           <option value="V2">bETH</option>
