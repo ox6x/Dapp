@@ -8,7 +8,7 @@ import {
   Flex,
   Heading,
   Spinner,
-  Select
+  Select,
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
@@ -22,17 +22,15 @@ import { ethers } from "ethers";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Link from "next/link";
-
-// --- 引入 CoinBase Style 的 SCSS ---
 import styles from "./supplier.module.scss";
 
 export default function StorePage() {
-  const [version, setVersionState] = useState<"V1" | "V2">('V1');
+  // 處理版本切換
+  const [version, setVersionState] = useState<"V1" | "V2">("V1");
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedVersion = localStorage.getItem('ADDRESS_VERSION') as "V1" | "V2";
+    if (typeof window !== "undefined") {
+      const savedVersion = localStorage.getItem("ADDRESS_VERSION") as "V1" | "V2";
       if (savedVersion) {
         setVersionState(savedVersion);
         setVersion(savedVersion);
@@ -40,59 +38,58 @@ export default function StorePage() {
     }
   }, []);
 
-  // 切换版本
   const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newVersion = event.target.value as "V1" | "V2";
     setVersionState(newVersion);
     setVersion(newVersion);
-    window.location.reload(); // 重新加载页面以应用更改
+    window.location.reload(); // 重新加載頁面應用合約更改
   };
 
-  // 连接合约
+  // 連接合約並加載 NFT
   const { contract } = useContract(TOOLS_ADDRESS);
-  // 取得 NFT 资料
   const { data: nfts } = useNFTs(contract);
 
-  // Slick Slider 设置
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: false,
-    centerMode: true,
-    centerPadding: "0",
+  // 處理數量調整邏輯
+  const useQuantity = (initialQuantity = 1) => {
+    const [quantity, setQuantity] = useState(initialQuantity);
+
+    const increment = () => setQuantity((prev) => prev + 1);
+    const decrement = () => setQuantity((prev) => Math.max(1, prev - 1));
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = parseInt(e.target.value, 10);
+      setQuantity(isNaN(value) || value < 1 ? 1 : value);
+    };
+
+    return { quantity, increment, decrement, handleInputChange };
   };
 
-  // 加载中显示
+  // 加載中的顯示
   const renderSpinner = () => (
-    <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
+    <Flex h="50vh" justifyContent="center" alignItems="center">
       <Spinner />
     </Flex>
   );
 
-  // 单个 NFT 卡片
+  // 單個 NFT 卡片渲染
   const NFTComponent = ({ nft }: { nft: NFTType }) => {
-    const { data, isLoading } = useActiveClaimCondition(contract, nft.metadata.id);
-
-    const [quantity, setQuantity] = useState(1);
+    const { data: claimCondition, isLoading } = useActiveClaimCondition(
+      contract,
+      nft.metadata.id
+    );
+    const { quantity, increment, decrement, handleInputChange } = useQuantity();
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // 计算总价格
-    const totalPrice = !isLoading && data
+    const totalPrice = claimCondition
       ? ethers.utils.formatEther(
-          ethers.BigNumber.from(data.price).mul(quantity)
+          ethers.BigNumber.from(claimCondition.price).mul(quantity)
         )
       : "Loading...";
 
-    // 执行交易
     const handleTransaction = async () => {
       if (!contract || isProcessing) return;
 
       setIsProcessing(true);
       try {
-        // 执行领取（claim）
         await contract.erc1155.claim(nft.metadata.id, quantity);
         alert(`Successfully purchased ${quantity} x ${nft.metadata.name}!`);
       } catch (error) {
@@ -103,63 +100,24 @@ export default function StorePage() {
       }
     };
 
-    // 数量调整
-    const incrementQuantity = () => setQuantity((prev) => prev + 1);
-    const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
-
-    // 输入框
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(e.target.value, 10);
-      setQuantity(isNaN(value) || value < 1 ? 1 : value);
-    };
-
     return (
-      <Card
-        key={nft.metadata.id}
-        overflow="hidden"
-        p={5}
-        className={styles.nftCard}
-      >
+      <Card overflow="hidden" p={5} className={styles.nftCard}>
         <MediaRenderer
           src={nft.metadata.image}
           height="100%"
           width="100%"
           className={styles.nftImage}
         />
-        <Text
-          fontSize="2xl"
-          fontWeight="bold"
-          my={5}
-          textAlign="center"
-          className={styles.nftTitle}
-        >
+        <Text fontSize="2xl" fontWeight="bold" my={5} textAlign="center">
           {nft.metadata.name}
         </Text>
-
-        {!isLoading && data ? (
-          <Text
-            textAlign="center"
-            my={5}
-            className={styles.nftPrice}
-          >
-            Total Cost: {totalPrice} {data.currencyMetadata.symbol}
-          </Text>
-        ) : (
-          <Text textAlign="center">Loading...</Text>
-        )}
-
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          gap="10px"
-          mt={5}
-          className={styles.quantityControl}
-        >
-          <Button
-            onClick={decrementQuantity}
-            disabled={isProcessing || quantity <= 1}
-            width="fit-content"
-          >
+        <Text textAlign="center" my={5}>
+          {claimCondition
+            ? `Total Cost: ${totalPrice} ${claimCondition.currencyMetadata.symbol}`
+            : "Loading..."}
+        </Text>
+        <Flex justifyContent="center" alignItems="center" gap="10px" mt={5}>
+          <Button onClick={decrement} disabled={isProcessing || quantity <= 1}>
             -
           </Button>
           <Input
@@ -170,23 +128,16 @@ export default function StorePage() {
             width="60px"
             textAlign="center"
           />
-          <Button
-            onClick={incrementQuantity}
-            disabled={isProcessing}
-            width="fit-content"
-          >
+          <Button onClick={increment} disabled={isProcessing}>
             +
           </Button>
         </Flex>
-
         <Flex justifyContent="center" mt={5}>
           <Button
             onClick={handleTransaction}
             isLoading={isProcessing}
             loadingText="Processing"
             colorScheme="blue"
-            width="fit-content"
-            className={styles.rentButton}
           >
             Acquire
           </Button>
@@ -195,10 +146,19 @@ export default function StorePage() {
     );
   };
 
-  // 产生 NFT Slider
+  // NFT Slider 渲染
   const renderNFTSlider = () => (
     <div className={styles.sliderWrapper}>
-      <Slider {...sliderSettings}>
+      <Slider
+        dots={true}
+        infinite={true}
+        speed={500}
+        slidesToShow={1}
+        slidesToScroll={1}
+        autoplay={false}
+        centerMode={true}
+        centerPadding="0"
+      >
         {nfts?.map((nftItem) => (
           <div key={nftItem.metadata.id}>
             <NFTComponent nft={nftItem} />
@@ -210,13 +170,8 @@ export default function StorePage() {
 
   return (
     <Container maxW="1200px" className={styles.storePage}>
-      {/* Header 区块 */}
-      <Flex
-        className={styles.headerSection}
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
+      {/* Header */}
+      <Flex justifyContent="space-between" alignItems="center">
         <Select
           value={version}
           onChange={handleVersionChange}
@@ -227,15 +182,16 @@ export default function StorePage() {
         </Select>
       </Flex>
 
-      {/* 主标题、文字叙述 */}
+      {/* 主標題與描述 */}
       <Heading mt="40px" textAlign="center" className={styles.pageTitle}>
         Coinbase NFT Hub
       </Heading>
       <Text textAlign="center" className={styles.pageSubtitle}>
-        Experience a new era of digital assets with seamless NFT accessibility and advanced DeFi utility.
+        Experience a new era of digital assets with seamless NFT accessibility
+        and advanced DeFi utility.
       </Text>
 
-      {/* NFT 列表或加载中 Spinner */}
+      {/* NFT 列表或加載中 Spinner */}
       {!nfts ? renderSpinner() : renderNFTSlider()}
     </Container>
   );
