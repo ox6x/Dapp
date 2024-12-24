@@ -5,14 +5,14 @@ interface QuantityProps {
   onQuantityChange: (quantity: number) => void;
   minQuantity?: number;
   buttonText?: string;
-  className?: string; // 添加 className 屬性
+  className?: string; // 添加 className 属性
 }
 
 const Quantity: React.FC<QuantityProps> = ({
   onQuantityChange,
   minQuantity = 1,
   buttonText = "Confirm",
-  className, // 接收 className 屬性
+  className, // 接收 className 属性
 }) => {
   const [quantity, setQuantity] = useState<number>(minQuantity);
 
@@ -29,28 +29,54 @@ const Quantity: React.FC<QuantityProps> = ({
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= minQuantity) {
-      setQuantity(value);
-      onQuantityChange(value);
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) { // 只允许数字输入
+      const numericValue = parseInt(value, 10);
+      if (!isNaN(numericValue)) {
+        setQuantity(Math.max(minQuantity, numericValue));
+        onQuantityChange(Math.max(minQuantity, numericValue));
+      } else {
+        setQuantity(minQuantity);
+      }
+    }
+  };
+
+  const handleInputBlur = () => {
+    if (quantity < minQuantity) {
+      setQuantity(minQuantity);
+      onQuantityChange(minQuantity);
     }
   };
 
   return (
     <div className={`${styles.quantityContainer} ${className}`}>
-      <button className={styles.decrementButton} onClick={handleDecrement}>
+      <button
+        className={styles.decrementButton}
+        onClick={handleDecrement}
+        aria-label="Decrement"
+      >
         -
       </button>
       <input
-        type="number"
+        type="text"
         value={quantity}
         onChange={handleInputChange}
+        onBlur={handleInputBlur}
         className={styles.quantityInput}
+        aria-label="Quantity input"
       />
-      <button className={styles.incrementButton} onClick={handleIncrement}>
+      <button
+        className={styles.incrementButton}
+        onClick={handleIncrement}
+        aria-label="Increment"
+      >
         +
       </button>
-      <button className={styles.confirmButton} onClick={() => onQuantityChange(quantity)}>
+      <button
+        className={styles.confirmButton}
+        onClick={() => onQuantityChange(quantity)}
+        aria-label="Confirm"
+      >
         {buttonText}
       </button>
     </div>
