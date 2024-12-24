@@ -2,7 +2,6 @@ import {
   Container,
   Flex,
   Heading,
-  Link,
   Drawer,
   DrawerBody,
   DrawerOverlay,
@@ -11,28 +10,34 @@ import {
   useDisclosure,
   IconButton,
   Text,
-  Box,
   Stack,
-  Button,
+  Box,
 } from "@chakra-ui/react";
 import {
   MediaRenderer,
   useAddress,
   useContract,
-  useContractRead,
   useNFT,
+  useContractRead,
 } from "@thirdweb-dev/react";
 import { FaWallet } from "react-icons/fa";
 import styles from './NavBar.module.scss';
 
-const TOOLS_ADDRESS = "0xYourToolsContractAddress"; // 替換為實際的合約地址
+// 多個合約地址
+const contracts = {
+  V1: "0x605f710b66Cc10A0bc0DE7BD8fe786D5C9719179", // V1 工具合約地址
+  V2: "0xf747821D7A019B0C8c11824a141D2EA6De89cA34", // V2 工具合約地址
+};
+
+// 代幣合約地址
+const tokens = {
+  TOKEN1: "0x1234567890abcdef1234567890abcdef12345678", // 第一個代幣合約地址
+  TOKEN2: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd", // 第二個代幣合約地址
+};
 
 export default function NavBar() {
   const address = useAddress();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // NFT 工具合約
-  const { contract: toolContract } = useContract(TOOLS_ADDRESS);
 
   if (!address) {
     return null;
@@ -42,14 +47,9 @@ export default function NavBar() {
     <Container className={styles.navBarContainer}>
       <Flex className={styles.navBarFlex}>
         <Heading className={styles.heading}>
-          <Link href="/" style={{ textDecoration: "none" }}>
-            BaseBot
-          </Link>
+          BaseBot
         </Heading>
         <Flex alignItems={"center"} justifyContent={"flex-end"} w="auto">
-          <Link href="/supplier" className={styles.link}>
-            Supplier
-          </Link>
           <IconButton
             icon={<FaWallet />}
             aria-label="Open Wallet"
@@ -60,57 +60,99 @@ export default function NavBar() {
         </Flex>
       </Flex>
 
-      {/* Drawer for NFT and Wallet */}
+      {/* Drawer for NFTs and Tokens */}
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerBody display="flex" flexDirection="column" alignItems="center" justifyContent="flex-start" pt={10}>
-            <Heading as="h2" size="lg" mb={4}>
+          <DrawerBody display="flex" flexDirection="column" alignItems="flex-start" justifyContent="flex-start" pt={6}>
+            <Heading as="h2" size="lg" mb={6}>
               Your NFTs
             </Heading>
 
-            {/* 顯示 NFT */}
-            {address ? (
-              <Stack spacing={6} w="100%">
-                {/* 使用 tokenId 1 作為示例，可以根據需求循環顯示多個 */}
-                {[1, 2, 3].map((tokenId) => {
-                  const { data: nftData } = useNFT(toolContract, tokenId);
+            {/* 顯示 NFTs */}
+            {Object.keys(contracts).map((version) => {
+              const { contract: toolContract } = useContract(contracts[version]);
 
-                  return (
-                    <Flex
-                      key={tokenId}
-                      direction="row"
-                      border="1px solid #e2e8f0"
-                      borderRadius="lg"
-                      p={4}
-                      align="center"
-                      gap={6}
-                    >
-                      {/* NFT 圖片 */}
-                      <MediaRenderer
-                        src={nftData?.metadata?.image || ""}
-                        alt={nftData?.metadata?.name || "NFT Image"}
-                        style={{
-                          width: "80px",
-                          height: "80px",
-                          borderRadius: "8px",
-                          objectFit: "cover",
-                        }}
-                      />
+              return (
+                <Box key={version} w="100%" mb={6}>
+                  <Heading size="md" mb={4}>
+                    Version {version}
+                  </Heading>
+                  <Stack spacing={4}>
+                    {[1, 2, 3].map((tokenId) => {
+                      const { data: nftData } = useNFT(toolContract, tokenId);
 
-                      {/* NFT 資訊 */}
-                      <Stack>
-                        <Text fontWeight="bold">{nftData?.metadata?.name || "Unknown NFT"}</Text>
-                        <Text>Token ID: {tokenId}</Text>
-                      </Stack>
-                    </Flex>
-                  );
-                })}
-              </Stack>
-            ) : (
-              <Text>Please connect your wallet to view NFTs.</Text>
-            )}
+                      return (
+                        <Flex
+                          key={`${version}-${tokenId}`}
+                          direction="row"
+                          border="1px solid #e2e8f0"
+                          borderRadius="lg"
+                          p={4}
+                          align="center"
+                          gap={6}
+                        >
+                          {/* NFT 圖片 */}
+                          <MediaRenderer
+                            src={nftData?.metadata?.image || ""}
+                            alt={nftData?.metadata?.name || "NFT Image"}
+                            style={{
+                              width: "80px",
+                              height: "80px",
+                              borderRadius: "8px",
+                              objectFit: "cover",
+                            }}
+                          />
+
+                          {/* NFT 資訊 */}
+                          <Stack>
+                            <Text fontWeight="bold">
+                              {nftData?.metadata?.name || "Unknown NFT"}
+                            </Text>
+                            <Text>Token ID: {tokenId}</Text>
+                          </Stack>
+                        </Flex>
+                      );
+                    })}
+                  </Stack>
+                </Box>
+              );
+            })}
+
+            {/* 顯示 Tokens */}
+            <Heading as="h2" size="lg" mb={6}>
+              Your Tokens
+            </Heading>
+            {Object.keys(tokens).map((token) => {
+              const { contract: tokenContract } = useContract(tokens[token]);
+              const { data: tokenBalance } = useContractRead(
+                tokenContract,
+                "balanceOf",
+                [address]
+              );
+
+              return (
+                <Box key={token} w="100%" mb={4}>
+                  <Flex
+                    direction="row"
+                    border="1px solid #e2e8f0"
+                    borderRadius="lg"
+                    p={4}
+                    align="center"
+                    justify="space-between"
+                  >
+                    <Text fontWeight="bold">{token}</Text>
+                    <Text>
+                      Balance:{" "}
+                      {tokenBalance
+                        ? parseFloat(tokenBalance.toString()).toFixed(2)
+                        : "Loading..."}
+                    </Text>
+                  </Flex>
+                </Box>
+              );
+            })}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
