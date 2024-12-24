@@ -23,34 +23,20 @@ export default function NavBar() {
                     <Link href="/supplier" className={styles.link}>
                         Supplier
                     </Link>
-                    {/* Wallet Toggle */}
+
+                    {/* Toggle for wallet */}
                     <Box
-                        position="relative"
                         onClick={() => setWalletVisible(!isWalletVisible)}
                         className={styles.walletToggle}
-                        cursor="pointer"
+                    ></Box>
+
+                    {/* Wallet sliding container */}
+                    <Box
+                        className={`${styles.walletContent} ${
+                            isWalletVisible ? styles.visible : ""
+                        }`}
                     >
-                        {/* Wallet Button Preview */}
-                        <Box
-                            position="absolute"
-                            top={isWalletVisible ? "0" : "-60px"} // Adjust height to slide in/out
-                            transition="top 0.3s ease-in-out"
-                            bg="gray.100"
-                            p={2}
-                            rounded="md"
-                            shadow="md"
-                            zIndex="10"
-                        >
-                            <ConnectWallet className={styles.connectWallet} />
-                        </Box>
-                        <Box
-                            bg="gray.300"
-                            h="10px"
-                            w="100px"
-                            rounded="md"
-                            mt="10px"
-                            _hover={{ bg: "gray.400" }}
-                        />
+                        <ConnectWallet className={styles.connectWallet} />
                     </Box>
                 </Flex>
             </Flex>
