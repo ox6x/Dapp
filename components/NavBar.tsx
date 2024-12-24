@@ -1,4 +1,4 @@
-import { Container, Flex, Heading, Link, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Button, IconButton } from "@chakra-ui/react";
+import { Container, Flex, Heading, Link, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, IconButton } from "@chakra-ui/react";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { FaWallet } from "react-icons/fa";
 import styles from './NavBar.module.scss';
@@ -37,7 +37,7 @@ export default function NavBar() {
             {/* Drawer for Connect Wallet */}
             <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
                 <DrawerOverlay />
-                <DrawerContent>
+                <DrawerContent width="350px"> {/* 設置寬度為 350px */}
                     <DrawerCloseButton />
                     <DrawerBody display="flex" flexDirection="column" alignItems="center" justifyContent="flex-start" pt={10}>
                         <ConnectWallet className={styles.connectWallet} />
