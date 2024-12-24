@@ -3,7 +3,7 @@ import { MediaRenderer, useAddress, useContract, useContractRead, useNFT } from 
 import { STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import Quantity from "./Quantity";
-import styles from './EquippedSection.module.scss';
+import styles from "./EquippedSection.module.scss";
 
 const EquippedSection = ({ equippedTools }: any) => {
     const address = useAddress();
@@ -39,9 +39,11 @@ const EquippedSection = ({ equippedTools }: any) => {
     };
 
     return (
-        <Box className={styles.equippedSection}>
-            <Card className={styles.card}>
-                <Heading className={styles.heading}>Activated</Heading>
+        <Box className={styles.equippedSection} p={4}>
+            <Card className={styles.card} p={6}>
+                <Heading className={styles.heading} mb={4}>
+                    Activated
+                </Heading>
                 {equippedTools &&
                     equippedTools[0].map((nft: ethers.BigNumber) => {
                         const tokenId = nft.toNumber();
@@ -64,19 +66,20 @@ const EquippedSection = ({ equippedTools }: any) => {
                                 borderRadius="lg"
                                 p={4}
                                 mb={4}
-                                gap={4}
+                                gap={6}
+                                align="center"
                             >
                                 {/* 左側：圖片和名稱 */}
                                 <Stack
                                     spacing={4}
-                                    className={styles.leftSection}
                                     align="center"
-                                    flex={{ base: "0 0 auto", md: "0 0 200px" }}
+                                    flexShrink={0}
+                                    flex={{ base: "1", md: "0 0 150px" }}
                                 >
                                     <MediaRenderer
                                         src={nftData?.metadata?.image || ""}
+                                        alt={`${nftData?.metadata?.name || "NFT Image"}`} // 確保 alt 為字符串
                                         className={styles.nftImage}
-                                        alt={nftData?.metadata?.name || "NFT Image"}
                                         style={{
                                             width: "150px",
                                             height: "150px",
@@ -84,25 +87,15 @@ const EquippedSection = ({ equippedTools }: any) => {
                                             objectFit: "cover",
                                         }}
                                     />
-                                    <Text
-                                        className={styles.nftName}
-                                        fontWeight="bold"
-                                        fontSize="lg"
-                                        textAlign="center"
-                                    >
-                                        {nftData?.metadata?.name}
+                                    <Text fontWeight="bold" textAlign="center" fontSize="lg">
+                                        {nftData?.metadata?.name || "Unknown"}
                                     </Text>
                                 </Stack>
 
                                 {/* 右側：操作和信息 */}
-                                <Flex
-                                    direction="column"
-                                    justify="space-between"
-                                    className={styles.rightSection}
-                                    flex="1"
-                                >
-                                    {/* 操作按鈕 */}
-                                    <Stack spacing={4} direction="row" justify="space-between">
+                                <Stack spacing={4} flex="1">
+                                    {/* 操作區 */}
+                                    <Stack spacing={4} direction={{ base: "column", md: "row" }} justify="space-between">
                                         <Quantity
                                             minQuantity={1}
                                             onQuantityChange={(quantity) => handleOffClick(tokenId, quantity)}
@@ -116,30 +109,23 @@ const EquippedSection = ({ equippedTools }: any) => {
                                             color="white"
                                             _hover={{ bg: "blue.400" }}
                                             _active={{ bg: "blue.600" }}
-                                            flex="0 0 auto"
+                                            flexShrink={0}
                                         >
                                             Claim
                                         </Button>
                                     </Stack>
 
                                     {/* 獎勵和裝備數量 */}
-                                    <Box mt={4}>
+                                    <Box>
                                         <Divider className={styles.divider} />
-                                        <Flex
-                                            justify="space-between"
-                                            className={styles.rewardInfo}
-                                            mt={4}
-                                            flexWrap="wrap"
-                                        >
-                                            <Text className={styles.equippedQuantity} fontWeight="medium">
-                                                Equipped Quantity: {equippedQuantity}
-                                            </Text>
-                                            <Text className={styles.tokenRewards} fontWeight="medium" color="green.500">
+                                        <Flex justify="space-between" wrap="wrap" mt={4}>
+                                            <Text fontWeight="medium">Equipped Quantity: {equippedQuantity}</Text>
+                                            <Text fontWeight="medium" color="green.500">
                                                 Token Rewards: {claimableCarrot}
                                             </Text>
                                         </Flex>
                                     </Box>
-                                </Flex>
+                                </Stack>
                             </Flex>
                         );
                     })}
