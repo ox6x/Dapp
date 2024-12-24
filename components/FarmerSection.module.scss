@@ -1,1 +1,29 @@
+// 主色调
+$primary-blue: #1652F0;
+$secondary-gray: #F6F6F6;
+$text-color: #333;
 
+.container {
+  background-color: $secondary-gray;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.card {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  color: $primary-blue;
+}
+
+.nft-box {
+  border: 1px solid $primary-blue;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.text, .balance {
+  color: $text-color;
+}
