@@ -25,10 +25,10 @@ const Home: NextPage = () => {
       const tools = await useContract(TOOLS_ADDRESS);
       const staking = await useContract(STAKING_ADDRESS);
       const rewards = await useContract(REWARDS_ADDRESS);
-      setFarmerContract(farmer);
-      setToolsContract(tools);
-      setStakingContract(staking);
-      setRewardContract(rewards);
+      setFarmerContract(farmer.contract);
+      setToolsContract(tools.contract);
+      setStakingContract(staking.contract);
+      setRewardContract(rewards.contract);
     };
 
     initializeContracts();
