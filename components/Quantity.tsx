@@ -3,16 +3,18 @@ import styles from "./Quantity.module.scss";
 
 interface QuantityProps {
   onQuantityChange: (quantity: number) => void;
+  onClaim?: () => void; // 添加 onClaim 回调
   minQuantity?: number;
   buttonText?: string;
-  className?: string; // 添加 className 属性
+  className?: string;
 }
 
 const Quantity: React.FC<QuantityProps> = ({
   onQuantityChange,
+  onClaim, // 接收 onClaim 回调
   minQuantity = 1,
   buttonText = "Confirm",
-  className, // 接收 className 属性
+  className,
 }) => {
   const [quantity, setQuantity] = useState<number>(minQuantity);
 
@@ -30,7 +32,7 @@ const Quantity: React.FC<QuantityProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^\d*$/.test(value)) { // 只允许数字输入
+    if (/^\d*$/.test(value)) {
       const numericValue = parseInt(value, 10);
       if (!isNaN(numericValue)) {
         setQuantity(Math.max(minQuantity, numericValue));
@@ -79,6 +81,15 @@ const Quantity: React.FC<QuantityProps> = ({
       >
         {buttonText}
       </button>
+      {onClaim && ( // 添加 Claim 按钮
+        <button
+          className={styles.claimButton}
+          onClick={onClaim}
+          aria-label="Claim"
+        >
+          Claim
+        </button>
+      )}
     </div>
   );
 };
