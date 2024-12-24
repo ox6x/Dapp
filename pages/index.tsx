@@ -13,7 +13,14 @@ import {
   setVersion,
 } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
-import { Container, Select } from "@chakra-ui/react";
+import {
+  Container,
+  Select,
+  VStack,
+  Heading,
+  Spinner,
+  Box,
+} from "@chakra-ui/react";
 
 import LoginSection from "../components/LoginSection";
 import LoadingScreen from "../components/LoadingScreen";
@@ -21,7 +28,6 @@ import FarmerSection from "../components/FarmerSection";
 import InventorySection from "../components/InventorySection";
 import EquippedSection from "../components/EquippedSection";
 import { useState, useEffect } from "react";
-import styles from './index.module.scss'; // 引入 SCSS 文件
 
 const Home: NextPage = () => {
   const [version, setVersionState] = useState<"V1" | "V2">("V1");
@@ -68,39 +74,52 @@ const Home: NextPage = () => {
   }
 
   if (loadingOwnedFarmers) {
-    return <LoadingScreen />;
+    return (
+      <Container maxW="container.sm" centerContent>
+        <VStack spacing={6}>
+          <Spinner size="xl" />
+          <Heading>Loading Farmers...</Heading>
+        </VStack>
+      </Container>
+    );
   }
 
   if (ownedFarmers?.length === 0) {
     return (
-      <Container className={styles.container} maxW={"container.sm"} px={4}>
+      <Container maxW="container.sm" py={6}>
         <ClaimFarmer />
       </Container>
     );
   }
 
   return (
-    <Container className={styles.container} maxW={"container.sm"} px={4} py={6}>
-      {/* 下拉選單：位於頂部 */}
-      <Select
+    <Container maxW="container.sm" px={4} py={6}>
+      {/* 下拉選單 */}
+      <Box mb={6}>
+        <Select
           value={version}
           onChange={handleVersionChange}
           width="auto"
-      >
-        <option value="V1">ETH</option>
-        <option value="V2">bETH</option>
-      </Select>
+          borderColor="gray.400"
+          focusBorderColor="teal.400"
+        >
+          <option value="V1">ETH</option>
+          <option value="V2">bETH</option>
+        </Select>
+      </Box>
 
       {/* 各個區塊 */}
-      <div className={styles.section}>
-        <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
-      </div>
-      <div className={styles.section}>
-        <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
-      </div>
-      <div className={styles.section}>
-        <EquippedSection equippedTools={equippedTools} />
-      </div>
+      <VStack spacing={6} align="stretch">
+        <Box borderWidth={1} borderRadius="md" p={4} shadow="md">
+          <FarmerSection ownedFarmers={ownedFarmers} rewardBalance={rewardBalance} />
+        </Box>
+        <Box borderWidth={1} borderRadius="md" p={4} shadow="md">
+          <InventorySection ownedTools={ownedTools} loadingOwnedTools={loadingOwnedTools} />
+        </Box>
+        <Box borderWidth={1} borderRadius="md" p={4} shadow="md">
+          <EquippedSection equippedTools={equippedTools} />
+        </Box>
+      </VStack>
     </Container>
   );
 };
