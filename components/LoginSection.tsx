@@ -6,6 +6,10 @@ const LoginSection: React.FC = () => {
   const address = useAddress();
   const connectWithMetamask = useMetamask();
 
+  const handleConnectWallet = () => {
+    connectWithMetamask(); // 確保不傳入任何參數
+  };
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
@@ -16,7 +20,7 @@ const LoginSection: React.FC = () => {
         {!address && (
           <button
             className={styles.loginButton}
-            onClick={connectWithMetamask}
+            onClick={handleConnectWallet} // 使用封裝的函數
           >
             Connect Wallet
           </button>
