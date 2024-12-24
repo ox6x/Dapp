@@ -1,6 +1,6 @@
-import { useAddress, useContractRead, useOwnedNFTs } from "@thirdweb-dev/react";
+import { useAddress, useContractRead, useOwnedNFTs, useContract } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
-import { FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS, TOOLS_ADDRESS } from "../const/addresses";
+import { getToolsAddress, FARMER_ADDRESS, REWARDS_ADDRESS, STAKING_ADDRESS } from "../const/addresses";
 import { ClaimFarmer } from "../components/ClaimFarmer";
 import { Container, Button, Flex } from "@chakra-ui/react";
 
@@ -18,18 +18,26 @@ const Home: NextPage = () => {
 
   const handleVersionChange = (newVersion: "V1" | "V2") => {
     dispatch({ type: "SET_VERSION", version: newVersion });
-    // Additional logic to reinitialize contract if needed
   };
 
-  const { contract: farmercontract } = useContract(FARMER_ADDRESS);
+  const { contract: farmerContract } = useContract(FARMER_ADDRESS);
   const { contract: stakingContract } = useContract(STAKING_ADDRESS);
   const { contract: rewardContract } = useContract(REWARDS_ADDRESS);
 
-  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmercontract, address);
+  const { data: ownedFarmers, isLoading: loadingOwnedFarmers } = useOwnedNFTs(farmerContract, address);
   const { data: ownedTools, isLoading: loadingOwnedTools } = useOwnedNFTs(toolsContract, address);
 
-  const { data: equippedTools } = useContractRead(stakingContract, "getStakeInfo", [address]);
-  const { data: rewardBalance } = useContractRead(rewardContract, "balanceOf", [address]);
+  const { data: equippedTools, error: equippedToolsError } = useContractRead(stakingContract, "getStakeInfo", [address]);
+  const { data: rewardBalance, error: rewardBalanceError } = useContractRead(rewardContract, "balanceOf", [address]);
+
+  useEffect(() => {
+    if (equippedToolsError) {
+      console.error("Error fetching equipped tools:", equippedToolsError);
+    }
+    if (rewardBalanceError) {
+      console.error("Error fetching reward balance:", rewardBalanceError);
+    }
+  }, [equippedToolsError, rewardBalanceError]);
 
   if (!address) {
     return <LoginSection />;
