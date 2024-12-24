@@ -1,20 +1,50 @@
-// LoadingScreen.module.scss - Binance Inspired
+// LoginSection.module.scss - Binance Inspired
 
 $binance-yellow: #f3ba2f;
-$bg-white: #ffffff;
+$bg-dark: #12161c;
+$bg-light: #f7f7f7;
+$text-dark: #242d35;
+$text-light: #ffffff;
 
-.loadingScreenContainer {
-  max-width: 640px;
-  padding: 1rem;
-}
-
-.loadingScreenFlex {
-  height: 100vh;
+.container {
+  display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  background-color: $bg-dark;
 }
 
-.loadingSpinner {
-  size: 64px;
-  color: $binance-yellow;
+.content {
+  text-align: center;
+  background-color: $bg-light;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+  font-size: 2rem;
+  color: $text-dark;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: $text-dark;
+  margin-bottom: 2rem;
+}
+
+.connectButton {
+  background-color: $binance-yellow;
+  color: $text-light;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: darken($binance-yellow, 10%);
+  }
 }
