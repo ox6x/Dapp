@@ -86,7 +86,6 @@ const Home: NextPage = () => {
         className={styles.select}
         value={version}
         onChange={handleVersionChange}
-        width="5ch"
         mb={4}
       >
         <option value="V1">ETH</option>
