@@ -25,7 +25,8 @@
     "react-dom": "^18.2",
     "react-slick": "^0.29.0",
     "slick-carousel": "^1.8.1",
-    "sass": "^1.68.0"
+    "sass": "^1.68.0",
+    "react-icons": "^4.10.1"
   },
   "devDependencies": {
     "@types/node": "^18.11.11",
