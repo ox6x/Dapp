@@ -13,8 +13,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": ".",                          // 添加此行
+    "paths": {                               // 添加此部分
+      "@contexts/*": ["contexts/*"],
+      "@components/*": ["components/*"],
+      "@utils/*": ["utils/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types/**/*.d.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "types/**/*.d.ts",
+    "contexts/**/*.ts",                      // 添加此行
+    "contexts/**/*.tsx"                      // 添加此行
+  ],
   "exclude": ["node_modules"]
 }
