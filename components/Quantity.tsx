@@ -37,56 +37,20 @@ const Quantity: React.FC<QuantityProps> = ({
   };
 
   return (
-    <div className={className} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <button
-        onClick={handleDecrement}
-        style={{
-          padding: "6px 12px",
-          background: "#3182ce",
-          color: "#fff",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
+    <div className={`${styles.quantityContainer} ${className}`}>
+      <button className={styles.decrementButton} onClick={handleDecrement}>
         -
       </button>
       <input
         type="number"
         value={quantity}
         onChange={handleInputChange}
-        style={{
-          width: "50px",
-          textAlign: "center",
-          padding: "4px",
-          borderRadius: "4px",
-          border: "1px solid #ccc",
-        }}
+        className={styles.quantityInput}
       />
-      <button
-        onClick={handleIncrement}
-        style={{
-          padding: "6px 12px",
-          background: "#3182ce",
-          color: "#fff",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
+      <button className={styles.incrementButton} onClick={handleIncrement}>
         +
       </button>
-      <button
-        onClick={() => onQuantityChange(quantity)}
-        style={{
-          padding: "6px 12px",
-          background: "#38a169",
-          color: "#fff",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
+      <button className={styles.confirmButton} onClick={() => onQuantityChange(quantity)}>
         {buttonText}
       </button>
     </div>
