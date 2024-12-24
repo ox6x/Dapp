@@ -3,21 +3,50 @@
 /* 設置全局樣式 */
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f9fbfd; /* Light Background */
-  color: #333333; /* Text Color */
+  background-color: #f3f4f6; /* 幣安背景色 */
+  color: #1e2022; /* 幣安文字顏色 */
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #333333;
+  color: #1e2022; /* 標題文字顏色 */
 }
 
 a {
-  color: #0052ff; /* CoinBase Blue */
+  color: #f0b90b; /* 幣安黃色 */
   text-decoration: none;
 
   &:hover {
-    color: darken(#0052ff, 10%);
+    color: darken(#f0b90b, 10%);
   }
 }
 
 /* 添加其他全局樣式 */
+button {
+  background-color: #f0b90b;
+  color: #1e2022;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken(#f0b90b, 10%);
+  }
+}
+
+input, textarea {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+}
