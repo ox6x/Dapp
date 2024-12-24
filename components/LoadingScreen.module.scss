@@ -1,1 +1,22 @@
+/* components/LoadingScreen.module.scss */
 
+/* 設置全局樣式 */
+.loadingScreenContainer {
+  height: 100vh; /* 使容器佔滿整個視窗高度 */
+  display: flex;
+  justify-content: center; /* 水平置中 */
+  align-items: center; /* 垂直置中 */
+  background-color: #f3f4f6; /* 幣安背景色 */
+}
+
+.loadingScreenFlex {
+  display: flex;
+  justify-content: center; /* 水平置中 */
+  align-items: center; /* 垂直置中 */
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  color: #f0b90b; /* 幣安黃色 */
+}
