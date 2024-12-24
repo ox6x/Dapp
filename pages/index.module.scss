@@ -1,93 +1,112 @@
+/* 主容器樣式 */
 .container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 16px;
+  background: linear-gradient(to bottom, #f9f9f9, #f3f4f6); /* 柔和漸層背景 */
+  padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: #f3f4f6; /* Binance 淡灰背景 */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.selectBox {
-  margin-bottom: 16px;
+/* Flex 容器，用於下拉選單 */
+.flex {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
 
-  select {
-    width: auto;
-    padding: 8px 16px;
-    border: 1px solid #f3ba2f; /* Binance 黃色 */
-    border-radius: 4px;
-    background-color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: border-color 0.2s;
+/* 下拉選單樣式 */
+.select {
+  border: 1px solid #f3ba2f; /* Binance 黃色 */
+  border-radius: 6px;
+  background-color: #ffffff;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
-    &:focus {
-      border-color: #d4a214; /* 深黃 */
-      outline: none;
-    }
+  &:hover {
+    border-color: #d4a214; /* 深黃 */
+  }
+
+  &:focus {
+    border-color: #f3ba2f; /* 黃色焦點 */
+    box-shadow: 0 0 4px rgba(243, 186, 47, 0.6);
+    outline: none;
   }
 }
 
-.vStack {
+/* 垂直堆疊容器 */
+.vstack {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  align-items: stretch;
+  width: 100%;
+  max-width: 600px; /* 適合小屏幕的最大寬度 */
 }
 
+/* 各個區塊樣式 */
 .box {
-  border: 1px solid #d1d5db; /* 邊框顏色 */
-  border-radius: 8px;
-  padding: 16px;
-  background-color: #fff;
+  border: 1px solid #d1d5db; /* 默認灰色邊框 */
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 
   &:hover {
-    border-color: #f3ba2f; /* Binance 黃色 */
+    transform: translateY(-4px); /* 輕微上移 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: #f3ba2f; /* Binance 黃色邊框 */
   }
 }
 
-.heading {
-  font-size: 20px;
-  font-weight: bold;
-  color: #2b6cb0; /* Binance 藍色 */
-}
-
+/* 加載中的樣式 */
 .spinner {
   color: #f3ba2f; /* Binance 黃色 */
+  margin-top: 40px;
 }
 
-.button {
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: #2b6cb0; /* Binance 藍色 */
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
+/* 主標題樣式 */
+.heading {
+  font-size: 24px;
   font-weight: bold;
+  color: #2b6cb0; /* Binance 藍色 */
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* 說明文字樣式 */
+.text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333333; /* 深灰色 */
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* 按鈕樣式（可覆蓋 Chakra UI 默認按鈕） */
+.button {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #2b6cb0; /* Binance 藍色 */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    background-color: #225a9d; /* 深藍 */
+    background-color: #225a9d; /* 深藍色 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
-  &:focus {
-    outline: none;
-  }
-}
-
-.input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #000;
-  text-align: center;
-
-  &:focus {
-    border-color: #f3ba2f; /* Binance 黃色 */
-    outline: none;
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #e5e7eb; /* 禁用灰色 */
   }
 }
