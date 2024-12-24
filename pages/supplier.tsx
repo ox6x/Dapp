@@ -174,7 +174,7 @@ export default function StorePage() {
           width="5ch"
         >
           <option value="V1">ETH</option>
-          <option value="V2">bETH</</option>
+          <option value="V2">bETH</option>
         </Select>
       </Flex>
 
