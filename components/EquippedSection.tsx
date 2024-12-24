@@ -54,7 +54,6 @@ const EquippedSection = ({ equippedTools }: any) => {
                             [tokenId, address]
                         );
 
-                        // 获取装备数量和奖励
                         const equippedQuantity = ethers.utils.formatUnits(claimableRewards?.[0] || "0", 0);
                         const claimableCarrot = ethers.utils.formatUnits(claimableRewards?.[1] || "0", 18);
 
