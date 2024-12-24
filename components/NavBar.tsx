@@ -97,7 +97,7 @@ export default function NavBar() {
                           {/* NFT Image */}
                           <MediaRenderer
                             src={nftData?.metadata?.image || ""}
-                            alt={nftData?.metadata?.name || "NFT Image"}
+                            alt={String(nftData?.metadata?.name || "NFT Image")}
                             style={{
                               width: "80px",
                               height: "80px",
@@ -109,7 +109,7 @@ export default function NavBar() {
                           {/* NFT Info */}
                           <Stack>
                             <Text fontWeight="bold">
-                              {nftData?.metadata?.name || "Unknown NFT"}
+                              {String(nftData?.metadata?.name || "Unknown NFT")}
                             </Text>
                             <Text>Token ID: {tokenId}</Text>
                           </Stack>
