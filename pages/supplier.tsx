@@ -217,11 +217,6 @@ export default function StorePage() {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Link href="/">
-          <Flex justifyContent="center">
-            <Button width="fit-content">Back</Button>
-          </Flex>
-        </Link>
         <Select
           value={version}
           onChange={handleVersionChange}
