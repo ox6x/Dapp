@@ -60,7 +60,7 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
                         </Stack>
                     </Flex>
                     <Box mt={5}>
-                        <Text>Claimable $CARROT (V1):</Text>
+                        <Text>Token:</Text>
                         <Text>
                             {ethers.utils.formatUnits(claimableRewardsV1?.[1] || 0, 18)}
                         </Text>
@@ -96,7 +96,7 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
                         </Stack>
                     </Flex>
                     <Box mt={5}>
-                        <Text>Claimable $CARROT (V2):</Text>
+                        <Text>Token:</Text>
                         <Text>
                             {ethers.utils.formatUnits(claimableRewardsV2?.[1] || 0, 18)}
                         </Text>
