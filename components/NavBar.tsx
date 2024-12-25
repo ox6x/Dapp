@@ -1,11 +1,28 @@
-import { Container, Flex, Heading, Link, Drawer, DrawerBody, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, Button, IconButton } from "@chakra-ui/react";
+import { 
+    Container, 
+    Flex, 
+    Heading, 
+    Link, 
+    Drawer, 
+    DrawerBody, 
+    DrawerOverlay, 
+    DrawerContent, 
+    DrawerCloseButton, 
+    useDisclosure, 
+    IconButton, 
+    Box 
+} from "@chakra-ui/react";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { FaWallet } from "react-icons/fa";
+import { DrawerEquippedNFT } from "./DrawerEquippedNFT"; // 引入我們的組件
 import styles from './NavBar.module.scss';
 
 export default function NavBar() {
     const address = useAddress();
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    // 示例数据：装备的 NFT tokenId 列表
+    const equippedTools = [1, 2, 3];
 
     if (!address) {
         return null;
@@ -23,7 +40,6 @@ export default function NavBar() {
                     <Link href="/supplier" className={styles.link}>
                         Supplier
                     </Link>
-                    {/* 隱藏的按鈕 */}
                     <IconButton 
                         icon={<FaWallet />} 
                         aria-label="Open Wallet" 
@@ -40,7 +56,20 @@ export default function NavBar() {
                 <DrawerContent>
                     <DrawerCloseButton />
                     <DrawerBody display="flex" flexDirection="column" alignItems="center" justifyContent="flex-start" pt={10}>
+                        {/* Connect Wallet */}
                         <ConnectWallet className={styles.connectWallet} />
+                        
+                        {/* NFT Display Section */}
+                        <Box w="100%" mt={6}>
+                            <Heading size="md" mb={4}>Your Equipped NFTs</Heading>
+                            {equippedTools.length > 0 ? (
+                                equippedTools.map((tokenId) => (
+                                    <DrawerEquippedNFT key={tokenId} tokenId={tokenId} />
+                                ))
+                            ) : (
+                                <Box>No NFTs Found</Box>
+                            )}
+                        </Box>
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
