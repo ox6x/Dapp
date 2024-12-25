@@ -68,7 +68,7 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
                             contractAddress={STAKING_ADDRESS_V1}
                             action={(contract) => contract.call("claimRewards", [props.tokenId])}
                         >
-                            Claim $CARROT (V1)
+                            Claim
                         </Web3Button>
                     </Box>
                 </Card>
@@ -104,7 +104,7 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
                             contractAddress={STAKING_ADDRESS_V2}
                             action={(contract) => contract.call("claimRewards", [props.tokenId])}
                         >
-                            Claim $CARROT (V2)
+                            Claim
                         </Web3Button>
                     </Box>
                 </Card>
