@@ -21,8 +21,8 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
     const { contract: stakingContractV2 } = useContract(STAKING_ADDRESS_V2);
 
     // NFT 資料
-    const { data: nftV1, isLoading: isLoadingV1, error: errorV1 } = useNFT(toolContractV1, props.tokenId);
-    const { data: nftV2, isLoading: isLoadingV2, error: errorV2 } = useNFT(toolContractV2, props.tokenId);
+    const { data: nftV1 } = useNFT(toolContractV1, props.tokenId);
+    const { data: nftV2 } = useNFT(toolContractV2, props.tokenId);
 
     // 可領取獎勵資料
     const { data: claimableRewardsV1 } = useContractRead(
@@ -36,39 +36,20 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
         [props.tokenId, address]
     );
 
-    // 如果正在加載數據，顯示加載中
-    if (isLoadingV1 || isLoadingV2) {
-        return <Text>Loading...</Text>;
-    }
-
-    // 錯誤處理（可選）
-    if (errorV1 || errorV2) {
-        console.error("Error fetching NFT data", { errorV1, errorV2 });
-        return <Text>Error loading NFTs.</Text>;
-    }
-
-    // 調試輸出，確保拿到的數據正確
-    console.log("nftV1 data:", nftV1);
-    console.log("nftV2 data:", nftV2);
-
-    // 簡化的有效性檢查
-    const isValidNFTV1 = !!(nftV1?.metadata?.image && nftV1?.metadata?.name);
-    const isValidNFTV2 = !!(nftV2?.metadata?.image && nftV2?.metadata?.name);
-
     // Helper function to render NFT card
     const renderNFTCard = (nft: any, rewards: any, version: string, stakingAddress: string) => (
         <Card p={5} mb={5}>
             <Flex>
                 <Box>
                     <MediaRenderer
-                        src={nft.metadata.image}
+                        src={nft.metadata?.image || ""}
                         height="80%"
                         width="80%"
                     />
                 </Box>
                 <Stack spacing={1}>
                     <Text fontSize={"2xl"} fontWeight={"bold"}>
-                        {nft.metadata.name} ({version})
+                        {nft.metadata?.name || "Unnamed NFT"} ({version})
                     </Text>
                     <Text>
                         Equipped: {ethers.utils.formatUnits(rewards?.[0] || 0, 0)}
@@ -93,13 +74,17 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
     return (
         <Box>
             {/* 渲染工具合約 V1 相關資訊 */}
-            {isValidNFTV1 && renderNFTCard(nftV1, claimableRewardsV1, "V1", STAKING_ADDRESS_V1)}
+            {nftV1 && claimableRewardsV1?.[0] && ethers.utils.formatUnits(claimableRewardsV1?.[0], 0) !== "0" && (
+                renderNFTCard(nftV1, claimableRewardsV1, "V1", STAKING_ADDRESS_V1)
+            )}
 
             {/* 渲染工具合約 V2 相關資訊 */}
-            {isValidNFTV2 && renderNFTCard(nftV2, claimableRewardsV2, "V2", STAKING_ADDRESS_V2)}
+            {nftV2 && claimableRewardsV2?.[0] && ethers.utils.formatUnits(claimableRewardsV2?.[0], 0) !== "0" && (
+                renderNFTCard(nftV2, claimableRewardsV2, "V2", STAKING_ADDRESS_V2)
+            )}
 
-            {/* 提示用戶沒有 NFT */}
-            {!isValidNFTV1 && !isValidNFTV2 && <Text>No NFTs available to display.</Text>}
+            {/* 提示用戶沒有符合條件的 NFT */}
+            {!nftV1 && !nftV2 && <Text>No NFTs with rewards available.</Text>}
         </Box>
     );
 };
