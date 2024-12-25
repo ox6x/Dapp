@@ -21,8 +21,8 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
     const { contract: stakingContractV2 } = useContract(STAKING_ADDRESS_V2);
 
     // NFT 資料
-    const { data: nftV1, isLoading: isLoadingV1 } = useNFT(toolContractV1, props.tokenId);
-    const { data: nftV2, isLoading: isLoadingV2 } = useNFT(toolContractV2, props.tokenId);
+    const { data: nftV1, isLoading: isLoadingV1, error: errorV1 } = useNFT(toolContractV1, props.tokenId);
+    const { data: nftV2, isLoading: isLoadingV2, error: errorV2 } = useNFT(toolContractV2, props.tokenId);
 
     // 可領取獎勵資料
     const { data: claimableRewardsV1 } = useContractRead(
@@ -41,9 +41,19 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
         return <Text>Loading...</Text>;
     }
 
-    // 嚴格檢查 NFT 數據是否存在
-    const isValidNFTV1 = nftV1?.metadata && nftV1.metadata.image && nftV1.metadata.name;
-    const isValidNFTV2 = nftV2?.metadata && nftV2.metadata.image && nftV2.metadata.name;
+    // 錯誤處理（可選）
+    if (errorV1 || errorV2) {
+        console.error("Error fetching NFT data", { errorV1, errorV2 });
+        return <Text>Error loading NFTs.</Text>;
+    }
+
+    // 調試輸出，確保拿到的數據正確
+    console.log("nftV1 data:", nftV1);
+    console.log("nftV2 data:", nftV2);
+
+    // 簡化的有效性檢查
+    const isValidNFTV1 = !!(nftV1?.metadata?.image && nftV1?.metadata?.name);
+    const isValidNFTV2 = !!(nftV2?.metadata?.image && nftV2?.metadata?.name);
 
     // Helper function to render NFT card
     const renderNFTCard = (nft: any, rewards: any, version: string, stakingAddress: string) => (
@@ -83,18 +93,13 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
     return (
         <Box>
             {/* 渲染工具合約 V1 相關資訊 */}
-            {isValidNFTV1 ? (
-                renderNFTCard(nftV1, claimableRewardsV1, "V1", STAKING_ADDRESS_V1)
-            ) : (
-                <Text>No V1 NFT available.</Text>
-            )}
+            {isValidNFTV1 && renderNFTCard(nftV1, claimableRewardsV1, "V1", STAKING_ADDRESS_V1)}
 
             {/* 渲染工具合約 V2 相關資訊 */}
-            {isValidNFTV2 ? (
-                renderNFTCard(nftV2, claimableRewardsV2, "V2", STAKING_ADDRESS_V2)
-            ) : (
-                <Text>No V2 NFT available.</Text>
-            )}
+            {isValidNFTV2 && renderNFTCard(nftV2, claimableRewardsV2, "V2", STAKING_ADDRESS_V2)}
+
+            {/* 提示用戶沒有 NFT */}
+            {!isValidNFTV1 && !isValidNFTV2 && <Text>No NFTs available to display.</Text>}
         </Box>
     );
 };
