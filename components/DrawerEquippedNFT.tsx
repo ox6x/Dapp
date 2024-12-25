@@ -1,6 +1,13 @@
-import { MediaRenderer, Web3Button, useAddress, useContract, useContractRead, useNFT } from "@thirdweb-dev/react";
+import {
+    MediaRenderer,
+    Web3Button,
+    useAddress,
+    useContract,
+    useContractRead,
+    useNFT,
+} from "@thirdweb-dev/react";
 import { ethers } from "ethers";
-import { Text, Box, Card, Stack, Flex } from "@chakra-ui/react";
+import { Text, Box, Card, Stack, Flex, VStack, Heading } from "@chakra-ui/react";
 
 interface EquippedProps {
     tokenId: number;
@@ -37,78 +44,70 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
     );
 
     return (
-        <Box>
+        <VStack spacing={5} align="stretch" p={5}>
             {/* 显示工具合约V1相关信息 */}
             {nftV1 && (
-                <Card p={5} mb={5}>
-                    <Flex>
-                        <Box>
+                <Card p={5} shadow="md" borderRadius="lg">
+                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={5}>
+                        <Box flex="0 0 auto">
                             <MediaRenderer
                                 src={nftV1.metadata.image}
-                                height="80%"
-                                width="80%"
+                                height="100%"
+                                width="100%"
+                                style={{ maxWidth: "150px", borderRadius: "8px" }}
                             />
                         </Box>
-                        <Stack spacing={1}>
-                            <Text fontSize={"2xl"} fontWeight={"bold"}>
-                                {nftV1.metadata.name} (V1)
+                        <VStack align="start" spacing={3} flex="1">
+                            <Heading size="md">{nftV1.metadata.name} (V1)</Heading>
+                            <Text fontSize="lg" color="gray.600">
+                                Token Rewards:{" "}
+                                <Text as="span" fontWeight="bold">
+                                    {ethers.utils.formatUnits(claimableRewardsV1?.[1] || 0, 18)}
+                                </Text>
                             </Text>
-                            <Text>
-                                Equipped:{" "}
-                                {ethers.utils.formatUnits(claimableRewardsV1?.[0] || 0, 0)}
-                            </Text>
-                        </Stack>
+                            <Web3Button
+                                contractAddress={STAKING_ADDRESS_V1}
+                                action={(contract) => contract.call("claimRewards", [props.tokenId])}
+                                mt={3}
+                            >
+                                Claim Rewards
+                            </Web3Button>
+                        </VStack>
                     </Flex>
-                    <Box mt={5}>
-                        <Text>Token:</Text>
-                        <Text>
-                            {ethers.utils.formatUnits(claimableRewardsV1?.[1] || 0, 18)}
-                        </Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS_V1}
-                            action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                        >
-                            Claim
-                        </Web3Button>
-                    </Box>
                 </Card>
             )}
 
             {/* 显示工具合约V2相关信息 */}
             {nftV2 && (
-                <Card p={5}>
-                    <Flex>
-                        <Box>
+                <Card p={5} shadow="md" borderRadius="lg">
+                    <Flex direction={{ base: "column", md: "row" }} align="center" gap={5}>
+                        <Box flex="0 0 auto">
                             <MediaRenderer
                                 src={nftV2.metadata.image}
-                                height="80%"
-                                width="80%"
+                                height="100%"
+                                width="100%"
+                                style={{ maxWidth: "150px", borderRadius: "8px" }}
                             />
                         </Box>
-                        <Stack spacing={1}>
-                            <Text fontSize={"2xl"} fontWeight={"bold"}>
-                                {nftV2.metadata.name} (V2)
+                        <VStack align="start" spacing={3} flex="1">
+                            <Heading size="md">{nftV2.metadata.name} (V2)</Heading>
+                            <Text fontSize="lg" color="gray.600">
+                                Token Rewards:{" "}
+                                <Text as="span" fontWeight="bold">
+                                    {ethers.utils.formatUnits(claimableRewardsV2?.[1] || 0, 18)}
+                                </Text>
                             </Text>
-                            <Text>
-                                Equipped:{" "}
-                                {ethers.utils.formatUnits(claimableRewardsV2?.[0] || 0, 0)}
-                            </Text>
-                        </Stack>
+                            <Web3Button
+                                contractAddress={STAKING_ADDRESS_V2}
+                                action={(contract) => contract.call("claimRewards", [props.tokenId])}
+                                mt={3}
+                            >
+                                Claim Rewards
+                            </Web3Button>
+                        </VStack>
                     </Flex>
-                    <Box mt={5}>
-                        <Text>Token:</Text>
-                        <Text>
-                            {ethers.utils.formatUnits(claimableRewardsV2?.[1] || 0, 18)}
-                        </Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS_V2}
-                            action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                        >
-                            Claim
-                        </Web3Button>
-                    </Box>
                 </Card>
             )}
-        </Box>
+        </VStack>
     );
 };
