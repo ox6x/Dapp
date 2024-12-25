@@ -41,10 +41,9 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
         return <Text>Loading...</Text>;
     }
 
-    // 如果兩個 NFT 都沒有數據，返回空
-    if (!nftV1 && !nftV2) {
-        return null;
-    }
+    // 嚴格檢查 NFT 數據是否存在
+    const isValidNFTV1 = nftV1?.metadata && nftV1.metadata.image && nftV1.metadata.name;
+    const isValidNFTV2 = nftV2?.metadata && nftV2.metadata.image && nftV2.metadata.name;
 
     // Helper function to render NFT card
     const renderNFTCard = (nft: any, rewards: any, version: string, stakingAddress: string) => (
@@ -84,10 +83,18 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
     return (
         <Box>
             {/* 渲染工具合約 V1 相關資訊 */}
-            {nftV1 && renderNFTCard(nftV1, claimableRewardsV1, "V1", STAKING_ADDRESS_V1)}
+            {isValidNFTV1 ? (
+                renderNFTCard(nftV1, claimableRewardsV1, "V1", STAKING_ADDRESS_V1)
+            ) : (
+                <Text>No V1 NFT available.</Text>
+            )}
 
             {/* 渲染工具合約 V2 相關資訊 */}
-            {nftV2 && renderNFTCard(nftV2, claimableRewardsV2, "V2", STAKING_ADDRESS_V2)}
+            {isValidNFTV2 ? (
+                renderNFTCard(nftV2, claimableRewardsV2, "V2", STAKING_ADDRESS_V2)
+            ) : (
+                <Text>No V2 NFT available.</Text>
+            )}
         </Box>
     );
 };
