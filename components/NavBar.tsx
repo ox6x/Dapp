@@ -61,7 +61,7 @@ export default function NavBar() {
                         
                         {/* NFT Display Section */}
                         <Box w="100%" mt={6}>
-                            <Heading size="md" mb={4}>Your Equipped NFTs</Heading>
+                            <Heading size="md" mb={4}>Your NFTs</Heading>
                             {equippedTools.length > 0 ? (
                                 equippedTools.map((tokenId) => (
                                     <DrawerEquippedNFT key={tokenId} tokenId={tokenId} />
