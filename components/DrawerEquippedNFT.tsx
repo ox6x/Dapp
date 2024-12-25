@@ -14,17 +14,17 @@ const STAKING_ADDRESS_V2 = "0x8fCE5853B5228093Ab14df76a5a87e60971de989";
 export const DrawerEquippedNFT = (props: EquippedProps) => {
     const address = useAddress();
 
-    // 合约实例
+    // 合約實例
     const { contract: toolContractV1 } = useContract(TOOLS_ADDRESS_V1);
     const { contract: toolContractV2 } = useContract(TOOLS_ADDRESS_V2);
     const { contract: stakingContractV1 } = useContract(STAKING_ADDRESS_V1);
     const { contract: stakingContractV2 } = useContract(STAKING_ADDRESS_V2);
 
-    // NFT 数据
+    // NFT 資料
     const { data: nftV1 } = useNFT(toolContractV1, props.tokenId);
     const { data: nftV2 } = useNFT(toolContractV2, props.tokenId);
 
-    // 可领取奖励数据
+    // 可領取獎勵資料
     const { data: claimableRewardsV1 } = useContractRead(
         stakingContractV1,
         "getStakeInfoForToken",
@@ -36,9 +36,14 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
         [props.tokenId, address]
     );
 
+    // 如果沒有持有 NFT，返回空
+    if (!nftV1 && !nftV2) {
+        return null;
+    }
+
     return (
         <Box>
-            {/* 显示工具合约V1相关信息 */}
+            {/* 顯示工具合約 V1 相關資訊（僅當持有 NFT 時） */}
             {nftV1 && (
                 <Card p={5} mb={5}>
                     <Flex>
@@ -74,7 +79,7 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
                 </Card>
             )}
 
-            {/* 显示工具合约V2相关信息 */}
+            {/* 顯示工具合約 V2 相關資訊（僅當持有 NFT 時） */}
             {nftV2 && (
                 <Card p={5}>
                     <Flex>
