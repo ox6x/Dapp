@@ -21,8 +21,8 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
     const { contract: stakingContractV2 } = useContract(STAKING_ADDRESS_V2);
 
     // NFT 資料
-    const { data: nftV1 } = useNFT(toolContractV1, props.tokenId);
-    const { data: nftV2 } = useNFT(toolContractV2, props.tokenId);
+    const { data: nftV1, isLoading: isLoadingV1 } = useNFT(toolContractV1, props.tokenId);
+    const { data: nftV2, isLoading: isLoadingV2 } = useNFT(toolContractV2, props.tokenId);
 
     // 可領取獎勵資料
     const { data: claimableRewardsV1 } = useContractRead(
@@ -36,84 +36,58 @@ export const DrawerEquippedNFT = (props: EquippedProps) => {
         [props.tokenId, address]
     );
 
-    // 如果沒有持有 NFT，返回空
+    // 如果正在加載數據，顯示加載中
+    if (isLoadingV1 || isLoadingV2) {
+        return <Text>Loading...</Text>;
+    }
+
+    // 如果兩個 NFT 都沒有數據，返回空
     if (!nftV1 && !nftV2) {
         return null;
     }
 
+    // Helper function to render NFT card
+    const renderNFTCard = (nft: any, rewards: any, version: string, stakingAddress: string) => (
+        <Card p={5} mb={5}>
+            <Flex>
+                <Box>
+                    <MediaRenderer
+                        src={nft.metadata.image}
+                        height="80%"
+                        width="80%"
+                    />
+                </Box>
+                <Stack spacing={1}>
+                    <Text fontSize={"2xl"} fontWeight={"bold"}>
+                        {nft.metadata.name} ({version})
+                    </Text>
+                    <Text>
+                        Equipped: {ethers.utils.formatUnits(rewards?.[0] || 0, 0)}
+                    </Text>
+                </Stack>
+            </Flex>
+            <Box mt={5}>
+                <Text>Token:</Text>
+                <Text>
+                    {ethers.utils.formatUnits(rewards?.[1] || 0, 18)}
+                </Text>
+                <Web3Button
+                    contractAddress={stakingAddress}
+                    action={(contract) => contract.call("claimRewards", [props.tokenId])}
+                >
+                    Claim
+                </Web3Button>
+            </Box>
+        </Card>
+    );
+
     return (
         <Box>
-            {/* 顯示工具合約 V1 相關資訊（僅當持有 NFT 時） */}
-            {nftV1 && (
-                <Card p={5} mb={5}>
-                    <Flex>
-                        <Box>
-                            <MediaRenderer
-                                src={nftV1.metadata.image}
-                                height="80%"
-                                width="80%"
-                            />
-                        </Box>
-                        <Stack spacing={1}>
-                            <Text fontSize={"2xl"} fontWeight={"bold"}>
-                                {nftV1.metadata.name} (V1)
-                            </Text>
-                            <Text>
-                                Equipped:{" "}
-                                {ethers.utils.formatUnits(claimableRewardsV1?.[0] || 0, 0)}
-                            </Text>
-                        </Stack>
-                    </Flex>
-                    <Box mt={5}>
-                        <Text>Token:</Text>
-                        <Text>
-                            {ethers.utils.formatUnits(claimableRewardsV1?.[1] || 0, 18)}
-                        </Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS_V1}
-                            action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                        >
-                            Claim
-                        </Web3Button>
-                    </Box>
-                </Card>
-            )}
+            {/* 渲染工具合約 V1 相關資訊 */}
+            {nftV1 && renderNFTCard(nftV1, claimableRewardsV1, "V1", STAKING_ADDRESS_V1)}
 
-            {/* 顯示工具合約 V2 相關資訊（僅當持有 NFT 時） */}
-            {nftV2 && (
-                <Card p={5}>
-                    <Flex>
-                        <Box>
-                            <MediaRenderer
-                                src={nftV2.metadata.image}
-                                height="80%"
-                                width="80%"
-                            />
-                        </Box>
-                        <Stack spacing={1}>
-                            <Text fontSize={"2xl"} fontWeight={"bold"}>
-                                {nftV2.metadata.name} (V2)
-                            </Text>
-                            <Text>
-                                Equipped:{" "}
-                                {ethers.utils.formatUnits(claimableRewardsV2?.[0] || 0, 0)}
-                            </Text>
-                        </Stack>
-                    </Flex>
-                    <Box mt={5}>
-                        <Text>Token:</Text>
-                        <Text>
-                            {ethers.utils.formatUnits(claimableRewardsV2?.[1] || 0, 18)}
-                        </Text>
-                        <Web3Button
-                            contractAddress={STAKING_ADDRESS_V2}
-                            action={(contract) => contract.call("claimRewards", [props.tokenId])}
-                        >
-                            Claim
-                        </Web3Button>
-                    </Box>
-                </Card>
-            )}
+            {/* 渲染工具合約 V2 相關資訊 */}
+            {nftV2 && renderNFTCard(nftV2, claimableRewardsV2, "V2", STAKING_ADDRESS_V2)}
         </Box>
     );
 };
